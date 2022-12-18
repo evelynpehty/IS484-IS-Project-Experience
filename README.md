@@ -1,1 +1,1 @@
-# IS484-IS-Project-Experience
+# IS484 IS Project Experience (FinTech)
