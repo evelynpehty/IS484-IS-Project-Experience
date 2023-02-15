@@ -1,10 +1,19 @@
+from databaseConnection import create_engine
+
+
 def verify_password(username, password):
   #search for the username then return password from database
   #password_from_database => get the password from database
-  password_from_database = "password1"
-  if password == password_from_database:
+  engine = create_engine()
+  sql = "SELECT username from user WHERE username='"+username+"' AND password ='"+password+"'"
+  result = engine.execute("SELECT * FROM user_details WHERE userID='None'")
+  if result.rowcount > 0:
     return {
-      "username": username,
+      "code": 200,
+      "username": username
+    }, 200
 
-    } 
-  return None 
+  return  {
+      "code": 404,
+      "username": None
+    }, 404 
