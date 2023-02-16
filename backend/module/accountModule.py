@@ -16,13 +16,14 @@ def verify_password(username, password):
     engine.execute(updateSQL)
     return {
       "code": 200,
-      "username": username,
-      "userID": userID
+      "message": "information retireve successfully",
+      "data": result
     }, 200
 
   return  {
       "code": 404,
-      "username": None
+      "message": "no available information found",
+      "data": None
     }
 
 #PEEK
@@ -36,12 +37,14 @@ def get_net_worth(userID):
       availBalance += info[6]
     return{
       "code": 200,
-      "AvailBalance": availBalance
+      "message": "information retireve successfully",
+      "data": availBalance
     }
 
   return {
     "code": 404,
-    "AvailBalance": 0
+    "message": "no available information found",
+    "data": None
   }
 
 #REGISTER
@@ -53,5 +56,5 @@ def register(userID, username, password):
   engine.execute(result)
   return {
     "code": 200,
-    "status": "Register Successful"
+    "status": "register successful"
   }

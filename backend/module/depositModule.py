@@ -18,12 +18,13 @@ def get_view_all_deposit_accounts(userID):
             accountInfo.append(depositAccountInfo)
         return{
             "code": 200,
-            "accountInfo": accountInfo
+            "data": accountInfo
         }
 
     return {
         "code": 404,
-        "accountInfo":[
+        "message": "no available information found",
+        "data":[
 
         ]
     }
@@ -42,11 +43,12 @@ def get_selected_deposit_account(DepositAccountID):
             ).to_dict()
         return{
             "code": 200,
-            "accountInfo": depositAccountInfo
+            "data": depositAccountInfo
         }
     return {
         "code": 404,
-        "accountInfo": None
+        "message": "no available information found",
+        "data": None
     }
 #
 def get_available_balance(userID):
@@ -74,12 +76,13 @@ def get_recent_three_transaction(userID):
             transactions.append(transactions)
         return {
             "code": 200,
-            "transactions":transactions
+            "data":transactions
         }
 
     return {
         "code": 404,
-        "transactions":[
+        "message": "no available information found",
+        "data":[
 
         ]
     } 
@@ -105,12 +108,13 @@ def get_all_transaction(userID):
             transactions.append(transactions)
         return {
             "code": 200,
-            "transactions":transactions
+            "data":transactions
         }
 
     return {
         "code": 404,
-        "transactions":[
+        "message": "no available information found",
+        "data":[
 
         ]
     } 
