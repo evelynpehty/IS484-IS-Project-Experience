@@ -27,9 +27,7 @@ def get_view_all_deposit_accounts(userID):
     return {
         "code": 404,
         "message": "no available information found",
-        "data":[
-
-        ]
+        "data":None
     }
 
 

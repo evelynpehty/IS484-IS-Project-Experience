@@ -1,7 +1,11 @@
-from flask import Flask, redirect, url_for, request, jsonify
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from module.accountModule import *
 from module.depositModule import *
+from module.loanModule import *
+from module.portfolioModule import *
+from module.predictiveModule import *
+from module.securitiesModule import *
 
 app = Flask(__name__)
 CORS(app)
