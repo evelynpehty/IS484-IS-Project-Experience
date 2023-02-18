@@ -257,5 +257,46 @@ def add_new_deposit_account():
       "data": None
     }), 500
 
+# loan module--- 
+@app.route('/get_all_loan_account',methods = ['POST', 'GET'])
+def get_all_loan_account():
+  try:
+    userID = None 
+    if request.method == 'POST':
+      userID = request.form['userID']
+    else:
+      userID = request.args.get('username')
+    
+    result = get_view_all_loan_account(userID)
+    code = result["code"]
+    return jsonify(result), code
+  except Exception as e:
+
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+
+@app.route('/get_loan_account_detail',methods = ['POST', 'GET'])
+def get_loan_account_detail():
+  try:
+    loanAccountID = None 
+    if request.method == 'POST':
+      loanAccountID = request.form['loanAccountID']
+    else:
+      loanAccountID = request.args.get('loanAccountID')
+    
+    result = get_view_loan_account_detail(loanAccountID)
+    code = result["code"]
+    return jsonify(result), code
+  except Exception as e:
+
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+
 if __name__ == '__main__':
    app.run(debug = True)

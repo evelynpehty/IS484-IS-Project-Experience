@@ -23,7 +23,7 @@ def get_view_all_loan_account(userID):
         "message": "no available information found",
         "data": None
     }
-def get_loan_account_detail(loanAccountID):
+def get_view_loan_account_detail(loanAccountID):
     engine = create_engine()
     sql = "SELECT * FROM loan_account WHERE loanAccountID = "+str(loanAccountID)
     info = engine.execute(sql).fetchone()
