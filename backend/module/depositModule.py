@@ -1,7 +1,7 @@
-from databaseConnection import create_engine
-from classes.deposit_account import Deposit_Account
-from classes.transaction_log import Transaction_Log
-from accountModule import get_net_worth
+from module.databaseConnection import create_engine
+from module.classes.deposit_account import Deposit_Account
+from module.classes.transaction_log import Transaction_Log
+from module.accountModule import get_net_worth
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
@@ -34,7 +34,7 @@ def get_view_all_deposit_accounts(userID):
 
 
 #SELECTED
-def get_selected_deposit_account(DepositAccountID):
+def get_view_selected_deposit_account(DepositAccountID):
     engine = create_engine()
     sql = "SELECT * FROM deposit_account WHERE DepositAccountID = "+str(DepositAccountID)
     info = engine.execute(sql).fetchone()
@@ -54,44 +54,48 @@ def get_selected_deposit_account(DepositAccountID):
         "data": None
     }
 #
-def get_available_balance(userID):
+def get_view_available_balance(userID):
     #same return as this function in accountModule
     return get_net_worth(userID)
 
-def get_recent_three_transaction(userID):
-    engine = create_engine()
-    sql = """
-    SELECT * FROM transaction_log  
-    WHERE accountFROM IN (SELECT depositAccountID FROM deposit_account WHERE userID = """ +str(userID)+""")
-    OR accountTo IN (SELECT depositAccountID FROM deposit_account WHERE userID = """ +str(userID)+""")
-    ORDER BY transactionDate DESC
-    LIMIT 3;
-    """
-    result = engine.execute(sql)
-    if result.rowcount > 0:
-        transactions = []
-        for info in result.fetchall():
-            transaction = Transaction_Log(
-                info[0], info[1], info[2], info[3], 
-                info[4], info[5], info[6], info[7],
-                info[8], info[9], info[10]
-            ).to_dict()
-            transactions.append(transactions)
-        return {
-            "code": 200,
-            "data":transactions
-        }
+def get_view_recent_three_transaction(userID):
+    transactions = get_view_all_transaction(userID)
+    if transactions["code"] == 200:
+        transactions["data"] = transactions["data"][:3]
+    return transactions
+    # engine = create_engine()
+    # sql = """
+    # SELECT * FROM transaction_log  
+    # WHERE accountFROM IN (SELECT depositAccountID FROM deposit_account WHERE userID = """ +str(userID)+""")
+    # OR accountTo IN (SELECT depositAccountID FROM deposit_account WHERE userID = """ +str(userID)+""")
+    # ORDER BY transactionDate DESC
+    # LIMIT 3;
+    # """
+    # result = engine.execute(sql)
+    # if result.rowcount > 0:
+    #     transactions = []
+    #     for info in result.fetchall():
+    #         transaction = Transaction_Log(
+    #             info[0], info[1], info[2], info[3], 
+    #             info[4], info[5], info[6], info[7],
+    #             info[8], info[9], info[10]
+    #         ).to_dict()
+    #         transactions.append(transactions)
+    #     return {
+    #         "code": 200,
+    #         "data":transactions
+    #     }
 
-    return {
-        "code": 404,
-        "message": "no available information found",
-        "data":[
+    # return {
+    #     "code": 404,
+    #     "message": "no available information found",
+    #     "data":[
 
-        ]
-    } 
+    #     ]
+    # } 
 
 #TRANSACTIONS UI
-def get_all_transaction(userID):
+def get_view_all_transaction(userID):
     engine = create_engine()
     sql = """
     SELECT * FROM transaction_log  
@@ -102,13 +106,14 @@ def get_all_transaction(userID):
     result = engine.execute(sql)
     if result.rowcount > 0:
         transactions = []
+        
         for info in result.fetchall():
             transaction = Transaction_Log(
                 info[0], info[1], info[2], info[3], 
                 info[4], info[5], info[6], info[7],
                 info[8], info[9], info[10]
             ).to_dict()
-            transactions.append(transactions)
+            transactions.append(transaction)
         return {
             "code": 200,
             "data":transactions
@@ -139,7 +144,7 @@ def add_new_deposit_account_with_default_values(depositAccountID, userID, accoun
     minimumAmount = 1
     cardNo = 78123456
     CVV = 111
-    result = add_new_deposit_account(depositAccountID, userID, productID, accountName,
+    result = add_new_deposit_account_without_default_values(depositAccountID, userID, productID, accountName,
         crr_date, expire_date, availBalance, 
         pendingBalance, currentStatus, interestRate, depositTerm, 
         openEmployeeID, minimumAmount, cardNo, crr_date,
@@ -150,11 +155,12 @@ def add_new_deposit_account_with_default_values(depositAccountID, userID, accoun
 
 
 
-def add_new_deposit_account(depositAccountID ,  userID ,  productID ,  accountName , 
+def add_new_deposit_account_without_default_values(depositAccountID ,  userID ,  productID ,  accountName , 
         accountOpenDate ,  accountCloseDate ,  availBalance , 
         pendingBalance ,  currentStatus ,  interestRate ,  depositTerm , 
         openEmployeeID ,  minimumAmount ,  cardNo ,  cardStartDate , 
         cardExpiryDate ,  CVV ):
+    
     sql = """
         INSERT INTO  deposit_account
         ( depositAccountID ,  userID ,  productID ,  accountName , 
@@ -187,6 +193,7 @@ def get_new_productID(userID):
     engine = create_engine()
     sql = "SELECT productID FROM deposit_account WHERE userID = "+str(userID) +" ORDER BY productID DESC"
     productID = engine.execute(sql).fetchone()[0] + 1
+    # try to generate the productID
     return productID
 
 #Deposit Account UI

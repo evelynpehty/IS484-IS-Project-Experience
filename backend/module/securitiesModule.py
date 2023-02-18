@@ -1,3 +1,6 @@
+# -> check stock price 
+#pip install polygon-api-client
+# polygon-api-client-1.7.1
 def get_all_stocks():
     all_stock_info = {
 
