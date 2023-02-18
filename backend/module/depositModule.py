@@ -32,9 +32,9 @@ def get_view_all_deposit_accounts(userID):
 
 
 #SELECTED
-def get_view_selected_deposit_account(DepositAccountID):
+def get_view_selected_deposit_account(depositAccountID):
     engine = create_engine()
-    sql = "SELECT * FROM deposit_account WHERE DepositAccountID = "+str(DepositAccountID)
+    sql = "SELECT * FROM deposit_account WHERE DepositAccountID = "+str(depositAccountID)
     info = engine.execute(sql).fetchone()
     if info:
         depositAccountInfo = Deposit_Account(
