@@ -46,13 +46,14 @@ def get_view_loan_account_detail(loanAccountID):
 
 
 #maybe can make some improvement in next few meetings 
-def get_calculate_loan_repayment_detail(principal, rate, payment_period_in_year):
+def get_view_calculate_loan_repayment_detail(principal, rate, payment_period_in_year):
     n = payment_period_in_year*12
     r = rate/(100*12)
     monthly_payment = principal*((r*((r+1)**n))/(((r+1)**n)-1))
     total_interest_paid = monthly_payment*12*payment_period_in_year
     total_amount = total_interest_paid + principal
     return {
+        "code": 200,
         "monthly_payment": monthly_payment,
         "total_interest_paid": total_interest_paid,
         "total_payment_amount": total_amount
