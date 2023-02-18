@@ -174,7 +174,7 @@ def get_all_transaction():
       "data": None
     }), 500
 
-
+# no test yet 
 @app.route('/add_new_deposit_account',methods = ['POST', 'GET'])
 def add_new_deposit_account():
   try:
