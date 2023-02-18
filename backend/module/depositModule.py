@@ -2,6 +2,9 @@ from databaseConnection import create_engine
 from classes.deposit_account import Deposit_Account
 from classes.transaction_log import Transaction_Log
 from accountModule import get_net_worth
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
 
 def get_view_all_deposit_accounts(userID):
     engine = create_engine()
@@ -121,9 +124,70 @@ def get_all_transaction(userID):
 
 #ACCOUNT NUMBER UI
 #add deposit account -> need more information 
-def add_new_deposit_account():
-    pass 
+def add_new_deposit_account_with_default_values(depositAccountID, userID, accountName):
+    # accountNo => depositAccountID
+    #current date: cardStarDate and accountOpenDate
+    crr_date = datetime.today().strftime('%Y-%m-%d')
+    productID = get_new_productID(userID)
+    expire_date = (datetime.today() + relativedelta(years=5)).strftime('%Y-%m-%d')
+    availBalance = 10000
+    pendingBalance = 10000
+    currentStatus = "Active"
+    interestRate = 2
+    depositTerm = 0 
+    openEmployeeID = 1
+    minimumAmount = 1
+    cardNo = 78123456
+    CVV = 111
+    result = add_new_deposit_account(depositAccountID, userID, productID, accountName,
+        crr_date, expire_date, availBalance, 
+        pendingBalance, currentStatus, interestRate, depositTerm, 
+        openEmployeeID, minimumAmount, cardNo, crr_date,
+        expire_date, CVV)
+        
+    return result
 
+
+
+
+def add_new_deposit_account(depositAccountID ,  userID ,  productID ,  accountName , 
+        accountOpenDate ,  accountCloseDate ,  availBalance , 
+        pendingBalance ,  currentStatus ,  interestRate ,  depositTerm , 
+        openEmployeeID ,  minimumAmount ,  cardNo ,  cardStartDate , 
+        cardExpiryDate ,  CVV ):
+    sql = """
+        INSERT INTO  deposit_account
+        ( depositAccountID ,  userID ,  productID ,  accountName , 
+        accountOpenDate ,  accountCloseDate ,  availBalance , 
+        pendingBalance ,  currentStatus ,  interestRate ,  depositTerm , 
+        openEmployeeID ,  minimumAmount ,  cardNo ,  cardStartDate , 
+        cardExpiryDate ,  CVV ) 
+        VALUES ('%s', '%s', '%s', '%s', 
+                '%s', '%s', '%s', 
+                '%s', '%s', '%s', '%s',
+                '%s', '%s', '%s', '%s', 
+                '%s', '%s');
+        """ %(
+        depositAccountID ,  userID ,  productID ,  accountName , 
+        accountOpenDate ,  accountCloseDate ,  availBalance , 
+        pendingBalance ,  currentStatus ,  interestRate ,  depositTerm , 
+        openEmployeeID ,  minimumAmount ,  cardNo ,  cardStartDate , 
+        cardExpiryDate ,  CVV 
+        )
+    engine = create_engine()
+    engine.execute(sql)
+    return{
+        "code": 200,
+        "message": "Your account has successfully added"
+    }
+    
+
+
+def get_new_productID(userID):
+    engine = create_engine()
+    sql = "SELECT productID FROM deposit_account WHERE userID = "+str(userID) +" ORDER BY productID DESC"
+    productID = engine.execute(sql).fetchone()[0] + 1
+    return productID
 
 #Deposit Account UI
 #more operation 
