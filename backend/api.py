@@ -1,6 +1,13 @@
 from flask import Blueprint, request, jsonify
 from models import db, User, UserDetails, Product, DepositAccount, LoanAccount, TransactionType, TransactionLog, MonthlyBalance, CreditCard
 
+from module.accountModule import *
+from module.depositModule import *
+from module.loanModule import *
+from module.portfolioModule import *
+from module.predictiveModule import *
+from module.securitiesModule import *
+
 api = Blueprint('api', __name__)
 
 @api.route("/user")
@@ -306,3 +313,36 @@ def getallmonthlybalance():
         "code": 404,
         "message": "There are no available monthly balance."
     }),404
+
+
+# @api.route('/login')
+# def login():
+#     # return jsonify({
+#     #   "code": 500,
+#     #   "message": str("1"),
+#     #   "data": None
+#     # }), 5
+#   username = None 
+#   password = None
+#   print(request.args)
+#   try:
+#     # print(request.form)
+#     if request.method == 'POST':
+#       username = request.form['username']
+#       password = request.form['password']
+#       # return redirect(url_for('success',name = user))
+#     else:
+#       username = request.args.get('username')
+#       password = request.args.get('password')
+#       # return redirect(url_for('success',name = user))
+#     print(username, password)
+#     userInfo = verify_password(username, password)
+#     return jsonify(userInfo), 200
+
+#   except Exception as e:
+
+#     return jsonify({
+#       "code": 500,
+#       "message": str(e),
+#       "data": None
+#     }), 500
