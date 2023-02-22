@@ -33,7 +33,7 @@ def login():
       username = request.args.get('username')
       password = request.args.get('password')
       # return redirect(url_for('success',name = user))
-    print(username, password)
+    # print(username, password)
     userInfo = verify_password(username, password)
     return jsonify(userInfo), 200
 
@@ -78,6 +78,7 @@ def logout():
   return jsonify({
     "username": None,
     "userID": None,
+    "message": "log out successfully",
   }), 200
 
 
@@ -105,17 +106,17 @@ def get_all_deposit_accounts():
     }), 500
 
 
-# required attribute: DepositAccountID
+# required attribute: depositAccountID
 @app.route('/get_selected_deposit_account',methods = ['POST', 'GET'])
 def get_selected_deposit_account():
   try:
-    DepositAccountID = None 
+    depositAccountID = None 
     if request.method == 'POST':
-      DepositAccountID = request.form['DepositAccountID']
+      depositAccountID = request.form['depositAccountID']
     else:
-      DepositAccountID = request.args.get('DepositAccountID')
+      depositAccountID = request.args.get('depositAccountID')
     
-    result = get_view_selected_deposit_account(DepositAccountID)
+    result = get_view_selected_deposit_account(depositAccountID)
     code = result["code"]
     return jsonify(result), code
   except Exception as e:
@@ -342,7 +343,7 @@ def get_calculate_loan_repayment_detail():
       rate = request.args.get('rate')
       payment_period_in_year = request.args.get('payment_period_in_year')
     
-    result = get_view_calculate_loan_repayment_detail(principal, rate, payment_period_in_year)
+    result = get_view_calculate_loan_repayment_detail(float(principal), float(rate), float(payment_period_in_year))
     code = result["code"]
     return jsonify(result), code
   except Exception as e:

@@ -1,5 +1,5 @@
 import sqlalchemy as db
-from polygon import RESTClient
+# from polygon import RESTClient
 from config import BaseConfig
 
 
