@@ -1,5 +1,9 @@
 import sqlalchemy as db
+# from polygon import RESTClient
+from config import BaseConfig
 
 
 def create_engine():
-    return db.create_engine('mysql+mysqlconnector://root:@localhost:3306/monetari')
+    #local database
+    # return db.create_engine()
+    return db.create_engine(BaseConfig.SQLALCHEMY_DATABASE_URI)
