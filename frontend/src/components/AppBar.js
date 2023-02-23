@@ -4,6 +4,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 import '../main.css';
 
+import logo from "../assets/images/appbar_logo.png";
+
 import { ReactComponent as User } from "../assets/icons/user-red.svg";
 
 function MenuAppBar() {
@@ -34,8 +36,16 @@ function MenuAppBar() {
                 >
                     <MenuIcon />
                 </IconButton>
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign:"center", color:"black", fontWeight:"bold" }}>
-                Monetari.
+                <Typography component="div" sx={{ flexGrow: 1, textAlign:"center" }}>
+                <Box
+                    component="img"
+                    sx={{
+                        maxHeight: { xs: 130, sm: 150, md: 180, lg: 200, xl: 220 },
+                        maxWidth: { xs: 130, sm: 150, md: 180, lg: 200, xl: 220 },
+                    }}
+                    alt="logo"
+                    src={ logo }
+                />
                 </Typography>
                 {auth && (
                 <div>
