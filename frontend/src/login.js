@@ -25,10 +25,8 @@ function SignIn() {
                             <Box
                                 component="img"
                                 sx={{
-                                    height: 300,
-                                    width: 300,
-                                    maxHeight: { xs: 150, sm: 200, md: 250, lg: 300 },
-                                    maxWidth: { xs: 150, sm: 200, md: 250, lg: 300 },
+                                    maxHeight: { xs: 150, sm: 180, md: 200, lg: 230, xl: 300 },
+                                    maxWidth: { xs: 150, sm: 180, md: 200, lg: 230, xl: 300 },
                                 }}
                                 alt="logo"
                                 src={ logo }
