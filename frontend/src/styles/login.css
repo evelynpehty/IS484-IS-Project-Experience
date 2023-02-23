@@ -1,0 +1,36 @@
+p {
+  font-weight: bold;
+  color: var(--darkgray);
+  margin-bottom: 10px !important;
+}
+
+a {
+  text-decoration: none;
+  color: var(--darkgray);
+}
+
+#loginBtn {
+  background: linear-gradient(to top right, #E69F9F, #E60000)!important;
+}
+
+#registerBtn {
+  background: var(--white);
+  color: var(--black);
+}
+
+.MuiButton-root {
+  font-weight: bold !important; 
+}
+
+.quickAction {
+  padding-left: 64px !important;
+}
+
+.small-icon {
+  width: auto;
+  height: auto;
+}
+
+.MuiGrid2-root {
+  margin: auto !important;
+}
