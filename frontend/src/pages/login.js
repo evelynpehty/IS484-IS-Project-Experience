@@ -1,26 +1,100 @@
 import * as React from 'react';
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import Grid from '@mui/material/Unstable_Grid2';
 import { TextField, Box, Button, Card, CardContent, Typography } from "@mui/material";
 import { Stack } from '@mui/system';
 
-import './main.css';
-import './styles/login.css';
+import '../styles/main.css';
+import '../styles/login.css';
+import Loading from '../components/loading.js'
 
-import logo from "./assets/images/logo.png";
-import { ReactComponent as Savings } from "./assets/icons/savings-red.svg";
-import { ReactComponent as Loans } from "./assets/icons/loans-red.svg";
-import { ReactComponent as Investments } from "./assets/icons/investments-red.svg";
-import { ReactComponent as Personalise } from "./assets/icons/personalise-red.svg";
-import { ReactComponent as Plans } from "./assets/icons/plans-red.svg";
-import { ReactComponent as CashFlow } from "./assets/icons/cashflow-red.svg";
-import { ReactComponent as Recommendations } from "./assets/icons/recommendations-red.svg";
+import logo from "../assets/images/logo.png";
+import { ReactComponent as Savings } from "../assets/icons/savings-red.svg";
+import { ReactComponent as Loans } from "../assets/icons/loans-red.svg";
+import { ReactComponent as Investments } from "../assets/icons/investments-red.svg";
+import { ReactComponent as Personalise } from "../assets/icons/personalise-red.svg";
+import { ReactComponent as Plans } from "../assets/icons/plans-red.svg";
+import { ReactComponent as CashFlow } from "../assets/icons/cashflow-red.svg";
+import { ReactComponent as Recommendations } from "../assets/icons/recommendations-red.svg";
+
+//import account_service from "../services/account.js";
+import { login } from "../actions/auth";
+import { useNavigate } from "react-router-dom";
 
 function SignIn() {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    // const { isLoggedIn } = useSelector(state => state.auth);    
+    const { message } = useSelector(state => state.message);
+    const handleLogin = (e) => {
+        e.preventDefault()
+        setLoading(true);
+        
+        dispatch(login(username, password)).then(() => {
+            navigate("/dashboard")
+        }).catch(() => {
+            setLoading(false)
+            console.log(message)
+          });
+
+            //navigate("/dashboard");
+            
+            /*if(isLoggedIn){
+                console.log(user)
+                navigate("/dashboard");
+            }
+            else{
+                setLoading(false)
+                console.log("Incorrect login credentials. please try again")
+            }*/
+          
+        /*account_service.login(username,password).then((response)=>{
+            console.log(response)
+            console.log(account_service.getCurrentUser())
+            
+            // successful login
+            if(response.code === 200){
+                navigate("/dashboard"); 
+                window.location.reload();
+            }
+
+            // unsuccessful login
+            if(response.code === 404){
+                setLoading(false);
+                console.log(response.message)
+            }
+        },(error)=>{
+            setLoading(false);
+            console.log(error.message) //display error message    
+        }
+     )   */ 
+    }
+
+    const onChangeUsername = (e) => {
+        const username = e.target.value;
+        setUsername(username);
+      };
+    
+      const onChangePassword = (e) => {
+        const password = e.target.value;
+        setPassword(password);
+      };
+
+
     return (
         <div className="SignIn">
+            {loading && <Loading></Loading>}
             <Grid container>
                 <Grid xs={12} lg={6}>
                     <Box p={8}>
+                       
                         <Stack spacing={4} mb={5} alignItems="center">
                             <Box
                                 component="img"
@@ -31,20 +105,34 @@ function SignIn() {
                                 alt="logo"
                                 src={ logo }
                             />
-                            <TextField
-                                required
-                                id="inputUserID"
-                                label="User ID"
-                                fullWidth={ true }
-                            />
-                            <TextField
-                                required
-                                id="inputPassword"
-                                label="Password"
-                                type="password"
-                                fullWidth={ true }
-                            />
-                            <Button id="loginBtn" variant="contained" fullWidth={ true }>LOG IN</Button>
+
+                            <form onSubmit={handleLogin}>
+                                <TextField
+                                    required
+                                    id="inputUsername"
+                                    name='username'
+                                    label="Userame"
+                                    value={username}
+                                    onChange={onChangeUsername}
+                                    fullWidth={ true }
+                                    sx={{ mb: 5 }}
+                                    
+                                />
+                                <TextField
+                                    required
+                                    id="inputPassword"
+                                    name="password"
+                                    label="Password"
+                                    value={password}
+                                    onChange={onChangePassword}
+                                    type="password"
+                                    fullWidth={ true }
+                                    sx={{ mb: 5 }}
+                                    
+                                />
+                                <Button type="submit" id="loginBtn" variant="contained" fullWidth={ true }>LOG IN</Button>
+                            </form>
+                    
                             <Button sx={{ color: "gray" }} fullWidth={ true }>FORGOT PASSWORD</Button>
                             <p>or</p>
                             <Button id="registerBtn" variant="contained" fullWidth={ true }>REGISTER</Button>

@@ -21,7 +21,7 @@ def verify_password(username, password):
       "code": 200,
       "message": "information retireve successfully",
       "data": result
-    }, 200
+    }
 
   return  {
       "code": 404,
