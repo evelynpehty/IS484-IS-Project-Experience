@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-//pages
-import Login from "./pages/login";
+// Pages
+import Login from "./pages/Account_Module/login";
 import DashBoard from './pages/dashboard.js'
-import Deposit from './pages/deposit.js'
+import DepositSummary from './pages/Deposit_Module/deposit-summary.js'
 
 import { clearMessage } from "./actions/message";
 
-//navigation components
-import AppBar from './components/AppBar';
-import BottomNavigation from './components/BottomNavigation';
+// Navigation components
+import MainAppBar from './components/MainAppBar';
+import MainBottomNavigation from './components/MainBottomNavigation';
 
 function App() {
   const [showAppBar, setAppBar] = useState(false);
@@ -44,12 +44,12 @@ function App() {
 
     return (
       <>
-        {(showAppBar) && <AppBar></AppBar>}
-        {(showBottomNavigation) && <BottomNavigation></BottomNavigation>}
+        {(showAppBar) && <MainAppBar></MainAppBar>}
+        {(showBottomNavigation) && <MainBottomNavigation></MainBottomNavigation>}
         <Routes>
           <Route exact path={"/"} element= {!currentUser && <Login></Login>} />
           <Route exact path={"/dashboard"} element={<DashBoard />} />
-          <Route exact path={"/deposit"} element={<Deposit />} />
+          <Route exact path={"/deposit"} element={<DepositSummary />} />
         </Routes>
       </>
     )  

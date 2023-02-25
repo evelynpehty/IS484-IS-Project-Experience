@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 
 import "../styles/main.css";
 
-export default function SimpleBottomNavigation() {
+export default function MainBottomNavigation() {
   const [value, setValue] = React.useState(0);
 
   return (

@@ -12,7 +12,7 @@ import { logout } from "../actions/auth";
 
 import { ReactComponent as User } from "../assets/icons/user-red.svg";
 
-function MenuAppBar() {
+function MainAppBar() {
     const navigate = useNavigate();
     const [auth, setAuth] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -98,4 +98,4 @@ function MenuAppBar() {
     );
 }
 
-export default MenuAppBar;
+export default MainAppBar;
