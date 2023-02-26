@@ -20,7 +20,7 @@ function DepositSummary() {
     const { transactionHistoryList } = useSelector((state) => state.deposit);
 
 
-    var newArray = transactionHistoryList.filter(function (el)
+    /*var newArray = transactionHistoryList.filter(function (el)
     {
         //var transactionDate = new Date(el.transactionDate);
         const transactionDate = moment(el.transactionDate).format("DD-MM-YYYY")
@@ -32,7 +32,7 @@ function DepositSummary() {
         //return transactionDate <= endDate && transactionDate >= startDate
     }
     );
-    console.log(newArray);
+    console.log(newArray);*/
 
     
     /*var newArray = depositList.filter(function (el)
