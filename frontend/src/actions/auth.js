@@ -40,8 +40,14 @@ export const login = (username, password) => (dispatch) => {
     );
   };
 
-  export const logout = () => (dispatch) => { 
-    dispatch({
-      type: "LOGOUT",
-    });
-  };
+export const logout = () => (dispatch) => { 
+  dispatch({
+    type: "LOGOUT",
+  });
+};
+
+export const RemoveFirstLoad = () => (dispatch) => { 
+  dispatch({
+    type: "REMOVE_FIRST_LOAD",
+  });
+};

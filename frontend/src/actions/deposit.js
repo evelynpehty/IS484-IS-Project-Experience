@@ -39,3 +39,44 @@ export const deposit = (UserID) => (dispatch) => {
       }
     );
   };
+
+  export const depositTransactionHistory = (UserID) => (dispatch) => {
+    return deposit_service.getDepositTransactionHistory(UserID).then(
+      (data) => {
+        console.log(data)
+        if(data.code === 200){
+          dispatch({
+            type: "TRANSACTION_HISTORY_SUCCESS",
+            payload: { transactionHistoryList: data.data },
+          });
+        }
+        else{
+          dispatch({
+            type: "TRANSACTION_HISTORY_FAIL"
+          });
+
+          dispatch({
+            type: "SET_MESSAGE",
+            payload: "No Transaction History",
+          });
+          return Promise.reject();
+        }
+
+        return Promise.resolve();
+      },
+      (error) => {
+        console.log(error)
+        const message = error.message
+        dispatch({
+          type: "TRANSACTION_HISTORY_FAIL",
+        });
+  
+        dispatch({
+          type: "SET_MESSAGE",
+          payload: message,
+        });
+  
+        return Promise.reject();
+      }
+    );
+  };

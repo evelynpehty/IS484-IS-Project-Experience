@@ -8,7 +8,8 @@ const initialState = user
 
 const initialState = {
     isLoggedIn: false,
-    user: undefined
+    isFirstLoad: false,
+    user: undefined,
 }
 
 const authReducer = (state = initialState, action) => {
@@ -20,20 +21,28 @@ switch (type) {
       return {
           ...state,
           isLoggedIn: true,
+          isFirstLoad: true,
           user: payload.user,
       };
     case "LOGIN_FAIL":
     return {
         ...state,
         isLoggedIn: false,
+        isFirstLoad: false,
         user: null,
     };
     case "LOGOUT":
       return {
         ...state,
         isLoggedIn: false,
+        isFirstLoad: false,
         user: null,
     };
+    case "REMOVE_FIRST_LOAD":
+      return {
+          ...state,
+          isFirstLoad: false,
+      };
 
     default:
     return state;

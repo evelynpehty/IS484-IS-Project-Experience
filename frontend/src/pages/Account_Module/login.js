@@ -44,39 +44,7 @@ function SignIn() {
         }).catch(() => {
             setLoading(false)
             console.log(message)
-          });
-
-            //navigate("/dashboard");
-            
-            /*if(isLoggedIn){
-                console.log(user)
-                navigate("/dashboard");
-            }
-            else{
-                setLoading(false)
-                console.log("Incorrect login credentials. please try again")
-            }*/
-          
-        /*account_service.login(username,password).then((response)=>{
-            console.log(response)
-            console.log(account_service.getCurrentUser())
-            
-            // successful login
-            if(response.code === 200){
-                navigate("/dashboard"); 
-                window.location.reload();
-            }
-
-            // unsuccessful login
-            if(response.code === 404){
-                setLoading(false);
-                console.log(response.message)
-            }
-        },(error)=>{
-            setLoading(false);
-            console.log(error.message) //display error message    
-        }
-     )   */ 
+        });
     }
 
     const onChangeUsername = (e) => {

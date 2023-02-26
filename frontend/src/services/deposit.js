@@ -17,8 +17,24 @@ const getalldepositaccounts = (userID) => {
       });
   };
 
+  const getDepositTransactionHistory = (userID) => {
+    var bodyFormData = new FormData();
+    bodyFormData.append("userID", userID)
+
+    return axios
+    ({
+        method: "post",
+        url: API_URL + "get_all_transaction",
+        data: bodyFormData,
+    })
+      .then((response) => {
+        return response.data;
+      });
+  };
+
   const deposit_service = { 
-    getalldepositaccounts
+    getalldepositaccounts,
+    getDepositTransactionHistory
   }
 
   export default deposit_service;

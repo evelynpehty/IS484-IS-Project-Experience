@@ -1,5 +1,6 @@
 const initialState = {
-    depositList: []
+    depositList: [],
+    transactionHistoryList: []
 }
 
 const depositReducer = (state = initialState, action) => {
@@ -15,6 +16,16 @@ switch (type) {
     return {
         ...state,
         depositList: []
+    };
+    case "TRANSACTION_HISTORY_SUCCESS":
+      return {
+          ...state,
+          transactionHistoryList: payload.transactionHistoryList,
+      };
+    case "TRANSACTION_HISTORY_FAIL":
+    return {
+        ...state,
+        transactionHistoryList: []
     };
     
     default:
