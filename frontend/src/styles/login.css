@@ -9,6 +9,10 @@ a {
   color: var(--darkgray);
 }
 
+form {
+  width: 100% !important;
+}
+
 #loginBtn {
   background: linear-gradient(to top right, #E69F9F, #E60000)!important;
 }

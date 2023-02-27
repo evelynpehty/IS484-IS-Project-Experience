@@ -1,17 +1,22 @@
 import * as React from 'react';
+import { useDispatch } from "react-redux";
 import { AppBar, Toolbar, Box, Typography, IconButton, MenuItem, Menu } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import { useNavigate } from "react-router-dom";
 
-import '../main.css';
+import '../styles/main.css';
+import account_service from "../services/account.js";
 
 import logo from "../assets/images/appbar_logo.png";
+import { logout } from "../actions/auth";
 
 import { ReactComponent as User } from "../assets/icons/user-red.svg";
 
-function MenuAppBar() {
+function MainAppBar() {
+    const navigate = useNavigate();
     const [auth, setAuth] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
-  
+    const dispatch = useDispatch();
     // const handleChange = (event) => {
     //   setAuth(event.target.checked);
     // };
@@ -23,6 +28,13 @@ function MenuAppBar() {
     const handleClose = () => {
       setAnchorEl(null);
     };
+
+    const handleLogOut = () => {
+        dispatch(logout());
+        navigate("/")
+
+      };
+  
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -76,6 +88,7 @@ function MenuAppBar() {
                     >
                         <MenuItem onClick={handleClose}>Profile</MenuItem>
                         <MenuItem onClick={handleClose}>My account</MenuItem>
+                        <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
                     </Menu>
                 </div>
                 )}
@@ -85,4 +98,4 @@ function MenuAppBar() {
     );
 }
 
-export default MenuAppBar;
+export default MainAppBar;

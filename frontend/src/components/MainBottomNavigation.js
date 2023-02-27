@@ -9,10 +9,12 @@ import { ReactComponent as Loans } from "../assets/icons/loans.svg";
 import { ReactComponent as LoansRed } from "../assets/icons/loans-red.svg";
 import { ReactComponent as Investments } from "../assets/icons/investments.svg";
 import { ReactComponent as InvestmentsRed } from "../assets/icons/investments-red.svg";
+import { Link } from "react-router-dom";
 
-import "../../src/main.css";
 
-export default function SimpleBottomNavigation() {
+import "../styles/main.css";
+
+export default function MainBottomNavigation() {
   const [value, setValue] = React.useState(0);
 
   return (
@@ -25,12 +27,14 @@ export default function SimpleBottomNavigation() {
                 setValue(newValue);
                 }}
             >
-                <BottomNavigationAction label="Dashboard" icon={value === 0 ? <DashboardRed /> : <Dashboard />} />
-                <BottomNavigationAction label="Savings" icon={value === 1 ? <SavingsRed /> : <Savings /> } />
+                <BottomNavigationAction component={ Link } to={"/dashboard"} label="Dashboard" icon={value === 0 ? <DashboardRed /> : <Dashboard />} />
+                <BottomNavigationAction component={ Link } to={"/deposit"} label="Savings" icon={value === 1 ? <SavingsRed /> : <Savings /> } />
                 <BottomNavigationAction label="Loans" icon={value === 2 ? <LoansRed /> : <Loans /> } />
                 <BottomNavigationAction label="Investments" icon={value === 3 ? <InvestmentsRed /> : <Investments /> } />
             </BottomNavigation>
             </Paper>
         </Box>
+
+        
   );
 }
