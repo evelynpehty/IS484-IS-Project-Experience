@@ -21,7 +21,6 @@ function DashBoard() {
   const dispatch = useDispatch()
   
   useEffect(() => {
-    console.log("Hello World")
     if(isFirstLoad){
       setLoading(true)
       console.log(UserID)
