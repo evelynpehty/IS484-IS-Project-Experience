@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 
 import Grid from '@mui/material/Unstable_Grid2';
 import { Container, Box, Button, Card, CardContent, Typography, Fab } from "@mui/material";
+import { borderBottom } from "@mui/system";
 
 function AccountDetails() {
     // Styling for Account Details Page
@@ -38,6 +39,25 @@ function AccountDetails() {
         cardContent: {
             paddingBottom: "16px"
         },
+
+        card2: {
+            marginBottom: "24px",
+            borderRadius: "15px",
+            padding: 10
+        },
+
+        cardContent2: {
+            paddingBottom: "16px",
+            borderBottom: "1px dashed #BFBFBF"
+        },
+
+        positive: {
+            color: "#3BB537"
+        },
+
+        negative: {
+            color: "#E60000"
+        }
     }
 
     /*var newArray = transactionHistoryList.filter(function (el)
@@ -56,17 +76,20 @@ function AccountDetails() {
     
     const { id } = useParams()
     const { depositList } = useSelector((state) => state.deposit);
-    // const { transactionHistoryList } = useSelector((state) => state.deposit);
+    const { transactionHistoryList } = useSelector((state) => state.deposit);
 
     const deposit_item = depositList.filter(function (el)
     {
       return el.DepositAccountID === id
     })
 
-    /*const transaction_item = transactionHistoryList.filter(function (el)
+    const transaction_item = transactionHistoryList.filter(function (el)
     {
       return el.accountFrom === id || el.accountTo === id
-    })*/
+    })
+
+    var accountID = id
+    var recent_transactions = transaction_item.slice(0, 3)
 
     return (
         <React.Fragment>
@@ -97,12 +120,36 @@ function AccountDetails() {
                         <Button style={ styles.button } variant="contained">EXPAND</Button>
                     </Grid>
 
-                    
-
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
                         <Typography style={ styles.label } variant="h6">Recent Transactions</Typography>
                         <Button style={ styles.button } variant="contained">VIEW ALL</Button>
                     </Grid>
+
+                    <Card style={ styles.card2 } elevation={4}>
+                        { recent_transactions.map (( value, index ) => {
+                            return (
+                                <CardContent style={ (index === recent_transactions.length - 1) ? styles.cardContent : styles.cardContent2 } key={ index }>
+                                    <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                        <Typography sx={{ fontSize: 16, fontWeight:"bold" }} color="#4B4948">
+                                            {value.transactionID}
+                                        </Typography>
+                                        <Typography style={ (value.accountFrom === id) ? styles.negative : styles.positive } sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="#4B4948">
+                                            {(value.accountFrom === id) ? `- SGD $${ value.transactionAmount.toLocaleString("en-US") }` : `SGD $${ value.transactionAmount.toLocaleString("en-US") }` }
+                                        </Typography>
+                                    </Grid>
+                                    <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                        <Typography sx={{ fontSize: 12 }} color="#9197A4">
+                                            Bills Payment: BIR
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 12 }} textAlign="end" color="#9197A4">
+                                            { value.transactionDate.replace(" GMT", "") }
+                                        </Typography>
+                                    </Grid>
+                                </CardContent>
+                            )
+                        })}
+
+                    </Card>
                 </Box>
             </Container>
         </React.Fragment>
