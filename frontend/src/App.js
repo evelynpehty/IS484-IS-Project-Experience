@@ -51,7 +51,7 @@ function App() {
           <Route exact path={"/"} element= {!currentUser && <Login></Login>} />
           <Route exact path={"/dashboard"} element={<DashBoard />} />
           <Route exact path={"/deposit"} element={<DepositSummary />} />
-          <Route exact path={"/account-details"} element={<AccountDetails />} />
+          <Route exact path={"/account-details/:id"} element={<AccountDetails />} />
         </Routes>
       </>
     )  
