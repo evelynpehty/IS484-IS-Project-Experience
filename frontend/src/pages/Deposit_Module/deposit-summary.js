@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import moment from 'moment';
+import React from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import Grid from '@mui/material/Unstable_Grid2';
@@ -51,30 +50,7 @@ function DepositSummary() {
 
     // Get list of deposit account from state
     const { depositList } = useSelector((state) => state.deposit);
-    const { transactionHistoryList } = useSelector((state) => state.deposit);
-
-    /*var newArray = transactionHistoryList.filter(function (el)
-    {
-        //var transactionDate = new Date(el.transactionDate);
-        const transactionDate = moment(el.transactionDate).format("DD-MM-YYYY")
-        const newTransactionDate = moment(transactionDate, "DD-MM-YYYY")
-        const startDate = moment("15-01-2023", "DD-MM-YYYY")
-        const endDate = moment("01-02-2023","DD-MM-YYYY")
-       
-        return newTransactionDate.isBetween(startDate, endDate,undefined,[]) 
-        //return transactionDate <= endDate && transactionDate >= startDate
-    }
-    );
-    console.log(newArray);*/
-
     
-    /*var newArray = depositList.filter(function (el)
-    {
-      return el.DepositAccountID === "4567"
-    }
-    );
-    console.log(newArray);*/
-
     return (
         <React.Fragment>
             <Container maxWidth="lg">
@@ -86,8 +62,8 @@ function DepositSummary() {
 
                     { depositList.map ((value, index) => {
                         return (
-                            <Link to={"/account-details"}>
-                            <Card style={ styles.card } key={ index }>
+                             <Link to={`/account-details/${value.DepositAccountID}`} key={value.DepositAccountID}> 
+                            <Card style={ styles.card } key={ index } >
                                 <CardContent style={ styles.cardContent }>
                                     <Typography sx={{ fontSize: 12 }} color="white">
                                         UBS

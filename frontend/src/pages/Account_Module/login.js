@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import Grid from '@mui/material/Unstable_Grid2';
-import { Container, TextField, Box, Button, Card, CardContent, Typography } from "@mui/material";
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 import { Stack } from '@mui/system';
-
-import Loading from '../../components/loading.js'
+import { Container, TextField, Box, Button, Card, CardContent, Typography } from "@mui/material";
 
 import '../../styles/main.css';
 import '../../styles/login.css';
-
 
 import logo from "../../assets/images/logo.png";
 import { ReactComponent as Savings } from "../../assets/icons/savings-red.svg";
@@ -20,10 +20,11 @@ import { ReactComponent as Personalise } from "../../assets/icons/personalise-re
 import { ReactComponent as Plans } from "../../assets/icons/plans-red.svg";
 import { ReactComponent as CashFlow } from "../../assets/icons/cashflow-red.svg";
 import { ReactComponent as Recommendations } from "../../assets/icons/recommendations-red.svg";
+import Loading from '../../components/loading.js'
+
 
 //import account_service from "../services/account.js";
 import { login } from "../../actions/auth";
-import { useNavigate } from "react-router-dom";
 
 function SignIn() {
     // Styling for Login Page
@@ -46,6 +47,7 @@ function SignIn() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(false);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -53,14 +55,16 @@ function SignIn() {
     // const { isLoggedIn } = useSelector(state => state.auth);    
     const { message } = useSelector(state => state.message);
     const handleLogin = (e) => {
+        
         e.preventDefault()
         setLoading(true);
+        setError(false)
         
         dispatch(login(username, password)).then(() => {
             navigate("/dashboard")
         }).catch(() => {
             setLoading(false)
-            console.log(message)
+            setError(true)
         });
     }
 
@@ -90,6 +94,9 @@ function SignIn() {
                                     alt="logo"
                                     src={ logo }
                                 />
+                                {error && <Stack sx={{ width: '100%' }} spacing={2}>
+                                <Alert severity="error" onClose={() => {setError(false)}}><AlertTitle>Error</AlertTitle>{message}</Alert>
+                                </Stack>}
                                 <form onSubmit={handleLogin}>
                                     <TextField
                                         required
