@@ -26,6 +26,23 @@ import { login } from "../../actions/auth";
 import { useNavigate } from "react-router-dom";
 
 function SignIn() {
+    // Styling for Login Page
+    const styles = {
+        grid: {
+            margin: "auto"
+        },
+
+        paragraph: {
+            fontWeight: "bold",
+            color: "#9197A4",
+            marginBottom: "10px"
+        },
+
+        card: {
+            backgroundColor: "white"
+        }
+    }
+
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -61,7 +78,7 @@ function SignIn() {
         <Container maxWidth="xl">
             {/* { loading && <Loading></Loading> } */}
             <Box sx={{ m: 5 }}>
-                <Grid container>
+                <Grid container style={ styles.grid }>
                     <Grid xs={12} lg={6}>
                             <Stack spacing={4} mb={5} alignItems="center">
                                 <Box
@@ -101,13 +118,13 @@ function SignIn() {
                                 </form>
                         
                                 <Button sx={{ color: "gray" }} fullWidth={ true }>FORGOT PASSWORD</Button>
-                                <p>or</p>
+                                <p style={ styles.paragraph }>or</p>
                                 <Button id="registerBtn" variant="contained" fullWidth={ true }>REGISTER</Button>
                                 <Typography variant="subtitle2" align="center">Privacy Policy & Terms and Conditions</Typography>
                             </Stack>
                     </Grid>
                     <Grid container lg={6} display={{ xs: "none", sm: "none", lg: "block" }} alignItems="center" >
-                        <p className="quickAction">Quick Actions</p>
+                        <Typography variant="p" style={ styles.paragraph } sx={{ paddingLeft: "64px" }}>Quick Actions</Typography>
                         <Box
                             sx={{
                                 p: 8,
@@ -116,7 +133,7 @@ function SignIn() {
                                 gap: 2,
                             }}
                         >
-                            <Card>
+                            <Card style={ styles.card }>
                                 <CardContent sx={{ p: 4, textAlign: "center" }}>
                                     <Savings className="small-icon"/>
                                     <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color="text.secondary" gutterBottom>
