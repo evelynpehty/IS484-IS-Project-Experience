@@ -7,6 +7,7 @@ import Login from "./pages/Account_Module/login";
 import DashBoard from './pages/dashboard.js'
 import DepositSummary from './pages/Deposit_Module/deposit-summary.js'
 import AccountDetails from './pages/Deposit_Module/account-details.js'
+import TransactionHistory from './pages/Deposit_Module/view-transaction-history.js'
 
 import { clearMessage } from "./actions/message";
 
@@ -51,7 +52,9 @@ function App() {
           <Route exact path={"/"} element= {!currentUser && <Login></Login>} />
           <Route exact path={"/dashboard"} element={<DashBoard />} />
           <Route exact path={"/deposit"} element={<DepositSummary />} />
+          <Route exact path={"/view-transaction-history"} element={<TransactionHistory />} />
           <Route exact path={"/account-details/:id"} element={<AccountDetails />} />
+          
         </Routes>
       </>
     )  
