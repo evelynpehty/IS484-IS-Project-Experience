@@ -62,7 +62,7 @@ function DepositSummary() {
 
                     { depositList.map ((value, index) => {
                         return (
-                             <Link to={`/account-details/${value.DepositAccountID}`} key={value.DepositAccountID}> 
+                            <Link to={`/account-details/${value.DepositAccountID}`} key={value.DepositAccountID}> 
                             <Card style={ styles.card } key={ index } >
                                 <CardContent style={ styles.cardContent }>
                                     <Typography sx={{ fontSize: 12 }} color="white">
@@ -78,7 +78,7 @@ function DepositSummary() {
                                         Available Balance
                                     </Typography>
                                     <Typography sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="white">
-                                        SGD ${value.AvailBalance}
+                                        SGD ${ value.AvailBalance.toLocaleString("en-US") }
                                     </Typography>
                                 </CardContent>
                             </Card>
