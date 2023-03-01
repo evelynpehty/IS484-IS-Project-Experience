@@ -31,6 +31,7 @@
     "redux-session-storage": "^2.0.1",
     "redux-thunk": "^2.4.2",
     "styled-components": "^5.3.6",
+    "victory": "^36.6.8",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

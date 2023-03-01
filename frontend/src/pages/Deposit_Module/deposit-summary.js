@@ -78,7 +78,7 @@ function DepositSummary() {
                                         Available Balance
                                     </Typography>
                                     <Typography sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="white">
-                                        SGD ${value.AvailBalance.toLocaleString("en-US")}
+                                        SGD ${ value.AvailBalance.toLocaleString("en-US") }
                                     </Typography>
                                 </CardContent>
                             </Card>
