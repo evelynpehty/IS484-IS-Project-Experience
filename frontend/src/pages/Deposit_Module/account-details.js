@@ -1,7 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { useParams } from 'react-router-dom';
-//import moment from 'moment';
+
 
 import Grid from '@mui/material/Unstable_Grid2';
 import { Container, Box, Button, Card, CardContent, Typography, Fab } from "@mui/material";
@@ -73,7 +74,8 @@ function AccountDetails() {
     }
     );
     console.log(newArray);*/
-    
+
+    const navigate = useNavigate();
     const { id } = useParams()
     const { depositList } = useSelector((state) => state.deposit);
     const { transactionHistoryList } = useSelector((state) => state.deposit);
@@ -88,8 +90,13 @@ function AccountDetails() {
       return el.accountFrom === id || el.accountTo === id
     })
 
+    console.log(transaction_item)
     var accountID = id
     var recent_transactions = transaction_item.slice(0, 3)
+
+    const handleViewAll = () => {
+        navigate('/view-transaction-history', {replace: true , state: { transaction_item: transaction_item, id: id } })  
+    }
 
     return (
         <React.Fragment>
@@ -122,7 +129,7 @@ function AccountDetails() {
 
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
                         <Typography style={ styles.label } variant="h6">Recent Transactions</Typography>
-                        <Button style={ styles.button } variant="contained">VIEW ALL</Button>
+                        <Button style={ styles.button } variant="contained" onClick={handleViewAll}>VIEW ALL</Button>
                     </Grid>
 
                     <Card style={ styles.card2 } elevation={4}>
