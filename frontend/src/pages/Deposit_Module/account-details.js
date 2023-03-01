@@ -115,7 +115,6 @@ function AccountDetails() {
       return el.accountFrom === id || el.accountTo === id
     })
 
-    console.log(transaction_item)
     var recent_transactions = transaction_item.slice(0, 3)
 
     const handleViewAll = () => {
@@ -286,7 +285,6 @@ function AccountDetails() {
                                 </CardContent>
                             )
                         })}
-
                     </Card>
                 </Box>
             </Container>
