@@ -84,22 +84,7 @@ function AccountDetails() {
         { x: "Jun", y: 3000 },
         { x: "Jul", y: 5500 }
     ]
-
-    // var newArray = transactionHistoryList.filter(function (el)
-    // {
-    //     // var transactionDate = new Date(el.transactionDate);
-    //     const transactionDate = moment(el.transactionDate).format("DD-MM-YYYY")
-    //     const newTransactionDate = moment(transactionDate, "DD-MM-YYYY")
-    //     const startDate = moment("15-01-2023", "DD-MM-YYYY")
-    //     const endDate = moment("01-02-2023","DD-MM-YYYY")
-       
-    //     return newTransactionDate.isBetween(startDate, endDate,undefined,[]) 
-    //     // return transactionDate <= endDate && transactionDate >= startDate
-    // }
-    // );
-
-    // console.log(newArray);
-
+    
     const navigate = useNavigate();
     const { id } = useParams()
     const { depositList } = useSelector((state) => state.deposit);
