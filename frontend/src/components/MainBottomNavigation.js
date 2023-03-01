@@ -11,13 +11,10 @@ import { ReactComponent as Investments } from "../assets/icons/investments.svg";
 import { ReactComponent as InvestmentsRed } from "../assets/icons/investments-red.svg";
 import { Link } from "react-router-dom";
 
-
-import "../styles/main.css";
-
 export default function MainBottomNavigation() {
-  const [value, setValue] = React.useState(0);
-
-  return (
+    const [value, setValue] = React.useState(0);
+    
+    return (
         <Box sx={{ width: 500 }}>
             <Paper sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }} elevation={3}>
             <BottomNavigation
@@ -27,10 +24,10 @@ export default function MainBottomNavigation() {
                 setValue(newValue);
                 }}
             >
-                <BottomNavigationAction component={ Link } to={"/dashboard"} label="Dashboard" icon={value === 0 ? <DashboardRed /> : <Dashboard />} />
-                <BottomNavigationAction component={ Link } to={"/deposit"} label="Savings" icon={value === 1 ? <SavingsRed /> : <Savings /> } />
-                <BottomNavigationAction label="Loans" icon={value === 2 ? <LoansRed /> : <Loans /> } />
-                <BottomNavigationAction label="Investments" icon={value === 3 ? <InvestmentsRed /> : <Investments /> } />
+                <BottomNavigationAction sx={{ "& .Mui-selected": { color: "#E60000", fontWeight: "bold" } }} component={ Link } to={"/dashboard"} label="Dashboard" icon={value === 0 ? <DashboardRed /> : <Dashboard />} />
+                <BottomNavigationAction sx={{ "& .Mui-selected": { color: "#E60000", fontWeight: "bold" } }} component={ Link } to={"/deposit"} label="Savings" icon={value === 1 ? <SavingsRed /> : <Savings /> } />
+                <BottomNavigationAction sx={{ "& .Mui-selected": { color: "#E60000", fontWeight: "bold" } }} label="Loans" icon={value === 2 ? <LoansRed /> : <Loans /> } />
+                <BottomNavigationAction sx={{ "& .Mui-selected": { color: "#E60000", fontWeight: "bold" } }} label="Investments" icon={value === 3 ? <InvestmentsRed /> : <Investments /> } />
             </BottomNavigation>
             </Paper>
         </Box>
