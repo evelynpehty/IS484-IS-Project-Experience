@@ -3,10 +3,12 @@ import { useState } from "react";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Grid from '@mui/material/Unstable_Grid2';
-import { Container, Box, Button, Card, CardContent, Typography, IconButton, Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import { Container, Box, Button, Typography, IconButton, Accordion, AccordionDetails, AccordionSummary, AppBar, Toolbar } from "@mui/material";
 import SearchBar from '@mkyy/mui-search-bar';
 import { useNavigate, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
+import { ReactComponent as Arrow } from "../../assets/icons/arrow-red.svg";
 import { ReactComponent as FilterIcon } from "../../assets/icons/filter-line-red.svg";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
@@ -183,6 +185,17 @@ export default function ColorTabs() {
     };
 
   return (
+    <React.Fragment>
+    <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="fixed" color="primary">
+        <Toolbar>
+            <Arrow component={ Link } to={ `/account-details/${id}` } />
+            <Typography component={ Link } to={ `/account-details/${id}` } sx={{ flexGrow: 1, fontWeight: "bold", ml: 2 }} color="#4B4948">
+                Account Overview
+            </Typography>
+        </Toolbar>
+        </AppBar>
+    </Box>
     <Container maxWidth="lg">
         <Box sx={{mt: 10, mb: 10 }}>
             <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
@@ -363,5 +376,6 @@ export default function ColorTabs() {
         }
         </Box>
     </Container>
+    </React.Fragment>
   );
 }
