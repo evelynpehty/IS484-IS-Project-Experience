@@ -2,7 +2,8 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Grid from '@mui/material/Unstable_Grid2';
-import { Container, Box, Button, Card, CardContent, Typography, Fab } from "@mui/material";
+import { Container, Box, Button, Card, CardContent, Typography, IconButton } from "@mui/material";
+import SearchBar from '@mkyy/mui-search-bar';
 import { useNavigate, useLocation } from "react-router-dom";
 
 import moment from 'moment';
@@ -27,6 +28,15 @@ export default function ColorTabs() {
             fontSize: "12px",
             color: "#4B4948",
             backgroundColor: "#E5E7EC"
+        },
+
+        outlinedButton: {
+            paddingTop: "8px",
+            paddingBottom: "8px",
+            borderRadius: "30px",
+            fontSize: "12px",
+            color: "#E60000",
+            border: "1px solid linear-gradient(to top right, #E69F9F, #E60000)"
         },
 
         card: {
@@ -57,6 +67,10 @@ export default function ColorTabs() {
 
         negative: {
             color: "#E60000"
+        },
+
+        searchBar: {
+            border: "1px solid black"
         }
     }
 
@@ -144,67 +158,85 @@ export default function ColorTabs() {
         console.log(filtered)
     }*/
 
+    const handleSearch = labelOptionValue => {
+        //...
+        console.log(labelOptionValue);
+    };
+
   return (
     <Container maxWidth="lg">
-        <Box sx={{mt: 10, mb: 10, width: '100%' }}>
-        <Tabs
-            value={value}
-            onChange={handleChange}
-            textColor="secondary"
-            indicatorColor="secondary"
-            aria-label="secondary tabs example"
-            centered
-        >
-            <Tab value="Monthly" label="Monthly" />
-            <Tab value="Weekly" label="Weekly" />
-            
-        </Tabs>
-        
-       
+        <Box sx={{mt: 10, mb: 10 }}>
+            <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
+                <Typography style={ styles.label } variant="h6">All Transactions</Typography>
+                <Button style={ styles.outlinedButton } variant="outlined">COLLAPSE ALL</Button>
+            </Grid>
+
+            <SearchBar
+                style={ styles.searchBar }
+                value=""
+                // onChange={ newValue => setTextFieldValue(newValue) }
+                onSearch={ handleSearch }
+            />
+
+            <Tabs
+                value={value}
+                onChange={handleChange}
+                aria-label="secondary tabs example"
+                centered
+                sx={{ 
+                    "& .Mui-selected": { color: "#4B4948", fontWeight: "bold" },
+                    "& .MuiTabs-indicator": { backgroundColor: "#4B4948" }  
+                }}
+            >
+                <Tab value="Monthly" label="Monthly" />
+                <Tab value="Weekly" label="Weekly" />
+                <Tab value="Daily" label="Daily" />
+            </Tabs>
+    
         <Card style={ styles.card2 } elevation={4}>
         { value === "Monthly" &&
            Object.keys(groupByYearMonth).map(year => {
             return (
-              <>
-                {Object.keys(groupByYearMonth[year]).map( (month) => {
-                    return(
-                        <>
-                        <p>{month} {year.trim()}</p>
-                        {groupByYearMonth[year][month].map((item,index)=>{
-                            return <p>{item.transactionAmount}</p>
-                        })}
-                    </>
-                    )
-                }
-                )}
-            </>
+                <>
+                    {Object.keys(groupByYearMonth[year]).map( (month) => {
+                        return(
+                            <>
+                                <p>{month} {year.trim()}</p>
+                                {groupByYearMonth[year][month].map((item,index)=>{
+                                    return <p>{item.transactionAmount}</p>
+                                })}
+                            </>
+                        )
+                    }
+                    )}
+                </>
             )
           })
         }
         { value === "Weekly" &&
            Object.keys(groupByYMWeek).map(year => {
             return (
-              <>
-                {Object.keys(groupByYMWeek[year]).map( // <--- Also notice here, we have wrapped it in curly braces, because it is an "expression" inside JSX.
-                (month) => {
-                    return (
-                        <>
-                        { Object.keys(groupByYMWeek[year][month]).map(
-                            (week) => { 
-                                return(
-                                    <>
-                                        <p>{year} {month} {week}</p>
-                                        {groupByYMWeek[year][month][week].map((item,index)=>{
-                                            return <p>{item.transactionAmount}</p>
-                                        })}
-                                    </>
-                                )                         
-                        })}
-                        </>
-                    )
-                }
-            )}
-            </>
+                <>
+                    {Object.keys(groupByYMWeek[year]).map( // <--- Also notice here, we have wrapped it in curly braces, because it is an "expression" inside JSX.
+                    (month) => {
+                        return (
+                            <>
+                                { Object.keys(groupByYMWeek[year][month]).map(
+                                    (week) => { 
+                                        return(
+                                            <>
+                                                <p>{year} {month} {week}</p>
+                                                {groupByYMWeek[year][month][week].map((item,index)=>{
+                                                    return <p>{item.transactionAmount}</p>
+                                                })}
+                                            </>
+                                        )                         
+                                })}
+                            </>
+                        )
+                    }
+                )}
+                </>
             )
           })
         }
