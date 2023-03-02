@@ -193,6 +193,10 @@ function CashFlow() {
                         onChange={ handleChange } 
                         aria-label="basic tabs example"
                         centered
+                        sx={{ 
+                            "& .MuiTab-root.Mui-selected": { color: "#4B4948", fontWeight: "bold" },
+                            "& .MuiTabs-indicator": { backgroundColor: "#4B4948" }
+                        }}
                         >
                             <Tab value="Yearly" label="Yearly" />
                             <Tab value="Monthly" label="Monthly" />

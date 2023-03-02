@@ -39,7 +39,7 @@ export default function ColorTabs() {
             borderRadius: "30px",
             fontSize: "12px",
             color: "#E60000",
-            border: "1px solid linear-gradient(to top right, #E69F9F, #E60000)"
+            border: "1px solid #E60000"
         },
 
         card: {
@@ -82,7 +82,11 @@ export default function ColorTabs() {
         },
 
         boxContent: {
-            marginBottom: 3
+            marginBottom: 0
+        },
+
+        boxContent2: {
+            marginBottom: 10
         }
     }
 
@@ -142,6 +146,10 @@ export default function ColorTabs() {
     const handleChange = (event, newValue) => {
     setValue(newValue);
     };
+
+    // const collapse = () => {
+    //     return false;
+    //   };
 
     /*const handleFilter = () =>{
 
@@ -263,7 +271,7 @@ export default function ColorTabs() {
                                         <Typography>
                                             { groupByYearMonth[year][month].map((item,index) => {
                                                 return (
-                                                    <Box>
+                                                    <Box style={ (index === groupByYearMonth[year][month].length - 1) ? styles.boxContent : styles.boxContent2 }>
                                                         <Grid container direction="row" justifyContent="space-between" alignItems="center">
                                                             <Typography sx={{ fontSize: 16, fontWeight:"bold" }} color="#4B4948">
                                                                 {item.transactionID}
