@@ -67,6 +67,12 @@ function CashFlow() {
 
         negative: {
             color: "#E60000"
+        },
+        
+        default: {
+            background: "#FFFFFF",
+            color: "#000000"
+            
         }
     }
 
@@ -99,15 +105,40 @@ function CashFlow() {
       return el.DepositAccountID === id
     })
 
-    const transaction_item = transactionHistoryList.filter(function (el)
-    {
-      return el.accountFrom === id || el.accountTo === id
-    })
+    function filter_transaction_item(value){
+        console.log(value)
+        var result;
+        if(value === "All"){
+            result = transactionHistoryList.filter(function (el)
+            {
+            return el.accountFrom === id || el.accountTo === id
+            })
+        }
+        else if(value === "Income"){
+            result = transactionHistoryList.filter(function (el)
+            {
+            return el.accountTo === id
+            })
+        } 
+        else if(value === "Expense"){
+            result = transactionHistoryList.filter(function (el)
+            {
+            return el.accountFrom === id
+            })
+        }
+        return result.slice(0, 3)
 
-    var recent_transactions = transaction_item.slice(0, 3)
+    }
 
-    // Tabs Value Change
     const [value, setValue] = React.useState('Monthly');
+    const [TransDisplay, setTransDisplay] = React.useState(filter_transaction_item("All"))
+    const [clicked, setClicked] = React.useState("All")
+
+    function handleClick(select) {
+        console.log(select)
+        setClicked(select)
+        setTransDisplay(filter_transaction_item(select))
+    }
 
     const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -122,19 +153,6 @@ function CashFlow() {
     //   console.log(newAlignment)
     // };
 
-    const allTransactions = () => {
-        console.log("All Transactions Active");
-        var transactionMainElement = document.getElementById("transaction");
-        console.log(transactionMainElement)
-    }
-
-    const income = () => {
-        
-    }
-
-    const expense = () => {
-        
-    }
 
     return (
         <React.Fragment>
@@ -280,32 +298,36 @@ function CashFlow() {
                     
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center" spacing={ 2 }>
                         <Grid xs={4}>
-                            <Card elevation={ 4 } onClick={ allTransactions }>
+                            <Card elevation={ 4 } onClick={() => handleClick("All")} sx ={{background: clicked === "All" ? "#BFBFBF" : styles.default }}>
                                 <CardContent id="transactions" sx={{ textAlign: "center" }}>
-                                    <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color="text.secondary" gutterBottom>
+                                    <Typography sx={{ color: clicked === "All" ? "#FFFFFF" : styles.default.color,fontSize: 14, fontWeight: "bold" }} gutterBottom>
                                     All
                                     </Typography>
-                                    <MenuBlack />
+                                    {clicked !== "All" && <MenuBlack />}
+                                    {clicked === "All" && <MenuWhite />}
                                 </CardContent>
                             </Card>
                         </Grid>
                         <Grid xs={4}>
-                            <Card elevation={ 4 } onClick={ income }>
+                            <Card elevation={ 4 } onClick={() => handleClick("Income")} sx ={{background: clicked === "Income" ? "linear-gradient(to top right, #FFFFFF, #109878)" : styles.default }}>
                                 <CardContent sx={{ textAlign: "center" }}>
-                                    <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color="text.secondary" gutterBottom>
+                                    <Typography sx={{color: clicked === "Income" ? "#FFFFFF" : styles.default.color, fontSize: 14, fontWeight: "bold" }} gutterBottom>
                                     Income
                                     </Typography>
-                                    <UpBlack />
+                          
+                                    {clicked !== "Income" && <UpBlack />}
+                                    {clicked === "Income" && <UpWhite />}
                                 </CardContent>
                             </Card>
                         </Grid>
                         <Grid xs={4}>
-                            <Card elevation={ 4 } onClick={ expense }>
+                            <Card elevation={ 4 } onClick={() => handleClick("Expense")} sx ={{background: clicked === "Expense" ? "linear-gradient(to top right, #FFFFFF, #E60000)" : styles.default }}>
                                 <CardContent sx={{ textAlign: "center" }}>
-                                    <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color="text.secondary" gutterBottom>
+                                    <Typography sx={{color: clicked === "Expense" ? "#FFFFFF" : styles.default.color, fontSize: 14, fontWeight: "bold" }} gutterBottom>
                                     Expenses
                                     </Typography>
-                                    <DownBlack />
+                                    {clicked !== "Expense" && <DownBlack />}
+                                    {clicked === "Expense" && <DownWhite />}
                                 </CardContent>
                             </Card>
                         </Grid>
@@ -331,9 +353,9 @@ function CashFlow() {
                     </Grid>
                     
                     <Card style={ styles.card2 } elevation={ 4 }>
-                        { recent_transactions.map (( value, index ) => {
+                        { TransDisplay.map (( value, index ) => {
                             return (
-                                <CardContent style={ (index === recent_transactions.length - 1) ? styles.cardContent : styles.cardContent2 } key={ index }>
+                                <CardContent style={ (index === TransDisplay.length - 1) ? styles.cardContent : styles.cardContent2 } key={ index }>
                                     <Grid container direction="row" justifyContent="space-between" alignItems="center">
                                         <Typography sx={{ fontSize: 16, fontWeight:"bold" }} color="#4B4948">
                                             {value.transactionID}
