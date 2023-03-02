@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -48,8 +49,14 @@ function DepositSummary() {
         }
     }
 
+ 
     // Get list of deposit account from state
     const { depositList } = useSelector((state) => state.deposit);
+    const [isEmpty, setIsEmpty] = useState(false);
+    
+    if(depositList.length === 0){
+        setIsEmpty(true)
+    }
     
     return (
         <React.Fragment>
@@ -60,7 +67,7 @@ function DepositSummary() {
                         <Button style={ styles.button } variant="contained">Manage Accounts</Button>
                     </Grid>
 
-                    { depositList.map ((value, index) => {
+                    { !isEmpty && depositList.map ((value, index) => {
                         return (
                             <Link to={`/account-details/${value.DepositAccountID}`} key={value.DepositAccountID}> 
                             <Card style={ styles.card } key={ index } >
@@ -85,6 +92,8 @@ function DepositSummary() {
                             </Link>
                         );
                     })}
+                    {/* to beautify */}
+                    {isEmpty && <p>you do not hvae any deposit account</p>}
                 </Box>
 
                 <Fab style={ styles.fabButton } color="primary" aria-label="add">
