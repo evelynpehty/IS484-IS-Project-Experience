@@ -103,8 +103,57 @@ export default function ColorTabs() {
         return result
       }
       var groupByYearMonth = func_groupByYearMonth(transaction_item)
+    const [value, setValue] = React.useState('Monthly');
+    // const [startDate, setStartDate] = React.useState(null);
+    // const [endDate, setEndDate] = React.useState(null);
+    
+
+    function func_groupByYearMonth(transaction_item) {
+        const result = transaction_item.reduce((acc, cur) => {
+            const createdDate = new Date(cur.transactionDate)
+            const year = createdDate.getFullYear() + " "
+            const monthShortName = createdDate.toLocaleString('en-us', { month: 'long' })
+          
+            // Get year object corresponding to current item from acc (or insert if not present)
+            const groupByYear = acc[year] = acc[year] || {};
+          
+            //Get month array corresponding to current item from groupByYear object (or insert if not present)
+            const groupByMonth = groupByYear[monthShortName] = groupByYear[monthShortName] || [];
+          
+            // Add current item to current groupByMonth array
+            groupByMonth.push(cur);
+          
+            return acc
+          }, {});
+
+        return result
+      }
+      var groupByYearMonth = func_groupByYearMonth(transaction_item)
       console.log(groupByYearMonth);
 
+      function func_groupByYMWeek(transaction_item) {
+        const result = transaction_item.reduce((acc, cur) => {
+            const createdDate = new Date(cur.transactionDate)
+            const year = createdDate.getFullYear() + " "
+            const monthShortName = createdDate.toLocaleString('en-us', { month: 'long' })
+            const weekNum = moment(createdDate).format('W')
+            
+            // Get year object corresponding to current item from acc (or insert if not present)
+            const groupByYear = acc[year] = acc[year] || {};
+          
+            //Get month array corresponding to current item from groupByYear object (or insert if not present)
+            const groupByMonth = groupByYear[monthShortName] = groupByYear[monthShortName] || [];
+          
+            //Get week array corresponding to current item from groupByMonth object (or insert if not present)
+            const groupByWeek = groupByMonth[weekNum] = groupByMonth[weekNum] || [];
+            groupByWeek.push(cur);
+           
+            return acc
+          }, {});
+          return result
+      }
+
+    var groupByYMWeek = func_groupByYMWeek(transaction_item)
       function func_groupByYMWeek(transaction_item) {
         const result = transaction_item.reduce((acc, cur) => {
             const createdDate = new Date(cur.transactionDate)

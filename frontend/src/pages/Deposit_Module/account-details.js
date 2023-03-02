@@ -11,6 +11,7 @@ import { Container, Box, Button, Card, CardContent, Typography, AppBar, Toolbar 
 import { VictoryChart, VictoryLine, VictoryScatter, VictoryArea, VictoryAxis } from 'victory';
 
 import { ReactComponent as Arrow } from "../../assets/icons/arrow-red.svg";
+import { ModeCommentSharp, Savings } from "@mui/icons-material";
 
 function AccountDetails() {
     // Styling for Account Details Page
@@ -65,26 +66,30 @@ function AccountDetails() {
         }
     }
 
-    // Expenses Static Data
-    const data = [
-        { x: "Jan", y: 2000 },
-        { x: "Feb", y: 1500 },
-        { x: "Mar", y: 4000 },
-        { x: "Apr", y: 5000 },
-        { x: "Jun", y: 3500 },
-        { x: "Jul", y: 4000 }
-    ]
-
-    // Income Static Data
-    const data2 = [
-        { x: "Jan", y: 4000 },
-        { x: "Feb", y: 4500 },
-        { x: "Mar", y: 3200 },
-        { x: "Apr", y: 2500 },
-        { x: "Jun", y: 3000 },
-        { x: "Jul", y: 5500 }
-    ]
+    var months = ["Jan","Feb", "Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    //const currentMonth = moment().month()
+    //const currentMontName = moment(currentMonth+1, 'MM').format('MMM')
+    const sixMonthAgo = moment().subtract(5, 'months').format("MMM")
     
+    var monthRange = []
+    const indexof = months.indexOf(sixMonthAgo)
+    const limit = indexof + 5
+
+
+    for (let i = indexof; i <= limit; i++) {
+        monthRange.push(months[i%12])
+      }
+    
+    const income_data = []
+    const expense_data = []
+    monthRange.forEach(month => {
+        var currentobj = {}
+        currentobj["x"] = month
+        currentobj["y"] = 0
+        expense_data.push(currentobj)
+        income_data.push( Object.assign({},currentobj))
+    });
+
     const navigate = useNavigate();
     const { id } = useParams()
     const { depositList } = useSelector((state) => state.deposit);
@@ -100,7 +105,75 @@ function AccountDetails() {
       return el.accountFrom === id || el.accountTo === id
     })
 
-    console.log(transaction_item)
+    //income 
+    const income_transaction_data = transactionHistoryList.filter(function (el)
+    {
+      return el.accountTo === id 
+    })
+
+    //expenses 
+    const expenses_transaction_item = transactionHistoryList.filter(function (el)
+    {
+      return el.accountFrom === id 
+    })
+
+    expenses_transaction_item.forEach(element => {
+        const monthNum = moment(element.transactionDate).month() + 1
+        var monthName = moment(monthNum, 'MM').format('MMM');
+
+        expense_data.forEach(obj =>{
+            if (obj.x === monthName){
+                obj.y += element.transactionAmount
+            }
+        })
+        // const newTransactionDate = moment(transactionDate, "DD-MM-YYYY")
+    });
+
+    income_transaction_data.forEach(element => {
+        const monthNum = moment(element.transactionDate).month() + 1
+        var monthName = moment(monthNum, 'MM').format('MMM');
+
+        income_data.forEach(obj =>{
+            if (obj.x === monthName){
+                obj.y += element.transactionAmount
+            }
+        })
+    });
+
+    const expense_latest_obj = [expense_data[5]]
+    const income_latest_obj = [income_data[5]]
+
+    const latest_month = income_latest_obj[0].x
+    const total_income = income_latest_obj[0].y
+    const total_expense = expense_latest_obj[0].y
+
+    var expense_max = expense_data.reduce(
+        (prev, current) => {
+          return prev.y > current.y ? prev : current
+        }
+      );
+    var income_max = income_data.reduce(
+        (prev, current) => {
+          return prev.y > current.y ? prev : current
+        }
+      );
+
+    var max = 0
+  
+    if (income_max.y > expense_max.y){
+       max = income_max.y
+    } else{
+       max = expense_max.y
+    }
+
+    const arrayRange = (start, stop, step) =>
+    Array.from(
+    { length: (stop - start) / step + 1 },
+        (value, index) => start + index * step
+    );
+    var tickers = arrayRange(0, max+5000, 5000)
+    console.log(tickers)
+
     var recent_transactions = transaction_item.slice(0, 3)
 
     const handleViewAll = () => {
@@ -160,15 +233,15 @@ function AccountDetails() {
                                 style={{
                                     axis: { stroke: 'none' },
                                     ticks: { stroke: 'none' },
-                                    tickLabels: { fill: '#454459' },
+                                    tickLabels: { fill: '#454459' }
                                 }}
-                                tickValues = {[ 1000, 2000, 3000, 4000, 5000, 6000 ]}
+                                tickValues={tickers}
                             />
 
                             {/* Expenses Line Chart */}
                             <VictoryLine
                                 interpolation="natural"
-                                data={ data }
+                                data={ expense_data }
                                 style={{ 
                                     data: { stroke: "#E60000", strokeWidth: 6 },
                                     parent: { border: "1px solid #E60000"}
@@ -177,12 +250,10 @@ function AccountDetails() {
                             <VictoryArea
                                 interpolation="natural"
                                 style={{ data: { fill: "#FF9364", fillOpacity: 0.3, stroke: "none" } }}
-                                data={ data }
+                                data={ expense_data }
                             />
                             <VictoryScatter 
-                                data={[
-                                    { x: "Jul", y: 4000 }
-                                ]}
+                                data={expense_latest_obj}
                                 size={ 7 }
                                 style={{
                                     data: { fill: "#E60000", stroke: "#F3F3F3", strokeWidth: 3 }
@@ -192,7 +263,7 @@ function AccountDetails() {
                             {/* Income Line Chart */}
                             <VictoryLine
                                 interpolation="natural"
-                                data={ data2 }
+                                data={ income_data }
                                 style={{ 
                                     data: { stroke: "#109878", strokeWidth: 6 },
                                 }}
@@ -200,12 +271,10 @@ function AccountDetails() {
                             <VictoryArea
                                 interpolation="natural"
                                 style={{ data: { fill: "#01A099", fillOpacity: 0.3, stroke: "none"} }}
-                                data={ data2 }
+                                data={ income_data }
                             />
                             <VictoryScatter 
-                                data={[
-                                    { x: "Jul", y: 5500 }
-                                ]}
+                                data={income_latest_obj}
                                 size={ 7 }
                                 style={{
                                     data: { fill: "#109878", stroke: "#F3F3F3", strokeWidth: 3 }
@@ -219,10 +288,10 @@ function AccountDetails() {
                                         NET CASH FLOW
                                     </Typography>
                                     <Typography sx={{ fontSize: 18, fontWeight:"bold" }} color="#4B4948">
-                                        SGD $2,180.90
+                                        SGD ${total_income-total_expense.toLocaleString("en-US")}
                                     </Typography>
                                     <Typography sx={{ fontSize: 10 }} color="#9197A4">
-                                        For month of Jan 2023
+                                        For month of {latest_month} 2023
                                     </Typography>
                                 </Grid>
                                 <Grid xs={4}>
@@ -230,13 +299,13 @@ function AccountDetails() {
                                         TOTAL INCOME
                                     </Typography>
                                     <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} color="#3BB537">
-                                        SGD $4,500.90
+                                        SGD ${total_income.toLocaleString("en-US")}
                                     </Typography>
                                     <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">
                                         TOTAL EXPENSES
                                     </Typography>
                                     <Typography sx={{ fontSize: 14, fontWeight:"bold" }} color="#E60000">
-                                        SGD $2,420.00
+                                        SGD ${total_expense.toLocaleString("en-US")}
                                     </Typography>
                                 </Grid>
                             </Grid>
