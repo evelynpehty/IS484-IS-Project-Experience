@@ -1,19 +1,16 @@
 import * as React from 'react';
-import { useState } from "react";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Grid from '@mui/material/Unstable_Grid2';
 import { Container, Box, Button, Typography, IconButton, Accordion, AccordionDetails, AccordionSummary, AppBar, Toolbar } from "@mui/material";
 import SearchBar from '@mkyy/mui-search-bar';
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
-
 import { ReactComponent as Arrow } from "../../assets/icons/arrow-red.svg";
 import { ReactComponent as FilterIcon } from "../../assets/icons/filter-line-red.svg";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import moment from 'moment';
-import _ from 'lodash'
 
 export default function ColorTabs() {
     const styles = {
@@ -95,6 +92,7 @@ export default function ColorTabs() {
 
     const {state} = useLocation();
     const { transaction_item, id } = state;
+    console.log(transaction_item)
 
     const [value, setValue] = React.useState('Monthly');
     
@@ -370,6 +368,47 @@ export default function ColorTabs() {
                         )
                     }
                 )}
+                </>
+            )
+          })
+        }
+
+        {/* Daily Transaction History */}
+        { value === "Daily" && transaction_item.map((item,index) => {
+            return (
+                <>
+                    <Accordion defaultExpanded>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel2a-content"
+                            id="panel2a-header"
+                            sx={{ backgroundColor: "#F8F8F8" }}
+                            >
+                                <Typography sx={{ fontWeight: "bold", color: "#4B4948" }}>
+                                    { moment(item.transactionDate).format('dddd, Do MMM YYYY') } 
+                                </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Box>
+                                <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold" }} color="#4B4948">
+                                        {item.transactionID}
+                                    </Typography>
+                                    <Typography style={ (item.accountFrom === id) ? styles.negative : styles.positive } sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="#4B4948">
+                                        {(item.accountFrom === id) ? `- SGD $${ item.transactionAmount.toLocaleString("en-US") }` : `SGD $${ item.transactionAmount.toLocaleString("en-US") }` }
+                                    </Typography>
+                                </Grid>
+                                <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                    <Typography sx={{ fontSize: 12 }} color="#9197A4">
+                                        { item.transactionDescription }
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 12 }} textAlign="end" color="#9197A4">
+                                        { item.transactionDate.replace(" GMT", "") }
+                                    </Typography>
+                                </Grid>
+                            </Box>
+                        </AccordionDetails>
+                    </Accordion>  
                 </>
             )
           })
