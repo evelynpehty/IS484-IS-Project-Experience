@@ -26,8 +26,3 @@
 .MuiAppBar-colorPrimary {
     background: var(--white) !important;
 }
-
-.Mui-selected {
-    color: var(--primary) !important;
-    font-weight: bold;
-}
