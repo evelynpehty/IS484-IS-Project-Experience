@@ -2,8 +2,12 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Grid from '@mui/material/Unstable_Grid2';
-import { Container, Box, Button, Card, CardContent, Typography, Fab } from "@mui/material";
+import { Container, Box, Button, Card, CardContent, Typography, IconButton, Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import SearchBar from '@mkyy/mui-search-bar';
 import { useNavigate, useLocation } from "react-router-dom";
+
+import { ReactComponent as FilterIcon } from "../../assets/icons/filter-line-red.svg";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import moment from 'moment';
 import _ from 'lodash'
@@ -27,6 +31,15 @@ export default function ColorTabs() {
             fontSize: "12px",
             color: "#4B4948",
             backgroundColor: "#E5E7EC"
+        },
+
+        outlinedButton: {
+            paddingTop: "8px",
+            paddingBottom: "8px",
+            borderRadius: "30px",
+            fontSize: "12px",
+            color: "#E60000",
+            border: "1px solid linear-gradient(to top right, #E69F9F, #E60000)"
         },
 
         card: {
@@ -57,6 +70,19 @@ export default function ColorTabs() {
 
         negative: {
             color: "#E60000"
+        },
+
+        searchBar: {
+            border: "1px solid #BFBFBF"
+        },
+        
+        iconButton: {
+            border: "1px solid #BFBFBF",
+            borderRadius: "10px"
+        },
+
+        boxContent: {
+            marginBottom: 3
         }
     }
 
@@ -64,10 +90,8 @@ export default function ColorTabs() {
     const { transaction_item, id } = state;
 
     const [value, setValue] = React.useState('Monthly');
-    // const [startDate, setStartDate] = React.useState(null);
-    // const [endDate, setEndDate] = React.useState(null);
     
-
+    // Group by Month
     function func_groupByYearMonth(transaction_item) {
         const result = transaction_item.reduce((acc, cur) => {
             const createdDate = new Date(cur.transactionDate)
@@ -87,11 +111,11 @@ export default function ColorTabs() {
           }, {});
 
         return result
-      }
-      var groupByYearMonth = func_groupByYearMonth(transaction_item)
-      console.log(groupByYearMonth);
+    }
+    var groupByYearMonth = func_groupByYearMonth(transaction_item)
 
-      function func_groupByYMWeek(transaction_item) {
+    // Group by Week
+    function func_groupByYMWeek(transaction_item) {
         const result = transaction_item.reduce((acc, cur) => {
             const createdDate = new Date(cur.transactionDate)
             const year = createdDate.getFullYear() + " "
@@ -111,8 +135,7 @@ export default function ColorTabs() {
             return acc
           }, {});
           return result
-      }
-
+    }
     var groupByYMWeek = func_groupByYMWeek(transaction_item)
     console.log(groupByYMWeek);
       
@@ -144,72 +167,190 @@ export default function ColorTabs() {
         console.log(filtered)
     }*/
 
+    const handleSearch = labelOptionValue => {
+        //...
+        console.log(labelOptionValue);
+    };
+
   return (
     <Container maxWidth="lg">
-        <Box sx={{mt: 10, mb: 10, width: '100%' }}>
-        <Tabs
-            value={value}
-            onChange={handleChange}
-            textColor="secondary"
-            indicatorColor="secondary"
-            aria-label="secondary tabs example"
-            centered
-        >
-            <Tab value="Monthly" label="Monthly" />
-            <Tab value="Weekly" label="Weekly" />
-            
-        </Tabs>
-        
-       
-        <Card style={ styles.card2 } elevation={4}>
-        { value === "Monthly" &&
-           Object.keys(groupByYearMonth).map(year => {
+        <Box sx={{mt: 10, mb: 10 }}>
+            <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
+                <Typography style={ styles.label } variant="h6">All Transactions</Typography>
+                <Button style={ styles.outlinedButton } variant="outlined">COLLAPSE ALL</Button>
+            </Grid>
+
+            <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
+                <SearchBar
+                    style={ styles.searchBar }
+                    value=""
+                    // onChange={ newValue => setTextFieldValue(newValue) }
+                    onSearch={ handleSearch }
+                    placeholder="Search Transactions"
+                />
+                <IconButton style={ styles.iconButton } aria-label="delete">
+                    <FilterIcon />
+                </IconButton>
+            </Grid>
+
+            <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+                <Tabs
+                    value={value}
+                    onChange={handleChange}
+                    aria-label="secondary tabs example"
+                    centered
+                    sx={{ 
+                        "& .MuiTab-root.Mui-selected": { color: "#4B4948", fontWeight: "bold" },
+                        "& .MuiTabs-indicator": { backgroundColor: "#4B4948" }
+                    }}
+                >
+                    <Tab value="Monthly" label="Monthly" />
+                    <Tab value="Weekly" label="Weekly" />
+                    <Tab value="Daily" label="Daily" />
+                </Tabs>
+            </Box>
+
+            {/* <Accordion>
+                <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                >
+                <Typography>Accordion 1</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                <Typography>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                    malesuada lacus ex, sit amet blandit leo lobortis eget.
+                </Typography>
+                </AccordionDetails>
+            </Accordion>
+            <Accordion>
+                <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel2a-content"
+                id="panel2a-header"
+                >
+                <Typography>Accordion 2</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                <Typography>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                    malesuada lacus ex, sit amet blandit leo lobortis eget.
+                </Typography>
+                </AccordionDetails>
+            </Accordion> */}
+
+        {/* Monthly Transaction History */}
+        { value === "Monthly" && Object.keys(groupByYearMonth).map(year => {
             return (
-              <>
-                {Object.keys(groupByYearMonth[year]).map( (month) => {
-                    return(
-                        <>
-                        <p>{month} {year.trim()}</p>
-                        {groupByYearMonth[year][month].map((item,index)=>{
-                            return <p>{item.transactionAmount}</p>
-                        })}
-                    </>
-                    )
-                }
-                )}
-            </>
+                <>
+                    { Object.keys(groupByYearMonth[year]).map( (month, index) => {
+                        return(
+                            <>
+                                <Accordion>
+                                    <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel2a-content"
+                                    id="panel2a-header"
+                                    sx={{ backgroundColor: "#F8F8F8" }}
+                                    >
+                                        <Typography sx={{ fontWeight: "bold", color: "#4B4948" }}>
+                                            {month.substring(0, 3).toUpperCase()} {year.trim()}
+                                        </Typography>
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                        <Typography>
+                                            { groupByYearMonth[year][month].map((item,index) => {
+                                                return (
+                                                    <Box>
+                                                        <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                                            <Typography sx={{ fontSize: 16, fontWeight:"bold" }} color="#4B4948">
+                                                                {item.transactionID}
+                                                            </Typography>
+                                                            <Typography style={ (item.accountFrom === id) ? styles.negative : styles.positive } sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="#4B4948">
+                                                                {(item.accountFrom === id) ? `- SGD $${ item.transactionAmount.toLocaleString("en-US") }` : `SGD $${ item.transactionAmount.toLocaleString("en-US") }` }
+                                                            </Typography>
+                                                        </Grid>
+                                                        <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                                            <Typography sx={{ fontSize: 12 }} color="#9197A4">
+                                                                { item.transactionDescription }
+                                                            </Typography>
+                                                            <Typography sx={{ fontSize: 12 }} textAlign="end" color="#9197A4">
+                                                                { item.transactionDate.replace(" GMT", "") }
+                                                            </Typography>
+                                                        </Grid>
+                                                    </Box>
+                                                ) 
+                                            })}
+                                        </Typography>
+                                    </AccordionDetails>
+                                </Accordion>
+                            </>
+                        )
+                    }
+                    )}
+                </>
             )
           })
         }
         { value === "Weekly" &&
-           Object.keys(groupByYMWeek).map(year => {
+           Object.keys(groupByYMWeek).map((year, index) => {
             return (
-              <>
-                {Object.keys(groupByYMWeek[year]).map( // <--- Also notice here, we have wrapped it in curly braces, because it is an "expression" inside JSX.
-                (month) => {
-                    return (
-                        <>
-                        { Object.keys(groupByYMWeek[year][month]).map(
-                            (week) => { 
-                                return(
-                                    <>
-                                        <p>{year} {month} {week}</p>
-                                        {groupByYMWeek[year][month][week].map((item,index)=>{
-                                            return <p>{item.transactionAmount}</p>
-                                        })}
-                                    </>
-                                )                         
-                        })}
-                        </>
-                    )
-                }
-            )}
-            </>
+                <>
+                    {Object.keys(groupByYMWeek[year]).map((month, index) => {
+                        return (
+                            <>
+                                { Object.keys(groupByYMWeek[year][month]).map((week, index) => { 
+                                    return(
+                                        <>
+                                            <Accordion>
+                                                <AccordionSummary
+                                                expandIcon={<ExpandMoreIcon />}
+                                                aria-controls="panel2a-content"
+                                                id="panel2a-header"
+                                                sx={{ backgroundColor: "#F8F8F8" }}
+                                                >
+                                                    <Typography sx={{ fontWeight: "bold", color: "#4B4948" }}>
+                                                        { year.trim() } { month.substring(0, 3).toUpperCase() }  ( WEEK { week % 4 } )
+                                                    </Typography>
+                                                </AccordionSummary>
+                                                <AccordionDetails>
+                                                    {groupByYMWeek[year][month][week].map((item,index)=>{
+                                                        return (
+                                                            <Box>
+                                                                <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                                                    <Typography sx={{ fontSize: 16, fontWeight:"bold" }} color="#4B4948">
+                                                                        {item.transactionID}
+                                                                    </Typography>
+                                                                    <Typography style={ (item.accountFrom === id) ? styles.negative : styles.positive } sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="#4B4948">
+                                                                        {(item.accountFrom === id) ? `- SGD $${ item.transactionAmount.toLocaleString("en-US") }` : `SGD $${ item.transactionAmount.toLocaleString("en-US") }` }
+                                                                    </Typography>
+                                                                </Grid>
+                                                                <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                                                    <Typography sx={{ fontSize: 12 }} color="#9197A4">
+                                                                        { item.transactionDescription }
+                                                                    </Typography>
+                                                                    <Typography sx={{ fontSize: 12 }} textAlign="end" color="#9197A4">
+                                                                        { item.transactionDate.replace(" GMT", "") }
+                                                                    </Typography>
+                                                                </Grid>
+                                                            </Box>
+                                                        ) 
+                                                    })}
+                                                </AccordionDetails>
+                                            </Accordion>
+                                        </>
+                                    )                         
+                                })}
+                            </>
+                        )
+                    }
+                )}
+                </>
             )
           })
         }
-
-        </Card>
         </Box>
     </Container>
   );
