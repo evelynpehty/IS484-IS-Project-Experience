@@ -32,9 +32,7 @@ function MainAppBar() {
     const handleLogOut = () => {
         dispatch(logout());
         navigate("/")
-
       };
-  
 
     return (
         <Box sx={{ flexGrow: 1 }}>

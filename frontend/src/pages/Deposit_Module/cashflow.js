@@ -6,7 +6,7 @@ import * as V from 'victory';
 import { Link } from "react-router-dom";
 
 import Grid from '@mui/material/Unstable_Grid2';
-import { Container, Box, Button, Card, CardContent, Typography, AppBar, Toolbar, Tab, Tabs, Paper } from "@mui/material";
+import { Container, Box, Button, Card, CardContent, Typography, AppBar, Toolbar, Tab, Tabs, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { VictoryChart, VictoryLine, VictoryScatter, VictoryArea, VictoryAxis } from 'victory';
 
 import { ReactComponent as Arrow } from "../../assets/icons/arrow-red.svg";
@@ -106,6 +106,7 @@ function CashFlow() {
 
     var recent_transactions = transaction_item.slice(0, 3)
 
+    // Tabs Value Change
     const [value, setValue] = React.useState('Monthly');
 
     const handleChange = (event, newValue) => {
@@ -113,13 +114,35 @@ function CashFlow() {
     console.log(newValue)
     };
 
+    // // Toggle Button Change
+    // const [alignment, setAlignment] = React.useState('web');
+
+    // const handleChange2 = (event2, newAlignment) => {
+    //   setAlignment(newAlignment);
+    //   console.log(newAlignment)
+    // };
+
+    const allTransactions = () => {
+        console.log("All Transactions Active");
+        var transactionMainElement = document.getElementById("transaction");
+        console.log(transactionMainElement)
+    }
+
+    const income = () => {
+        
+    }
+
+    const expense = () => {
+        
+    }
+
     return (
         <React.Fragment>
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position="fixed" color="primary">
                 <Toolbar>
-                    <Arrow component={ Link } to={  `/account-details/${id}` } />
-                    <Typography component={ Link } to={  `/account-details/${id}` } sx={{ flexGrow: 1, fontWeight: "bold", ml: 2 }} color="#4B4948">
+                    <Arrow component={ Link } to={ `/account-details/${id}` } />
+                    <Typography component={ Link } to={ `/account-details/${id}` } sx={{ flexGrow: 1, fontWeight: "bold", ml: 2 }} color="#4B4948">
                         Account Overview
                     </Typography>
                 </Toolbar>
@@ -254,35 +277,52 @@ function CashFlow() {
                             </Grid>
                         </CardContent>
                     </Card>
+                    
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center" spacing={ 2 }>
                         <Grid xs={4}>
-                            <Card elevation={ 4 } value="Transactions">
-                                <CardContent sx={{ textAlign: "center" }}>
+                            <Card elevation={ 4 } onClick={ allTransactions }>
+                                <CardContent id="transactions" sx={{ textAlign: "center" }}>
                                     <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color="text.secondary" gutterBottom>
                                     All
                                     </Typography>
+                                    <MenuBlack />
                                 </CardContent>
                             </Card>
                         </Grid>
                         <Grid xs={4}>
-                            <Card elevation={ 4 } value="Income">
+                            <Card elevation={ 4 } onClick={ income }>
                                 <CardContent sx={{ textAlign: "center" }}>
                                     <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color="text.secondary" gutterBottom>
                                     Income
                                     </Typography>
+                                    <UpBlack />
                                 </CardContent>
                             </Card>
                         </Grid>
                         <Grid xs={4}>
-                        <Card elevation={ 4 } value="Expenses">
-                            <CardContent sx={{ textAlign: "center" }}>
+                            <Card elevation={ 4 } onClick={ expense }>
+                                <CardContent sx={{ textAlign: "center" }}>
                                     <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color="text.secondary" gutterBottom>
                                     Expenses
                                     </Typography>
+                                    <DownBlack />
                                 </CardContent>
                             </Card>
                         </Grid>
                     </Grid>
+
+                    {/* <ToggleButtonGroup
+                        color="primary"
+                        value={alignment}
+                        exclusive
+                        onChange={handleChange2}
+                        fullWidth={ true }
+                        sx={{ mb: 3 }}
+                    >
+                        <ToggleButton value="Transaction">All <MenuBlack sx={{ mr: 1 }} /></ToggleButton>
+                        <ToggleButton value="Income">Income</ToggleButton>
+                        <ToggleButton value="Expenses">Expenses</ToggleButton>
+                    </ToggleButtonGroup> */}
 
                     {/* Need to be made into a component */}
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
