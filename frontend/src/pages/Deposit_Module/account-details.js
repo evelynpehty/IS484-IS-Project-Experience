@@ -78,7 +78,7 @@ function AccountDetails() {
 
     for (let i = indexof; i <= limit; i++) {
         monthRange.push(months[i%12])
-      }
+    }
     
     const income_data = []
     const expense_data = []
