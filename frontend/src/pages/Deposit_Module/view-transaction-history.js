@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from "react";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -147,6 +148,7 @@ export default function ColorTabs() {
     setValue(newValue);
     };
 
+
     // const collapse = () => {
     //     return false;
     //   };
@@ -256,11 +258,11 @@ export default function ColorTabs() {
                     { Object.keys(groupByYearMonth[year]).map( (month, index) => {
                         return(
                             <>
-                                <Accordion>
+                                <Accordion defaultExpanded>
                                     <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel2a-content"
-                                    id="panel2a-header"
+                                    aria-controls={`panel-content`}
+                                    id={`panel-content-header`}
                                     sx={{ backgroundColor: "#F8F8F8" }}
                                     >
                                         <Typography sx={{ fontWeight: "bold", color: "#4B4948" }}>
@@ -312,7 +314,7 @@ export default function ColorTabs() {
                                 { Object.keys(groupByYMWeek[year][month]).map((week, index) => { 
                                     return(
                                         <>
-                                            <Accordion>
+                                            <Accordion defaultExpanded>
                                                 <AccordionSummary
                                                 expandIcon={<ExpandMoreIcon />}
                                                 aria-controls="panel2a-content"
