@@ -195,7 +195,12 @@ def get_new_productID(userID):
     return productID
 
 #fiter transaction history 
+def filter_transaction_history():
+    pass 
 
 #view large spending 
+def view_large_spending():
+    pass 
+
 
 

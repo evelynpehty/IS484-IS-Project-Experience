@@ -70,7 +70,22 @@ def get_view_calculate_loan_repayment_detail(principal, rate, payment_period_in_
 #     }
 
 #view loan transactions 
+def view_loan_transactions():
+    pass 
+
 
 #Add Loan Accounts (Add or Delete)
+def add_loan_account():
+    pass 
+def delelte_loan_account():
+    pass 
+
 #Partial Loan Repayment Calculation
+def calculate_partial_loan_repayment():
+    pass 
+
 #Consolidated Loan Repayment
+def consolidated_loan_repayment():
+    pass 
+
+

@@ -69,7 +69,14 @@ def register(username, password):
   }
 
 #reset password
+def reset_password():
+  pass 
 
 #edit personal detail 
+def edit_personal_detail():
+  pass 
 
 #peek details 
+
+def peek_detail():
+  pass 
