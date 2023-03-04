@@ -67,3 +67,9 @@ def register(username, password):
     "code": 200,
     "message": "register successful"
   }
+
+#reset password
+
+#edit personal detail 
+
+#peek details 

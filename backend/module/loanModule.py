@@ -23,6 +23,8 @@ def get_view_all_loan_account(userID):
         "message": "no available information found",
         "data": None
     }
+
+#SELECT 
 def get_view_loan_account_detail(loanAccountID):
     engine = create_engine()
     sql = "SELECT * FROM loan_account WHERE loanAccountID = "+str(loanAccountID)
@@ -66,3 +68,9 @@ def get_view_calculate_loan_repayment_detail(principal, rate, payment_period_in_
 #     return {
 #         "Total_amount": totalAmount
 #     }
+
+#view loan transactions 
+
+#Add Loan Accounts (Add or Delete)
+#Partial Loan Repayment Calculation
+#Consolidated Loan Repayment
