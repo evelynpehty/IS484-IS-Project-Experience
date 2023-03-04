@@ -17,6 +17,9 @@ def get_diversification_what_if_analysis():
         
     }
 
+# FUNCTION BEFORE MIDTERM 
+
+
 #View Net Worth
 def get_net_worth():
     pass 

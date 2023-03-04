@@ -185,7 +185,7 @@ def add_new_deposit_account_without_default_values(depositAccountID ,  userID , 
         "message": "Your account has successfully added"
     }
     
-
+# FUNCTION BEFORE MIDTERM 
 
 def get_new_productID(userID):
     engine = create_engine()

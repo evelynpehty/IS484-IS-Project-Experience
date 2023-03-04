@@ -68,6 +68,11 @@ def register(username, password):
     "message": "register successful"
   }
 
+
+# FUNCTION BEFORE MIDTERM 
+
+
+
 #reset password
 def reset_password():
   pass 

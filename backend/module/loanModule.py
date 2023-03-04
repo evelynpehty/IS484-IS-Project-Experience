@@ -69,6 +69,10 @@ def get_view_calculate_loan_repayment_detail(principal, rate, payment_period_in_
 #         "Total_amount": totalAmount
 #     }
 
+
+# FUNCTION BEFORE MIDTERM 
+
+
 #view loan transactions 
 def view_loan_transactions():
     pass 

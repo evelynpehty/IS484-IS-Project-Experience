@@ -13,6 +13,9 @@ def get_stock_price(stock_name):
         stock_name: price
     }
 
+# FUNCTION BEFORE MIDTERM 
+
+
 # View My Positions
 
 # Select Stock
