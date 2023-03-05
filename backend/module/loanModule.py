@@ -74,7 +74,9 @@ def get_view_calculate_loan_repayment_detail(principal, rate, payment_period_in_
 
 
 #view loan transactions 
-def view_loan_transactions():
+def view_loan_transactions_by_account(loanAccountID):
+    pass 
+def view_loan_transactions_by_user(userID):
     pass 
 
 # PEEK for loan 

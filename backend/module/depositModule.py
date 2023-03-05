@@ -218,13 +218,13 @@ def get_net_worth_deposit(userID):
 
 
 #fiter transaction history 
-def filter_transaction_history(userID, start_date, end_date):
+def filter_transaction_history_by_user(userID, start_date, end_date):
     engine = create_engine()
     sql = """
         SELECT *
         FROM transaction_log
-        WHERE (accountFrom = '%s'
-        OR accountTo = '%s')
+        WHERE (accountFrom IN (SELECT depositAccountID FROM deposit_account WHERE userID = '%s')
+        OR accountTo IN (SELECT depositAccountID FROM deposit_account WHERE userID = '%s'))
         AND (transactionDate BETWEEN 
         '%s' AND '%s')
         """ % (userID, userID, start_date, end_date)
@@ -251,9 +251,76 @@ def filter_transaction_history(userID, start_date, end_date):
 
         ]
     } 
+def filter_transaction_history_by_account(depositAccountID, start_date, end_date):
+    engine = create_engine()
+    sql = """
+        SELECT *
+        FROM transaction_log
+        WHERE (accountFrom = '%s'
+        OR accountTo = '%s')
+        AND (transactionDate BETWEEN 
+        '%s' AND '%s')
+        """ % (depositAccountID, depositAccountID, start_date, end_date)
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        transactions = []
+        
+        for info in result.fetchall():
+            transaction = Transaction_Log(
+                info[0], info[1], info[2], info[3], 
+                info[4], info[5], info[6], info[7],
+                info[8], info[9], info[10]
+            ).to_dict()
+            transactions.append(transaction)
+        return {
+            "code": 200,
+            "data":transactions
+        }
+
+    return {
+        "code": 404,
+        "message": "no available information found",
+        "data":[
+
+        ]
+    } 
 
 #view large spending 
-def view_large_spending(userID, large_amount_threshold):
+def view_large_spending_by_account(depositAccountID, large_amount_threshold):
+    engine = create_engine()
+    sql = """
+        SELECT *
+        FROM transaction_log
+        WHERE transactionAmount >= %s
+        AND (accountFrom IN (SELECT depositAccountID FROM deposit_account WHERE userID = '%s')
+        OR accountTo IN (SELECT depositAccountID FROM deposit_account WHERE userID = '%s'));
+    """% (large_amount_threshold, depositAccountID, depositAccountID)
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        transactions = []
+        
+        for info in result.fetchall():
+            transaction = Transaction_Log(
+                info[0], info[1], info[2], info[3], 
+                info[4], info[5], info[6], info[7],
+                info[8], info[9], info[10]
+            ).to_dict()
+            transactions.append(transaction)
+        return {
+            "code": 200,
+            "data":transactions
+        }
+
+    return {
+        "code": 404,
+        "message": "no available information found",
+        "data":[
+
+        ]
+    } 
+
+#view large spending 
+def view_large_spending_by_user(userID, large_amount_threshold):
     engine = create_engine()
     sql = """
         SELECT *
