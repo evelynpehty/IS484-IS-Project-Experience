@@ -185,7 +185,7 @@ def add_new_deposit_account_without_default_values(depositAccountID ,  userID , 
         "message": "Your account has successfully added"
     }
     
-# FUNCTION BEFORE MIDTERM 
+
 
 def get_new_productID(userID):
     engine = create_engine()
@@ -194,6 +194,8 @@ def get_new_productID(userID):
     # try to generate the productID
     return productID
 
+
+# FUNCTION BEFORE MIDTERM 
 def get_net_worth_deposit(userID):
     engine = create_engine()
     sql = "SELECT * FROM deposit_account WHERE userID = "+str(userID)
@@ -214,13 +216,107 @@ def get_net_worth_deposit(userID):
         "data": None
     }
 
+
 #fiter transaction history 
-def filter_transaction_history():
-    pass 
+def filter_transaction_history(userID, start_date, end_date):
+    engine = create_engine()
+    sql = """
+        SELECT *
+        FROM transaction_log
+        WHERE (accountFrom = '%s'
+        OR accountTo = '%s')
+        AND (transactionDate BETWEEN 
+        '%s' AND '%s')
+        """ % (userID, userID, start_date, end_date)
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        transactions = []
+        
+        for info in result.fetchall():
+            transaction = Transaction_Log(
+                info[0], info[1], info[2], info[3], 
+                info[4], info[5], info[6], info[7],
+                info[8], info[9], info[10]
+            ).to_dict()
+            transactions.append(transaction)
+        return {
+            "code": 200,
+            "data":transactions
+        }
+
+    return {
+        "code": 404,
+        "message": "no available information found",
+        "data":[
+
+        ]
+    } 
 
 #view large spending 
-def view_large_spending():
-    pass 
+def view_large_spending(userID, large_amount_threshold):
+    engine = create_engine()
+    sql = """
+        SELECT *
+        FROM transaction_log
+        WHERE transactionAmount >= %s
+        AND (accountFrom = %s OR accountTo = %s);
+    """% (large_amount_threshold, userID, userID)
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        transactions = []
+        
+        for info in result.fetchall():
+            transaction = Transaction_Log(
+                info[0], info[1], info[2], info[3], 
+                info[4], info[5], info[6], info[7],
+                info[8], info[9], info[10]
+            ).to_dict()
+            transactions.append(transaction)
+        return {
+            "code": 200,
+            "data":transactions
+        }
+
+    return {
+        "code": 404,
+        "message": "no available information found",
+        "data":[
+
+        ]
+    } 
+
+#delete deposit account 
+def remove_deposit_account(depositAccountID):
+    engine = create_engine()
+    monthly_balance_record = remove_monthly_balance(depositAccountID)
+    sql = "DELETE FROM deposit_account WHERE depositAccountID ='%s'" % depositAccountID
+    print(sql)
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        return {
+            "code": 200,
+            "message": "deposit account has been successfully removed",
+            "monthly balance": monthly_balance_record
+        }
+    return {
+        "code": 404,
+        "message": "no deposit account has been found"
+    }
+
+def remove_monthly_balance(depositAccountID):
+    engine = create_engine()
+    sql = "DELETE FROM monthly_balance WHERE depositAccountID ='%s'" % depositAccountID
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        return {
+            "code": 200,
+            "message": "%s monthly balance(s) have been successfully removed" % str(result.rowcount),
+        }
+    return {
+        "code": 404,
+        "message": "no monthly balance has been found",
+    }
+
 
 
 
