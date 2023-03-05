@@ -82,7 +82,7 @@ def view_loan_transactions_by_user(userID):
 # PEEK for loan 
 def get_net_worth_loan(userID):
     engine = create_engine()
-    sql = "SELECT * FROM deposit_account WHERE userID = "+str(userID)
+    sql = "SELECT * FROM loan_account WHERE userID = "+str(userID)
     result = engine.execute(sql)
     if result.rowcount > 0:
         availLoan = 0.0
@@ -102,15 +102,88 @@ def get_net_worth_loan(userID):
 
 
 #Add Loan Accounts (Add or Delete)
-def add_loan_account():
-    pass 
+def add_loan_account(loanAccountID,
+        userID,
+        productID,
+        loanStartDate,
+        loanMaturityDate,
+        loanTerm,
+        loanAmount,
+        loanBalance,
+        loanPurpose,
+        ltvRatio,
+        interestRate,
+        penaltyRate,
+        loanEmployeeID):
+    engine = create_engine()
+    sql = "SELECT * FROM loan_account WHERE userID = "+str(userID)
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        sql = """
+            INSERT INTO loan_account
+            (loanAccountID,
+            userID,
+            productID,
+            loanStartDate,
+            loanMaturityDate,
+            loanTerm,
+            loanAmount,
+            loanBalance,
+            loanPurpose,
+            ltvRatio,
+            interestRate,
+            penaltyRate,
+            loanEmployeeID)
+            VALUES
+            ('%s', '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')
+            """%(loanAccountID,
+            userID,
+            productID,
+            loanStartDate,
+            loanMaturityDate,
+            loanTerm,
+            loanAmount,
+            loanBalance,
+            loanPurpose,
+            ltvRatio,
+            interestRate,
+            penaltyRate,
+            loanEmployeeID)
+        result = engine.execute(sql)
+        return {
+            "code": 200,
+            "message": "New loan account added successfully"
+        }
+    return{
+        "code": 404,
+        "message": "No user found"
+    }
+    
+    
 
 
-def delelte_loan_account():
+
+def delelte_loan_account(loanAccountID):
+    engine = create_engine()
+    sql = "SELECT * FROM loan_account WHERE loanAccountID = '%s'" % loanAccountID
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        sql = "DELETE FROM loan_account WHERE loanAccountID = '%s'" % loanAccountID
+        result = engine.execute(sql)
+        return {
+            "code": 200,
+            "message": "Loan account deleted successfully"
+        }
+    return{
+        "code": 404,
+        "message": "No loan account found"
+    }
     pass 
 
 #Partial Loan Repayment Calculation
-def calculate_partial_loan_repayment():
+def calculate_partial_loan_repayment(principal, rate, payment_period_in_year, ):
+
+    return get_view_calculate_loan_repayment_detail(principal, rate, payment_period_in_year)
     pass 
 
 #Consolidated Loan Repayment

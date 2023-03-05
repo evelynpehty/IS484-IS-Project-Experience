@@ -1,4 +1,5 @@
 
+from module.accountModule import peek_detail
 def get_dashboard():
 
     return {
@@ -21,8 +22,9 @@ def get_diversification_what_if_analysis():
 
 
 #View Net Worth
-def get_net_worth():
-    pass 
+def get_net_worth(userID):
+    return peek_detail(userID)
+    
 
 #View My Financial Goals
 
