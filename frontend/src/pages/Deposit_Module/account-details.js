@@ -180,6 +180,11 @@ function AccountDetails() {
         navigate('/view-transaction-history', {replace: true , state: { transaction_item: transaction_item, id: id } })  
     }
 
+    const handleExpand = () => {
+        navigate('/cashflow', {replace: true , state: { transaction_item: transaction_item, id: id } })  
+
+    }
+
     return (
         <React.Fragment>
             <Box sx={{ flexGrow: 1 }}>
@@ -216,7 +221,7 @@ function AccountDetails() {
 
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
                         <Typography style={ styles.label } variant="h6">Cash Flow</Typography>
-                        <Button component={ Link } to={ `/cashflow/${id}` } style={ styles.button } variant="contained">EXPAND</Button>
+                        <Button style={ styles.button } variant="contained" onClick={handleExpand}>EXPAND</Button>
                     </Grid>
 
                     <Card style={ styles.card2 } elevation={ 4 }>

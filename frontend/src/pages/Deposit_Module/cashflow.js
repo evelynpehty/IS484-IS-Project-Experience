@@ -1,6 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { useParams } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 import moment from "moment";
 import * as V from 'victory';
 import { Link } from "react-router-dom";
@@ -96,32 +98,27 @@ function CashFlow() {
         { x: "Jul", y: 5500 }
     ]
 
-    const { id } = useParams()
-    const { depositList } = useSelector((state) => state.deposit);
-    const { transactionHistoryList } = useSelector((state) => state.deposit);
-
-    const deposit_item = depositList.filter(function (el)
-    {
-      return el.DepositAccountID === id
-    })
+    // const { id } = useParams()
+    //const { transactionHistoryList } = useSelector((state) => state.deposit);
+    const {state} = useLocation();
+    const { transaction_item, id } = state;
 
     function filter_transaction_item(value){
-        console.log(value)
         var result;
         if(value === "All"){
-            result = transactionHistoryList.filter(function (el)
+            result = transaction_item.filter(function (el)
             {
             return el.accountFrom === id || el.accountTo === id
             })
         }
         else if(value === "Income"){
-            result = transactionHistoryList.filter(function (el)
+            result = transaction_item.filter(function (el)
             {
             return el.accountTo === id
             })
         } 
         else if(value === "Expense"){
-            result = transactionHistoryList.filter(function (el)
+            result = transaction_item.filter(function (el)
             {
             return el.accountFrom === id
             })
@@ -135,7 +132,6 @@ function CashFlow() {
     const [clicked, setClicked] = React.useState("All")
 
     function handleClick(select) {
-        console.log(select)
         setClicked(select)
         setTransDisplay(filter_transaction_item(select))
     }
@@ -145,14 +141,11 @@ function CashFlow() {
     console.log(newValue)
     };
 
-    // // Toggle Button Change
-    // const [alignment, setAlignment] = React.useState('web');
-
-    // const handleChange2 = (event2, newAlignment) => {
-    //   setAlignment(newAlignment);
-    //   console.log(newAlignment)
-    // };
-
+    const navigate = useNavigate();
+    const handleViewAllTrans = () =>{
+        navigate('/view-transaction-history', {replace: true , state: { transaction_item: transaction_item, id: id, selectedFilter: clicked } })  
+    }
+        
 
     return (
         <React.Fragment>
@@ -172,21 +165,7 @@ function CashFlow() {
                         <Typography style={ styles.label } variant="h6">Cash Flow</Typography>
                         <Button style={ styles.button } variant="contained">VIEW INSIGHTS</Button>
                     </Grid>
-                    {/* <Tabs
-                        value={value}
-                        onChange={handleChange}
-                        textColor="secondary"
-                        indicatorColor="secondary"
-                        aria-label="secondary tabs example"
-                        centered
-                    >
-                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}></Box>
-                            <Tab value="Yearly" label="Yearly" />
-                            <Tab value="Monthly" label="Monthly" />
-                            <Tab value="Weekly" label="Weekly" />
-                        </Box>
-                    </Tabs> */}
-
+       
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <Tabs
                         value={ value } 
@@ -337,23 +316,10 @@ function CashFlow() {
                         </Grid>
                     </Grid>
 
-                    {/* <ToggleButtonGroup
-                        color="primary"
-                        value={alignment}
-                        exclusive
-                        onChange={handleChange2}
-                        fullWidth={ true }
-                        sx={{ mb: 3 }}
-                    >
-                        <ToggleButton value="Transaction">All <MenuBlack sx={{ mr: 1 }} /></ToggleButton>
-                        <ToggleButton value="Income">Income</ToggleButton>
-                        <ToggleButton value="Expenses">Expenses</ToggleButton>
-                    </ToggleButtonGroup> */}
-
                     {/* Need to be made into a component */}
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
-                        <Typography style={ styles.label } variant="h6">Transactions</Typography>
-                        <Button style={ styles.button } variant="contained">VIEW ALL</Button>
+                        <Typography style={ styles.label } variant="h6">{clicked === "All" ? "Transactions" : clicked}</Typography>
+                        <Button style={ styles.button } variant="contained" onClick={handleViewAllTrans}>VIEW ALL</Button>
                     </Grid>
                     
                     <Card style={ styles.card2 } elevation={ 4 }>
