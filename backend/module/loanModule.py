@@ -77,10 +77,33 @@ def get_view_calculate_loan_repayment_detail(principal, rate, payment_period_in_
 def view_loan_transactions():
     pass 
 
+# PEEK for loan 
+def get_net_worth_loan(userID):
+    engine = create_engine()
+    sql = "SELECT * FROM deposit_account WHERE userID = "+str(userID)
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        availLoan = 0.0
+        for info in result.fetchall():
+            availLoan += info[6]
+        return{
+        "code": 200,
+        "message": "Loan information retireve successfully",
+        "data": availLoan
+        }
+
+    return {
+        "code": 404,
+        "message": "no available information found",
+        "data": None
+    }
+
 
 #Add Loan Accounts (Add or Delete)
 def add_loan_account():
     pass 
+
+
 def delelte_loan_account():
     pass 
 

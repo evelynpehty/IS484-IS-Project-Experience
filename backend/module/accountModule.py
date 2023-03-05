@@ -1,5 +1,7 @@
 from module.databaseConnection import create_engine
 from module.classes.user import User
+from module.depositModule import get_net_worth_deposit
+from module.loanModule import get_net_worth_loan
 import time
 
 #LOGIN
@@ -74,14 +76,91 @@ def register(username, password):
 
 
 #reset password
-def reset_password():
-  pass 
+def reset_password(username, password):
+    engine = create_engine()
+    # sql = "SELECT * FROM user WHERE username='%s'" %username
+    sql = "SELECT * FROM user WHERE username='%s'" %username
+    result = engine.execute(sql)
+    if(result.rowcount == 0):
+        return {
+        "code": 404,
+        "message": "username is not found"
+      }
+    sql ="UPDATE user SET password='%s' WHERE username='%s'" % (password, username)
+    print(sql)
+    result = engine.execute(sql)
+    return {
+      "code": 200,
+      "message": "password reset successful"
+    }
 
 #edit personal detail 
-def edit_personal_detail():
-  pass 
+def edit_personal_detail(userID, familyName, givenName, 
+                         taxIdentifier, dateOfBirth, postalCode, 
+                         addressLine1, addressLine2, country, 
+                         city, state, countryCode, phoneNo, homeNo, 
+                         registrationDate, nationality, gender, 
+                         ethnicity, occupation, jobTitle, 
+                         employerName, maritalStatus, 
+                         email, chosenColor):
+    engine = create_engine()
+    sql = "SELECT * FROM user WHERE userID='%s'" %userID
+    result = engine.execute(sql)
+    if(result.rowcount == 0):
+        return {
+        "code": 404,
+        "message": "username is not found"
+      }
+    sql = """
+        UPDATE user_details
+        SET
+          familyName = '%s',
+          givenName = '%s',
+          taxIdentifier = '%s',
+          dateOfBirth = '%s',
+          postalCode = '%s',
+          addressLine1 = '%s',
+          addressLine2 = '%s',
+          country = '%s',
+          city = '%s',
+          state = '%s',
+          countryCode = '%s',
+          phoneNo = '%s',
+          homeNo  = '%s',
+          registrationDate  = '%s',
+          nationality  = '%s',
+          gender  = '%s',
+          ethnicity  = '%s',
+          occupation  = '%s',
+          jobTitle  = '%s',
+          employerName  = '%s',
+          maritalStatus  = '%s',
+          email  = '%s',
+          chosenColor  = '%s'
+        WHERE  userID  = '%s';
+      """ % (familyName, givenName, 
+                             taxIdentifier, dateOfBirth, postalCode, 
+                             addressLine1, addressLine2, country, 
+                             city, state, countryCode, phoneNo, homeNo, 
+                             registrationDate, nationality, gender, 
+                             ethnicity, occupation, jobTitle, 
+                             employerName, maritalStatus, 
+                             email, chosenColor, userID)
+    return {
+      "code": 200,
+      "message": "edit personal detail successful"
+    }
+    
 
 #peek details 
-
-def peek_detail():
-  pass 
+def peek_detail(userID):
+  net_worth_deposit = get_net_worth_deposit(userID)
+  net_worth_loan = get_net_worth_loan(userID)
+  return {
+     "code": 200,
+     "message": "Peek data successfully",
+     "data": {
+        "deposit_net_worth": net_worth_deposit,
+        "loan_net_worth": net_worth_loan
+     }
+  }

@@ -194,6 +194,26 @@ def get_new_productID(userID):
     # try to generate the productID
     return productID
 
+def get_net_worth_deposit(userID):
+    engine = create_engine()
+    sql = "SELECT * FROM deposit_account WHERE userID = "+str(userID)
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        availBalance = 0.0
+        for info in result.fetchall():
+            availBalance += info[6]
+        return{
+        "code": 200,
+        "message": "Deposit information retireve successfully",
+        "data": availBalance
+        }
+
+    return {
+        "code": 404,
+        "message": "no available information found",
+        "data": None
+    }
+
 #fiter transaction history 
 def filter_transaction_history():
     pass 
