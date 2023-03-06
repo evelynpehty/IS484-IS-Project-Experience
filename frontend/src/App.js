@@ -1,6 +1,10 @@
+// Main Packages
 import React, { useState, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+
+// MUI Components
+import { ThemeProvider, CssBaseline, Box } from "@mui/material";
 
 // Pages
 import Login from "./pages/Account_Module/login";
@@ -12,9 +16,13 @@ import CashFlow from './pages/Deposit_Module/cashflow.js'
 
 import { clearMessage } from "./actions/message";
 
-// Navigation components
-import MainAppBar from './components/MainAppBar';
-import MainBottomNavigation from './components/MainBottomNavigation';
+// Custom Components
+import { appTheme } from "./paletteTheme"
+import MainAppBar from "./components/MainAppBar";
+import MainBottomNavigation from "./components/MainBottomNavigation";
+
+// Images
+import backgroundImage from "./assets/images/bg.jpg";
 
 function App() {
   const [showAppBar, setAppBar] = useState(false);
@@ -46,18 +54,26 @@ function App() {
     }, [currentUser]);
 
     return (
-      <>
-        {(showAppBar) && <MainAppBar></MainAppBar>}
-        {(showBottomNavigation) && <MainBottomNavigation></MainBottomNavigation>}
-        <Routes>
-          <Route exact path={"/"} element= {!currentUser && <Login></Login>} />
-          <Route exact path={"/dashboard"} element={<DashBoard />} />
-          <Route exact path={"/deposit"} element={<DepositSummary />} />
-          <Route exact path={"/view-transaction-history"} element={<TransactionHistory />} />
-          <Route exact path={"/account-details/:id"} element={<AccountDetails />} />
-          <Route exact path={"/cashflow/:id"} element={<CashFlow />} />
-        </Routes>
-      </>
+      <div className="App" style={{ backgroundImage: `url(${ backgroundImage })`, height: "100vh" }}>
+        <header className="App-header">
+          <ThemeProvider theme={ appTheme }>
+            <CssBaseline enableColorScheme />
+            <>
+              {(showAppBar) && <MainAppBar></MainAppBar>}
+              {(showBottomNavigation) && <MainBottomNavigation></MainBottomNavigation>}
+              <Routes>
+                <Route exact path={"/"} element= {!currentUser && <Login></Login>} />
+                <Route exact path={"/dashboard"} element={<DashBoard />} />
+                <Route exact path={"/deposit"} element={<DepositSummary />} />
+                <Route exact path={"/view-transaction-history"} element={<TransactionHistory />} />
+                <Route exact path={"/account-details/:id"} element={<AccountDetails />} />
+                <Route exact path={"/cashflow/:id"} element={<CashFlow />} />
+              </Routes>
+            </>
+          </ThemeProvider>
+        </header>
+      </div>
+
     )  
 }
 
