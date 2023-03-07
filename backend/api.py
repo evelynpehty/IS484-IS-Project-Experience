@@ -614,9 +614,13 @@ functions: get_view_all_loan_account, get_view_loan_account_detail, get_view_cal
                     delelte_loan_account, calculate_partial_loan_repayment, consolidated_loan_repayment
 
 
-API Integrated: get_view_all_loan_account, get_view_loan_account_detail, get_view_calculate_loan_repayment_detail
+API Integrated: get_view_all_loan_account, get_view_loan_account_detail, get_view_calculate_loan_repayment_detail, 
+                    view_loan_transactions_by_account, view_loan_transactions_by_user, get_net_worth_loan, add_loan_account, 
+                    delelte_loan_account
 
-API function tested: get_view_all_loan_account, get_view_loan_account_detail, get_view_calculate_loan_repayment_detail
+API function tested: get_view_all_loan_account, get_view_loan_account_detail, get_view_calculate_loan_repayment_detail,
+                      view_loan_transactions_by_account, view_loan_transactions_by_user, get_net_worth_loan, add_loan_account, 
+                      delelte_loan_account
 
 API function no tested: 
 
@@ -695,4 +699,125 @@ def get_calculate_loan_repayment_detail():
     }), 500
 
 ## loan module--- AFTER MIDTERM REVIEW 
+# required attribute(default): userID
+@api.route('/get_net_worth_loan',methods = ['POST', 'GET'])
+def get_net_worth_loan_request():
+  try:
+    userID = None 
+    if request.method == 'POST':
+      userID = request.form['userID']
+    else:
+      userID = request.args.get('userID')
+    
+    result = get_net_worth_loan(userID)
+    code = result["code"]
+    return jsonify(result), code
+  except Exception as e:
 
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+
+
+# required attribute(default): loanAccountID,
+#                userID,
+#                 productID,
+#                 loanStartDate,
+#                 loanMaturityDate,
+#                 loanTerm,
+#                 loanAmount,
+#                 loanBalance,
+#                 loanPurpose,
+#                 ltvRatio,
+#                 interestRate,
+#                 penaltyRate,
+#                 loanEmployeeID
+@api.route('/add_loan_account',methods = ['POST', 'GET'])
+def add_loan_account_request():
+  try:
+    loanAccountID = None 
+    userID = None
+    productID = None
+    loanStartDate = None
+    loanMaturityDate = None
+    loanTerm = None
+    loanAmount = None
+    loanBalance = None
+    loanPurpose = None
+    ltvRatio = None
+    interestRate = None
+    penaltyRate = None
+    loanEmployeeID = None
+    if request.method == 'POST':
+      loanAccountID = request.form['loanAccountID']
+      userID = request.form['userID']
+      productID = request.form['productID']
+      loanStartDate = request.form['loanStartDate']
+      loanMaturityDate = request.form['loanMaturityDate']
+      loanTerm = request.form['loanTerm']
+      loanAmount = request.form['loanAmount']
+      loanBalance = request.form['loanBalance']
+      loanPurpose = request.form['loanPurpose']
+      ltvRatio = request.form['ltvRatio']
+      interestRate = request.form['interestRate']
+      penaltyRate = request.form['penaltyRate']
+      loanEmployeeID = request.form['loanEmployeeID']
+    else:
+      loanAccountID = request.args.get('loanAccountID')
+      userID = request.args.get('userID')
+      productID = request.args.get('productID')
+      loanStartDate = request.args.get('loanStartDate')
+      loanMaturityDate = request.args.get('loanMaturityDate')
+      loanTerm = request.args.get('loanTerm')
+      loanAmount = request.args.get('loanAmount')
+      loanBalance = request.args.get('loanBalance')
+      loanPurpose = request.args.get('loanPurpose')
+      ltvRatio = request.args.get('ltvRatio')
+      interestRate = request.args.get('interestRate')
+      penaltyRate = request.args.get('penaltyRate')
+      loanEmployeeID = request.args.get('loanEmployeeID')
+    
+    result = add_loan_account(loanAccountID,
+                userID,
+                productID,
+                loanStartDate,
+                loanMaturityDate,
+                loanTerm,
+                loanAmount,
+                loanBalance,
+                loanPurpose,
+                ltvRatio,
+                interestRate,
+                penaltyRate,
+                loanEmployeeID)
+    
+    return jsonify(result), result["code"]
+  except Exception as e:
+
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+  
+# required attribute(default): loanAccountID
+@api.route('/delelte_loan_account',methods = ['POST', 'GET'])
+def delelte_loan_account_request():
+  try: 
+    loanAccountID = None 
+    if request.method == 'POST':
+      loanAccountID = request.form['loanAccountID']
+    else:
+      loanAccountID = request.args.get('loanAccountID')
+    result = delelte_loan_account(loanAccountID)
+    return jsonify(result), result["code"]
+  except Exception as e:
+
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+  

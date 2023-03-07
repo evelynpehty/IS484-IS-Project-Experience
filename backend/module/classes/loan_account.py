@@ -31,3 +31,5 @@ class Loan_Account:
       "PenaltyRate": self.penaltyRate,
       "LoanEmployeeID": self.loanEmployeeID
     }
+  
+  
