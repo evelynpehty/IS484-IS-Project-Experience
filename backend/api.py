@@ -821,3 +821,22 @@ def delelte_loan_account_request():
       "data": None
     }), 500
   
+
+# required attribute(default): userID
+@api.route('/consolidated_loan_repayment',methods = ['POST', 'GET'])
+def consolidated_loan_repayment_request():
+  try: 
+    userID = None 
+    if request.method == 'POST':
+      userID = request.form['userID']
+    else:
+      userID = request.args.get('userID')
+    result = consolidated_loan_repayment(userID)
+    return jsonify(result), result["code"]
+  except Exception as e:
+
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
