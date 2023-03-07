@@ -11,6 +11,17 @@ from module.securitiesModule import *
 api = Blueprint('api', __name__)
 
 ### account module--- 
+"""
+ACCOUNT MODULE 
+Functions: verify_password, get_net_worth, register, reset_password, edit_personal_detail, peek_detail
+
+API Integrated: verify_password, get_net_worth, register, reset_password, edit_personal_detail, peek_detail
+
+API function tested: verify_password, get_net_worth, register
+
+API function no tested: reset_password, edit_personal_detail, peek_detail
+
+"""
 # required attribute: username, password
 @api.route('/login',methods = ['POST', 'GET'])
 def login():
@@ -239,6 +250,28 @@ def reset_password_request():
 
 
 ### deposit module--- 
+"""
+DEPOSIT MODULE 
+Functions: get_view_all_deposit_accounts, get_view_selected_deposit_account, get_view_available_balance, 
+                      get_view_recent_three_transaction, get_view_all_transaction, add_new_deposit_account_with_default_values,
+                      add_new_deposit_account_without_default_values, get_new_productID, get_net_worth_deposit, filter_transaction_history_by_user,
+                      filter_transaction_history_by_account, view_large_spending_by_account, view_large_spending_by_user,
+                      remove_deposit_account (including sub-function: remove_monthly_balance)
+
+API Integrated: get_view_all_deposit_accounts, get_view_selected_deposit_account, get_view_available_balance, 
+                      get_view_recent_three_transaction, get_view_all_transaction, add_new_deposit_account_with_default_values,
+                      add_new_deposit_account_without_default_values
+
+API function tested: get_view_all_deposit_accounts, get_view_selected_deposit_account, get_view_available_balance, 
+                      get_view_recent_three_transaction, get_view_all_transaction, add_new_deposit_account_with_default_values,
+                      add_new_deposit_account_without_default_values, get_new_productID
+
+API function no tested: get_net_worth_deposit, filter_transaction_history_by_user,
+                      filter_transaction_history_by_account, view_large_spending_by_account, view_large_spending_by_user,
+                      remove_deposit_account (including sub-function: remove_monthly_balance)
+
+"""
+
 # required attribute: userID
 @api.route('/get_all_deposit_accounts',methods = ['POST', 'GET'])
 def get_all_deposit_accounts():
@@ -569,9 +602,24 @@ def remove_deposit_account_request():
       "data": None
     }), 500
   
-  
+
 
 ### loan module --- 
+
+"""
+LOAN MODULE 
+functions: get_view_all_loan_account, get_view_loan_account_detail, get_view_calculate_loan_repayment_detail,
+                    view_loan_transactions_by_account, view_loan_transactions_by_user, get_net_worth_loan, add_loan_account, 
+                    delelte_loan_account, calculate_partial_loan_repayment, consolidated_loan_repayment
+
+
+API Integrated: get_view_all_loan_account, get_view_loan_account_detail, get_view_calculate_loan_repayment_detail
+
+API function tested: get_view_all_loan_account, get_view_loan_account_detail, get_view_calculate_loan_repayment_detail
+
+API function no tested: get_view_all_loan_account, get_view_loan_account_detail, get_view_calculate_loan_repayment_detail
+
+"""
 # required attribute(default): userID
 @api.route('/get_all_loan_account',methods = ['POST', 'GET'])
 def get_all_loan_account():
