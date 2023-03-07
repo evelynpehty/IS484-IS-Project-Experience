@@ -370,6 +370,7 @@ def remove_deposit_account(depositAccountID):
         "message": "no deposit account has been found"
     }
 
+#sub function for remove_deposit_account
 def remove_monthly_balance(depositAccountID):
     engine = create_engine()
     sql = "DELETE FROM monthly_balance WHERE depositAccountID ='%s'" % depositAccountID

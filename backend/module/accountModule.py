@@ -76,7 +76,10 @@ def register(username, password):
 
 
 #reset password
-def reset_password(username, password):
+def reset_password(username, password, new_password):
+    info = verify_password(username, password)
+    if info["code"] == 404:
+       return info 
     engine = create_engine()
     # sql = "SELECT * FROM user WHERE username='%s'" %username
     sql = "SELECT * FROM user WHERE username='%s'" %username
@@ -86,7 +89,7 @@ def reset_password(username, password):
         "code": 404,
         "message": "username is not found"
       }
-    sql ="UPDATE user SET password='%s' WHERE username='%s'" % (password, username)
+    sql ="UPDATE user SET password='%s' WHERE username='%s'" % (new_password, username)
     print(sql)
     result = engine.execute(sql)
     return {

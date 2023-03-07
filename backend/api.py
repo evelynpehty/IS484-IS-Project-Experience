@@ -75,6 +75,167 @@ def logout():
     "message": "log out successfully",
   }), 200
 
+## account module--- AFTER MIDTERM REVIEW 
+
+
+# required attribute: userID, familyName, givenName, 
+#                         taxIdentifier, dateOfBirth, postalCode, 
+#                        addressLine1, addressLine2, country, 
+#                         city, state, countryCode, phoneNo, homeNo, 
+#                         registrationDate, nationality, gender, 
+#                         ethnicity, occupation, jobTitle, 
+#                         employerName, maritalStatus, 
+#                         email, chosenColor
+@api.route('/edit_personal_detail',methods = ['POST', 'GET'])
+def edit_personal_detail_request():
+  userID = None 
+  familyName = None 
+  givenName = None 
+  taxIdentifier = None 
+  dateOfBirth = None 
+  postalCode = None 
+  addressLine1 = None 
+  addressLine2 = None 
+  country = None 
+  city = None 
+  state = None 
+  countryCode = None 
+  phoneNo = None 
+  homeNo = None 
+  registrationDate = None 
+  nationality = None 
+  gender = None 
+  ethnicity = None 
+  occupation = None 
+  jobTitle = None 
+  employerName = None 
+  maritalStatus = None 
+  email = None 
+  chosenColor = None
+  try:
+    if request.method == 'POST':
+      userID=request.form['userID']
+      familyName=request.form['familyName']
+      givenName=request.form['givenName']
+      taxIdentifier=request.form['taxIdentifier']
+      dateOfBirth=request.form['dateOfBirth']
+      postalCode=request.form['postalCode']
+      addressLine1=request.form['addressLine1']
+      addressLine2=request.form['addressLine2']
+      country=request.form['country']
+      city=request.form['city']
+      state=request.form['state']
+      countryCode=request.form['countryCode']
+      phoneNo=request.form['phoneNo']
+      homeNo=request.form['homeNo']
+      registrationDate=request.form['registrationDate']
+      nationality=request.form['nationality']
+      gender=request.form['gender']
+      ethnicity=request.form['ethnicity']
+      occupation=request.form['occupation']
+      jobTitle=request.form['jobTitle']
+      employerName=request.form['employerName']
+      maritalStatus=request.form['maritalStatus']
+      email=request.form['email']
+      chosenColor=request.form['chosenColor']
+    else:
+      userID=request.args.get('userID')
+      familyName=request.args.get('familyName')
+      givenName=request.args.get('givenName')
+      taxIdentifier=request.args.get('taxIdentifier')
+      dateOfBirth=request.args.get('dateOfBirth')
+      postalCode=request.args.get('postalCode')
+      addressLine1=request.args.get('addressLine1')
+      addressLine2=request.args.get('addressLine2')
+      country=request.args.get('country')
+      city=request.args.get('city')
+      state=request.args.get('state')
+      countryCode=request.args.get('countryCode')
+      phoneNo=request.args.get('phoneNo')
+      homeNo=request.args.get('homeNo')
+      registrationDate=request.args.get('registrationDate')
+      nationality=request.args.get('nationality')
+      gender=request.args.get('gender')
+      ethnicity=request.args.get('ethnicity')
+      occupation=request.args.get('occupation')
+      jobTitle=request.args.get('jobTitle')
+      employerName=request.args.get('employerName')
+      maritalStatus=request.args.get('maritalStatus')
+      email=request.args.get('email')
+      chosenColor=request.args.get('chosenColor')
+    info = edit_personal_detail(userID, familyName, givenName, 
+                         taxIdentifier, dateOfBirth, postalCode, 
+                         addressLine1, addressLine2, country, 
+                         city, state, countryCode, phoneNo, homeNo, 
+                         registrationDate, nationality, gender, 
+                         ethnicity, occupation, jobTitle, 
+                         employerName, maritalStatus, 
+                         email, chosenColor)
+    return jsonify(info), info["code"]
+  except Exception as e:
+
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+
+# required attribute: userID
+@api.route('/peek_detail',methods = ['POST', 'GET'])
+def peek_detail_request():
+  userID = None 
+  
+  try:
+    # print(request.form)
+    if request.method == 'POST':
+      userID = request.form['userID']
+    else:
+      userID = request.args.get('userID')
+
+    info = peek_detail(userID)
+    return jsonify(info), info["code"]
+  except Exception as e:
+
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 5
+
+# required attribute: username, password, new_password
+@api.route('/reset_password',methods = ['POST', 'GET'])
+def reset_password_request():
+  username = None 
+  password = None
+  new_password = None 
+  try:
+    # print(request.form)
+    if request.method == 'POST':
+      username = request.form['username']
+      password = request.form['password']
+      new_password = request.form['new_password']
+      # return redirect(url_for('success',name = user))
+    else:
+      username = request.args.get('username')
+      password = request.args.get('password')
+      new_password = request.form['new_password']
+      # return redirect(url_for('success',name = user))
+    # print(username, password)
+    userInfo = reset_password(username, password, new_password)
+    return jsonify(userInfo), 200
+
+  except Exception as e:
+
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+  
+
+
+
+
 
 
 ### deposit module--- 
@@ -270,8 +431,145 @@ def add_new_deposit_account():
     }), 500
 
 
+## deposit module--- AFTER MIDTERM REVIEW 
 
+# required attribute: userID
+@api.route('/get_net_worth_deposit',methods = ['POST', 'GET'])
+def get_net_worth_deposit_request():
+  userID = None 
+  
+  try:
+    # print(request.form)
+    if request.method == 'POST':
+      userID = request.form['userID']
+    else:
+      userID = request.args.get('userID')
 
+    userInfo = get_net_worth_deposit(userID)
+    return jsonify(userInfo), userInfo["code"]
+
+  except Exception as e:
+
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+
+# required attribute: userID, start_date, end_date
+@api.route('/filter_transaction_history_by_user',methods = ['POST', 'GET'])
+def filter_transaction_history_by_user_request():
+  userID = None
+  start_date = None 
+  end_date = None
+  try: 
+    if request.method == 'POST':
+      userID = request.form['userID']
+      start_date = request.form['start_date']
+      end_date = request.form['end_date']
+    else:
+      userID = request.args.get('userID')
+      start_date = request.args.get('start_date')
+      end_date = request.args.get('end_date')
+    userInfo = filter_transaction_history_by_user(userID, start_date, end_date)
+    return jsonify(userInfo), userInfo["code"]
+  except Exception as e:
+
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+  
+# required attribute: depositAccountID, start_date, end_date
+@api.route('/filter_transaction_history_by_account',methods = ['POST', 'GET'])
+def filter_transaction_history_by_user_request():
+  depositAccountID = None
+  start_date = None 
+  end_date = None
+  try: 
+    if request.method == 'POST':
+      depositAccountID = request.form['depositAccountID']
+      start_date = request.form['start_date']
+      end_date = request.form['end_date']
+    else:
+      depositAccountID = request.args.get('depositAccountID')
+      start_date = request.args.get('start_date')
+      end_date = request.args.get('end_date')
+    userInfo = filter_transaction_history_by_account(depositAccountID, start_date, end_date)
+    return jsonify(userInfo), userInfo["code"]
+  except Exception as e:
+
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+
+# required attribute: userID, large_amount_threshold
+@api.route('/view_large_spending_by_user',methods = ['POST', 'GET'])
+def view_large_spending_by_user_request():
+  userID = None
+  large_amount_threshold = None 
+  try: 
+    if request.method == 'POST':
+      userID = request.form['userID']
+      large_amount_threshold = request.form['large_amount_threshold']
+    else:
+      userID = request.args.get('userID')
+      large_amount_threshold = request.args.get('large_amount_threshold')
+    userInfo = view_large_spending_by_user(userID, large_amount_threshold)
+    return jsonify(userInfo), userInfo["code"]
+  except Exception as e:
+
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+
+# required attribute: depositAccountID, large_amount_threshold
+@api.route('/view_large_spending_by_user',methods = ['POST', 'GET'])
+def view_large_spending_by_user_request():
+  depositAccountID = None
+  large_amount_threshold = None 
+  try: 
+    if request.method == 'POST':
+      depositAccountID = request.form['depositAccountID']
+      large_amount_threshold = request.form['large_amount_threshold']
+    else:
+      depositAccountID = request.args.get('depositAccountID')
+      large_amount_threshold = request.args.get('large_amount_threshold')
+    userInfo = view_large_spending_by_account(depositAccountID, large_amount_threshold)
+    return jsonify(userInfo), userInfo["code"]
+  except Exception as e:
+
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+
+# required attribute: depositAccountID
+@api.route('/remove_deposit_account',methods = ['POST', 'GET'])
+def remove_deposit_account_request():
+  depositAccountID = None
+  try: 
+    if request.method == 'POST':
+      depositAccountID = request.form['depositAccountID']
+    else:
+      depositAccountID = request.args.get('depositAccountID')
+    userInfo = remove_deposit_account(depositAccountID)
+    return jsonify(userInfo), userInfo["code"]
+  except Exception as e:
+
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+  
+  
 
 ### loan module --- 
 # required attribute(default): userID
@@ -345,3 +643,6 @@ def get_calculate_loan_repayment_detail():
       "message": str(e),
       "data": None
     }), 500
+
+## loan module--- AFTER MIDTERM REVIEW 
+
