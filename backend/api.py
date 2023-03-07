@@ -611,16 +611,16 @@ def remove_deposit_account_request():
 LOAN MODULE 
 functions: get_view_all_loan_account, get_view_loan_account_detail, get_view_calculate_loan_repayment_detail,
                     view_loan_transactions_by_account, view_loan_transactions_by_user, get_net_worth_loan, add_loan_account, 
-                    delelte_loan_account, calculate_partial_loan_repayment, consolidated_loan_repayment
+                    delelte_loan_account, calculate_partial_loan_repayment, consolidated_loan_repayment, consolidated_loan_repayment
 
 
 API Integrated: get_view_all_loan_account, get_view_loan_account_detail, get_view_calculate_loan_repayment_detail, 
                     view_loan_transactions_by_account, view_loan_transactions_by_user, get_net_worth_loan, add_loan_account, 
-                    delelte_loan_account
+                    delelte_loan_account, consolidated_loan_repayment
 
 API function tested: get_view_all_loan_account, get_view_loan_account_detail, get_view_calculate_loan_repayment_detail,
                       view_loan_transactions_by_account, view_loan_transactions_by_user, get_net_worth_loan, add_loan_account, 
-                      delelte_loan_account
+                      delelte_loan_account, consolidated_loan_repayment
 
 API function no tested: 
 
