@@ -516,7 +516,7 @@ def filter_transaction_history_by_user_request():
   
 # required attribute: depositAccountID, start_date, end_date
 @api.route('/filter_transaction_history_by_account',methods = ['POST', 'GET'])
-def filter_transaction_history_by_user_request():
+def filter_transaction_history_by_account_request():
   depositAccountID = None
   start_date = None 
   end_date = None
@@ -562,8 +562,8 @@ def view_large_spending_by_user_request():
     }), 500
 
 # required attribute: depositAccountID, large_amount_threshold
-@api.route('/view_large_spending_by_user',methods = ['POST', 'GET'])
-def view_large_spending_by_user_request():
+@api.route('/view_large_spending_by_account',methods = ['POST', 'GET'])
+def view_large_spending_by_account_request():
   depositAccountID = None
   large_amount_threshold = None 
   try: 
@@ -592,6 +592,7 @@ def remove_deposit_account_request():
       depositAccountID = request.form['depositAccountID']
     else:
       depositAccountID = request.args.get('depositAccountID')
+    print(depositAccountID)
     userInfo = remove_deposit_account(depositAccountID)
     return jsonify(userInfo), userInfo["code"]
   except Exception as e:
@@ -673,6 +674,7 @@ def get_calculate_loan_repayment_detail():
     rate = None 
     payment_period_in_year = None 
     if request.method == 'POST':
+      print(request.form)
       principal = request.form['principal']
       rate = request.form['rate'] 
       payment_period_in_year = request.form['payment_period_in_year']

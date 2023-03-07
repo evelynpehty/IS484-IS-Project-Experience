@@ -149,6 +149,7 @@ def edit_personal_detail(userID, familyName, givenName,
                              ethnicity, occupation, jobTitle, 
                              employerName, maritalStatus, 
                              email, chosenColor, userID)
+    result = engine.execute(sql)
     return {
       "code": 200,
       "message": "edit personal detail successful"

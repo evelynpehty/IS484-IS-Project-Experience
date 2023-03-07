@@ -1,7 +1,7 @@
 from module.databaseConnection import create_engine
 from module.classes.deposit_account import Deposit_Account
 from module.classes.transaction_log import Transaction_Log
-from module.accountModule import get_net_worth
+# from module.accountModule import get_net_worth
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
@@ -54,7 +54,7 @@ def get_view_selected_deposit_account(depositAccountID):
 #
 def get_view_available_balance(userID):
     #same return as this function in accountModule
-    return get_net_worth(userID)
+    return get_net_worth_deposit(userID)
 
 def get_view_recent_three_transaction(userID):
     transactions = get_view_all_transaction(userID)
@@ -228,7 +228,9 @@ def filter_transaction_history_by_user(userID, start_date, end_date):
         AND (transactionDate BETWEEN 
         '%s' AND '%s')
         """ % (userID, userID, start_date, end_date)
+    print(sql)
     result = engine.execute(sql)
+    
     if result.rowcount > 0:
         transactions = []
         
@@ -285,8 +287,8 @@ def filter_transaction_history_by_account(depositAccountID, start_date, end_date
         ]
     } 
 
-#view large spending 
-def view_large_spending_by_account(depositAccountID, large_amount_threshold):
+#view large spending view_large_spending_by_user
+def view_large_spending_by_user(userID, large_amount_threshold):
     engine = create_engine()
     sql = """
         SELECT *
@@ -294,7 +296,8 @@ def view_large_spending_by_account(depositAccountID, large_amount_threshold):
         WHERE transactionAmount >= %s
         AND (accountFrom IN (SELECT depositAccountID FROM deposit_account WHERE userID = '%s')
         OR accountTo IN (SELECT depositAccountID FROM deposit_account WHERE userID = '%s'));
-    """% (large_amount_threshold, depositAccountID, depositAccountID)
+    """% (large_amount_threshold, userID, userID)
+    print(sql)
     result = engine.execute(sql)
     if result.rowcount > 0:
         transactions = []
@@ -320,14 +323,15 @@ def view_large_spending_by_account(depositAccountID, large_amount_threshold):
     } 
 
 #view large spending 
-def view_large_spending_by_user(userID, large_amount_threshold):
+def view_large_spending_by_account(depositAccountID, large_amount_threshold):
     engine = create_engine()
     sql = """
         SELECT *
         FROM transaction_log
         WHERE transactionAmount >= %s
         AND (accountFrom = %s OR accountTo = %s);
-    """% (large_amount_threshold, userID, userID)
+    """% (large_amount_threshold, depositAccountID, depositAccountID)
+    print(sql)
     result = engine.execute(sql)
     if result.rowcount > 0:
         transactions = []
@@ -356,6 +360,7 @@ def view_large_spending_by_user(userID, large_amount_threshold):
 def remove_deposit_account(depositAccountID):
     engine = create_engine()
     monthly_balance_record = remove_monthly_balance(depositAccountID)
+    print(monthly_balance_record)
     sql = "DELETE FROM deposit_account WHERE depositAccountID ='%s'" % depositAccountID
     print(sql)
     result = engine.execute(sql)
@@ -374,6 +379,7 @@ def remove_deposit_account(depositAccountID):
 def remove_monthly_balance(depositAccountID):
     engine = create_engine()
     sql = "DELETE FROM monthly_balance WHERE depositAccountID ='%s'" % depositAccountID
+    print(sql)
     result = engine.execute(sql)
     if result.rowcount > 0:
         return {
