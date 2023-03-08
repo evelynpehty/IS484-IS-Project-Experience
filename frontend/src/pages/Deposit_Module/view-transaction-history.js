@@ -113,6 +113,7 @@ export default function ColorTabs() {
     const [value, setValue] = React.useState('Monthly');
     const [transFilter, setTransFilter] = React.useState("");
     const [transactionDisplay, setTransDisplay] = React.useState(transaction_item);
+    const [selectedChip, setSelectedChip] = React.useState("");
 
     React.useEffect(() => {
         if(selectedFilter === undefined){
@@ -182,7 +183,7 @@ export default function ColorTabs() {
 
     /* handle chip value - months or year */
     const [chipValue, setChipValue] = React.useState(monthRange);
-    const [selectedChip, setSelectedChip] = React.useState("");
+    
    
     // Group by Month
     function func_groupByYearMonth(transaction_item) {
@@ -260,47 +261,12 @@ export default function ColorTabs() {
             setTransDisplay(filter_transaction_item(transFilter))
         }
     };
-
-    function handleChip(item){
-        if (item === selectedChip){
-            item = ""
-            setSelectedChip(item)
-        } else{
-            setSelectedChip(item)
-        }
-        
-        if(item !== ""){
-            if(value === "Monthly"){
-                const yy = item.split(" ")[1]
-                const mm = item.split(" ")[0];
-    
-                const result = filter_transaction_item(transFilter).filter(function (el)
-                {
-                    const transactionDate = moment(el.transactionDate)
-                    return transactionDate.month() === months.indexOf(mm) && transactionDate.year().toString() === yy
-                })
-    
-                setTransDisplay(result)
-            }
-    
-            if(value === "Yearly"){
-                const result = filter_transaction_item(transFilter).filter(function (el)
-                {
-                    const transactionDate = moment(el.transactionDate)   
-                    return transactionDate.year().toString() === item.toString()
-                })
-                
-                setTransDisplay(func_groupByYearMonth(result))
-            }
-        } else{
-            handleFilter(transFilter)
-        }
-    };
-    
     function handleFilter(f){
         setTransFilter(f)
+        console.log(selectedChip)
 
         if(selectedChip===""){
+
             if(value === "Yearly"){
                 setTransDisplay(func_groupByYearMonth(filter_transaction_item(f)))
             } 
@@ -334,6 +300,50 @@ export default function ColorTabs() {
             }
         }
     }
+
+    function handleChip(item){
+        if (item === selectedChip){
+            item = ""
+            setSelectedChip("")
+        } else{
+            setSelectedChip(item)
+        }
+        
+        if(item !== ""){
+            if(value === "Monthly"){
+                const yy = item.split(" ")[1]
+                const mm = item.split(" ")[0];
+    
+                const result = filter_transaction_item(transFilter).filter(function (el)
+                {
+                    const transactionDate = moment(el.transactionDate)
+                    return transactionDate.month() === months.indexOf(mm) && transactionDate.year().toString() === yy
+                })
+    
+                setTransDisplay(result)
+            }
+    
+            if(value === "Yearly"){
+                const result = filter_transaction_item(transFilter).filter(function (el)
+                {
+                    const transactionDate = moment(el.transactionDate)   
+                    return transactionDate.year().toString() === item.toString()
+                })
+                
+                setTransDisplay(func_groupByYearMonth(result))
+            }
+        } else{
+            if(value === "Yearly"){
+                setTransDisplay(func_groupByYearMonth(filter_transaction_item(transFilter)))
+            } 
+    
+            if(value === "Monthly"){
+                setTransDisplay(filter_transaction_item(transFilter))
+            }
+        }
+    };
+    
+
     
   return (
     <React.Fragment>
@@ -425,7 +435,7 @@ export default function ColorTabs() {
             <Stack direction="row" spacing={1}>
                 {
                     chipValue.map((item, index) => {
-                        return <Chip label={item} id={index} sx={(item === selectedChip) ? styles.chipSelected : styles.chipUnSelected } variant="outlined" onClick={() => handleChip(item)} />
+                        return <Chip label={item} id={index} key={index} sx={(item === selectedChip) ? styles.chipSelected : styles.chipUnSelected } variant="outlined" onClick={() => handleChip(item)} />
                     })
                 }
             </Stack>
