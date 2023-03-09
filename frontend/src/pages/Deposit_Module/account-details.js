@@ -11,7 +11,12 @@ import { Container, Box, Button, Card, CardContent, Typography, AppBar, Toolbar 
 import { VictoryChart, VictoryLine, VictoryScatter, VictoryArea, VictoryAxis } from 'victory';
 
 import { ReactComponent as Arrow } from "../../assets/icons/arrow-red.svg";
-import { ModeCommentSharp, Savings } from "@mui/icons-material";
+
+// Customised Components
+import MainAppBar from "../../components/MainAppBar";
+import MainBottomNavigation from "../../components/MainBottomNavigation";
+import WhiteReusableButton from "../../components/WhiteButton";
+
 
 function AccountDetails() {
     // Styling for Account Details Page

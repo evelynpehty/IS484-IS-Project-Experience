@@ -4,9 +4,14 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import Grid from '@mui/material/Unstable_Grid2';
-import { Container, Box, Button, Card, CardContent, Typography, Fab } from "@mui/material";
+import { Container, Box, Card, CardContent, Typography, Fab } from "@mui/material";
 
 import { ReactComponent as AddIcon } from "../../assets/icons/plus-line-red.svg";
+
+// Customised Components
+import MainAppBar from "../../components/MainAppBar";
+import MainBottomNavigation from "../../components/MainBottomNavigation";
+import WhiteReusableButton from "../../components/WhiteButton";
 
 function DepositSummary() {
     // Styling for Deposit Summary Page
@@ -19,15 +24,6 @@ function DepositSummary() {
             fontWeight: "bold",
             color: "#4B4948",
             fontSize: "16px"
-        },
-
-        button: {
-            paddingTop: "8px",
-            paddingBottom: "8px",
-            borderRadius: "30px",
-            fontSize: "12px",
-            color: "#4B4948",
-            backgroundColor: "#E5E7EC"
         },
 
         card: {
@@ -60,11 +56,12 @@ function DepositSummary() {
     
     return (
         <React.Fragment>
+            <MainAppBar />
             <Container maxWidth="lg">
-                <Box sx={{ mt: 10, mb: 10 }}>
+                <Box sx={{ pt: 10, mb: 10 }}>
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
                         <Typography style={ styles.label } variant="h6">Deposit Accounts</Typography>
-                        <Button style={ styles.button } variant="contained">Manage Accounts</Button>
+                        <WhiteReusableButton buttonText="MANAGE ACCOUNTS" />
                     </Grid>
 
                     { !isEmpty && depositList.map ((value, index) => {
@@ -100,6 +97,7 @@ function DepositSummary() {
                     <AddIcon />
                 </Fab>
             </Container>
+            <MainBottomNavigation />
         </React.Fragment>
     );
 }

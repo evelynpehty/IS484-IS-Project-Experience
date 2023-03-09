@@ -8,7 +8,7 @@ import { ThemeProvider, CssBaseline, Box } from "@mui/material";
 
 // Pages
 import Login from "./pages/Account_Module/login";
-import DashBoard from './pages/dashboard.js'
+import DashBoard from './pages/Dashboard_Module/dashboard.js'
 import DepositSummary from './pages/Deposit_Module/deposit-summary.js'
 import AccountDetails from './pages/Deposit_Module/account-details.js'
 import TransactionHistory from './pages/Deposit_Module/view-transaction-history.js'

@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { deposit } from "../actions/deposit";
-import { depositTransactionHistory } from "../actions/deposit";
-import { loan } from "../actions/loan";
-import { RemoveFirstLoad } from "../actions/auth";
+import { deposit } from "../../actions/deposit";
+import { depositTransactionHistory } from "../../actions/deposit";
+import { loan } from "../../actions/loan";
+import { RemoveFirstLoad } from "../../actions/auth";
 
-import Loading from "../components/loading.js";
+import Loading from "../../components/loading.js";
+
+// Customised Components
+import MainAppBar from "../../components/MainAppBar";
+import MainBottomNavigation from "../../components/MainBottomNavigation";
 
 
 function DashBoard() {

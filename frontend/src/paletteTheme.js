@@ -36,6 +36,6 @@ export const appTheme = createTheme({
     },
 
     typography: {
-        fontFamily: "Roboto, Arial"
+        fontFamily: ["Roboto", "Arial"].join(","),
     }
 });
