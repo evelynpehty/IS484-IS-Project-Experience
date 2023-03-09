@@ -55,7 +55,7 @@ function App() {
           <Route exact path={"/deposit"} element={<DepositSummary />} />
           <Route exact path={"/view-transaction-history"} element={<TransactionHistory />} />
           <Route exact path={"/account-details/:id"} element={<AccountDetails />} />
-          <Route exact path={"/cashflow/:id"} element={<CashFlow />} />
+          <Route exact path={"/cashflow"} element={<CashFlow />} />
         </Routes>
       </>
     )  
