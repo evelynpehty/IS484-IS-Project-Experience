@@ -242,9 +242,57 @@ def reset_password_request():
       "message": str(e),
       "data": None
     }), 500
+
+# required attribute: userID
+@api.route('/get_self_customization_functions',methods = ['POST', 'GET'])
+def get_self_customization_functions_request():
+  userID = None 
   
+  try:
+    # print(request.form)
+    if request.method == 'POST':
+      userID = request.form['userID']
+    else:
+      userID = request.args.get('userID')
 
+    info = get_self_customization_functions(userID)
+    return jsonify(info), info["code"]
+  except Exception as e:
 
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 5
+
+# required attribute: userID, functions_for_customization
+@api.route('/update_self_customization_functions',methods = ['POST', 'GET'])
+def update_self_customization_functions_request():
+  userID = None 
+  functionsForCustomization = None 
+  try:
+    # print(request.form)
+    if request.method == 'POST':
+      print("POST")
+      print("REQUEST", request.form)
+      userID = request.form['userID']
+      
+      functionsForCustomization = request.form['functionsForCustomization']
+      print("functionsForCustomization",request.form['functionsForCustomization'])
+    else:
+      print("GET")
+      userID = request.args.get('userID')
+      functionsForCustomization = request.args.get('functionsForCustomization')
+    print(userID, functionsForCustomization)
+    info = update_self_customization_functions(userID, functionsForCustomization)
+    return jsonify(info), info["code"]
+  except Exception as e:
+
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 5
 
 
 
@@ -840,3 +888,5 @@ def consolidated_loan_repayment_request():
       "message": str(e),
       "data": None
     }), 500
+  
+

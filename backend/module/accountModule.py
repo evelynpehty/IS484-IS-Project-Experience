@@ -1,4 +1,4 @@
-from module.databaseConnection import create_engine
+from module.databaseConnection import *
 from module.classes.user import User
 from module.depositModule import get_net_worth_deposit
 from module.loanModule import get_net_worth_loan
@@ -168,3 +168,42 @@ def peek_detail(userID):
         "loan_net_worth": net_worth_loan
      }
   }
+
+#self-customization (type: dictionary: {userID: [functions]})
+# SELF_CUSTOMIZATION = {
+   
+# }
+
+
+#LOOKING INTO SELF_CUSTOMIZATION.json for records 
+# implement by json file to store the customization function; can consider it with fornt end cookies in futures
+def get_self_customization_functions(userID):
+   SELF_CUSTOMIZATION = get_SELF_CUSTOMIZATION()
+   DEFAULT_FUNCTION_FOR_CUSTOMIZATION = "Saving, Loan, Investments, Personalise"
+   if userID in SELF_CUSTOMIZATION:
+      return {
+         "code": 200,
+         "data":{ 
+         "functions": SELF_CUSTOMIZATION[userID]
+         }
+      }
+   SELF_CUSTOMIZATION[userID] = DEFAULT_FUNCTION_FOR_CUSTOMIZATION
+   update_SELF_CUSTOMIZATION(SELF_CUSTOMIZATION)
+   return {
+      "code": 404,
+      "data":{ 
+         "functions": DEFAULT_FUNCTION_FOR_CUSTOMIZATION
+        }
+   }
+
+def update_self_customization_functions(userID, functions_for_customization):
+   SELF_CUSTOMIZATION = dict(get_SELF_CUSTOMIZATION())
+   print("functions_for_customization", functions_for_customization)
+   SELF_CUSTOMIZATION[userID] = functions_for_customization
+   update_SELF_CUSTOMIZATION(SELF_CUSTOMIZATION)
+   return {
+      "code": 200,
+      "message": "update self customization functions successfully!",
+      "data": SELF_CUSTOMIZATION[userID]
+   }
+

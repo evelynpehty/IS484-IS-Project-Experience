@@ -181,9 +181,9 @@ def delelte_loan_account(loanAccountID):
 
 
 #Partial Loan Repayment Calculation
-def calculate_partial_loan_repayment(principal, rate, payment_period_in_year):
+def calculate_partial_loan_repayment(principal, rate, payment_period_in_year, pay_amount_in_advance):
 
-    return get_view_calculate_loan_repayment_detail(principal, rate, payment_period_in_year)
+    return get_view_calculate_loan_repayment_detail(principal - pay_amount_in_advance, rate, payment_period_in_year)
 
 #Consolidated Loan Repayment
 def consolidated_loan_repayment(userID):
