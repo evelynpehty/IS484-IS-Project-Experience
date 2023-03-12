@@ -79,9 +79,9 @@ function SignIn() {
     };
 
     return (
-        <Container maxWidth="xl">
-            {/* { loading && <Loading></Loading> } */}
-            <Box sx={{ m: 5 }}>
+        <Container maxWidth="lg">
+            {/* { loading && <Loading></Loading> } */} 
+            <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
                 <Grid container style={ styles.grid }>
                     <Grid xs={12} lg={6}>
                             <Stack spacing={4} mb={5} alignItems="center">
@@ -89,7 +89,7 @@ function SignIn() {
                                     component="img"
                                     sx={{
                                         maxHeight: { xs: 150, sm: 180, md: 200, lg: 230, xl: 300 },
-                                        maxWidth: { xs: 150, sm: 180, md: 200, lg: 230, xl: 300 },
+                                        maxWidth: { xs: 150, sm: 180, md: 200, lg: 230, xl: 300 }
                                     }}
                                     alt="logo"
                                     src={ logo }

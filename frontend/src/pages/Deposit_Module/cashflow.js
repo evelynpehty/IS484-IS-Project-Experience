@@ -1,15 +1,21 @@
+// Packages
 import React from "react";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
-import moment from "moment";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
+// MUI Components
 import Grid from '@mui/material/Unstable_Grid2';
 import { Container, Box, Button, Card, CardContent, Typography, AppBar, Toolbar, Tab, Tabs } from "@mui/material";
 
+// Customised Components
+import SecondaryAppBar from "../../components/SecondaryAppBar"
+import WhiteReusableButton from "../../components/WhiteButton"
+
+// Assets (Images & Icons)
 import { ReactComponent as Arrow } from "../../assets/icons/arrow-red.svg";
 import { ReactComponent as UpWhite } from "../../assets/icons/up-white.svg";
 import { ReactComponent as UpBlack } from "../../assets/icons/up-black.svg";
@@ -31,7 +37,13 @@ import {
 function CashFlow() {
     const styles = {
         grid: {
-            marginBottom: "24px"
+            marginBottom: "24px",
+            paddingRight: "16px",
+            paddingLeft: "16px"
+        },
+
+        grid2: {
+            marginBottom: "16px"
         },
 
         label: {
@@ -61,8 +73,10 @@ function CashFlow() {
         },
 
         card2: {
-            marginTop: "15px",
+            marginTop: "24px",
             marginBottom: "24px",
+            marginLeft: "16px",
+            marginRight: "16px",
             borderRadius: "15px",
             padding: 10
         },
@@ -160,12 +174,12 @@ function CashFlow() {
         }
         const income_data = []
         const expense_data = []
-        monthRangeYear.forEach(month => {
-            var currentobj = {}
-            currentobj["x"] = month
-            currentobj["y"] = 0
-            expense_data.push(currentobj)
-            income_data.push( Object.assign({},currentobj))
+            monthRangeYear.forEach(month => {
+                var currentobj = {}
+                currentobj["x"] = month
+                currentobj["y"] = 0
+                expense_data.push(currentobj)
+                income_data.push( Object.assign({},currentobj))
         });
 
         expenses_transaction_item.forEach(element => {
@@ -316,21 +330,12 @@ function CashFlow() {
         
     return (
         <React.Fragment>
-            <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="fixed" color="primary">
-                <Toolbar>
-                    <Arrow component={ Link } to={ `/account-details/${id}` } />
-                    <Typography component={ Link } to={ `/account-details/${id}` } sx={{ flexGrow: 1, fontWeight: "bold", ml: 2 }} color="#4B4948">
-                        Account Overview
-                    </Typography>
-                </Toolbar>
-                </AppBar>
-            </Box>
-            <Container maxWidth="lg">
-                <Box sx={{ mt: 10, mb: 10 }}>
+            <SecondaryAppBar link={ `/account-details/${id}` } text="Account Overview" />
+            <Container maxWidth="lg" sx={{ p: 0 }}>
+                <Box sx={{ pt: 10, pb: 10 }}>
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
                         <Typography style={ styles.label } variant="h6">Cash Flow</Typography>
-                        <Button style={ styles.button } variant="contained">VIEW INSIGHTS</Button>
+                        <WhiteReusableButton buttonText="VIEW INSIGHTS" />
                     </Grid>
        
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -338,6 +343,7 @@ function CashFlow() {
                         value={ value } 
                         onChange={ handleChange } 
                         aria-label="basic tabs example"
+                        variant="fullWidth"
                         centered
                         sx={{ 
                             "& .MuiTab-root.Mui-selected": { color: "#4B4948", fontWeight: "bold" },
@@ -349,7 +355,9 @@ function CashFlow() {
                         </Tabs>
                     </Box>
                     <Card style={ styles.card2 } elevation={ 4 }>
-                    <ResponsiveContainer width="100%" height={300}>
+
+                        {/* Visualization */}
+                        <ResponsiveContainer width="100%" height={300}>
                             <AreaChart width={730} height={250} data={finalData}
                                 margin={{ top: 10, right: 30, left: 0, bottom: 0 }} >
                                 <defs>
@@ -370,9 +378,9 @@ function CashFlow() {
                                 <Area type="monotone"  dataKey="Expense" stroke="#E60000" strokeWidth="5" fillOpacity={1} fill="url(#colorPv)" activeDot={{ r:8, onClick: handleExpense }} />
                             </AreaChart>
                         </ResponsiveContainer>
+
                         {selectedMonth!=="" && 
-                       <CardContent style={ styles.cardContent }>
-                            
+                       <CardContent style={ styles.cardContent }>     
                             {type==="Income" &&  
                                 <Grid container direction="row" justifyContent="space-between" alignItems="center">
                                     <Grid xs={8}>
@@ -434,48 +442,49 @@ function CashFlow() {
                             }
                         </CardContent>} 
                     </Card>
-                    
-                    <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center" spacing={ 2 }>
-                        <Grid xs={4}>
-                            <Card elevation={ 4 } onClick={() => handleClick("All")} sx ={{background: clicked === "All" ? "#BFBFBF" : styles.default }}>
-                                <CardContent id="transactions" sx={{ textAlign: "center" }}>
-                                    <Typography sx={{ color: clicked === "All" ? "#FFFFFF" : styles.default.color,fontSize: 14, fontWeight: "bold" }} gutterBottom>
-                                    All
-                                    </Typography>
-                                    {clicked !== "All" && <MenuBlack />}
-                                    {clicked === "All" && <MenuWhite />}
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                        <Grid xs={4}>
-                            <Card elevation={ 4 } onClick={() => handleClick("Income")} sx ={{background: clicked === "Income" ? "linear-gradient(to top right, #FFFFFF, #109878)" : styles.default }}>
-                                <CardContent sx={{ textAlign: "center" }}>
-                                    <Typography sx={{color: clicked === "Income" ? "#FFFFFF" : styles.default.color, fontSize: 14, fontWeight: "bold" }} gutterBottom>
-                                    Income
-                                    </Typography>
-                          
-                                    {clicked !== "Income" && <UpBlack />}
-                                    {clicked === "Income" && <UpWhite />}
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                        <Grid xs={4}>
-                            <Card elevation={ 4 } onClick={() => handleClick("Expense")} sx ={{background: clicked === "Expense" ? "linear-gradient(to top right, #FFFFFF, #E60000)" : styles.default }}>
-                                <CardContent sx={{ textAlign: "center" }}>
-                                    <Typography sx={{color: clicked === "Expense" ? "#FFFFFF" : styles.default.color, fontSize: 14, fontWeight: "bold" }} gutterBottom>
-                                    Expenses
-                                    </Typography>
-                                    {clicked !== "Expense" && <DownBlack />}
-                                    {clicked === "Expense" && <DownWhite />}
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    </Grid>
 
-                    {/* Need to be made into a component */}
+                    <Box style={{ padding: 20 }}>
+                        <Grid container spacing={ 2 } style={ styles.grid2 } direction="row" justifyContent="space-between" alignItems="center">
+                            <Grid xs={4}>
+                                <Card elevation={ 4 } onClick={() => handleClick("All")} sx ={{background: clicked === "All" ? "#BFBFBF" : styles.default }}>
+                                    <CardContent id="transactions" sx={{ textAlign: "center" }}>
+                                        <Typography sx={{ color: clicked === "All" ? "#FFFFFF" : styles.default.color,fontSize: 14, fontWeight: "bold" }} gutterBottom>
+                                        All
+                                        </Typography>
+                                        {clicked !== "All" && <MenuBlack />}
+                                        {clicked === "All" && <MenuWhite />}
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid xs={4}>
+                                <Card elevation={ 4 } onClick={() => handleClick("Income")} sx ={{background: clicked === "Income" ? "linear-gradient(to top right, #FFFFFF, #109878)" : styles.default }}>
+                                    <CardContent sx={{ textAlign: "center" }}>
+                                        <Typography sx={{color: clicked === "Income" ? "#FFFFFF" : styles.default.color, fontSize: 14, fontWeight: "bold" }} gutterBottom>
+                                        Income
+                                        </Typography>
+                            
+                                        {clicked !== "Income" && <UpBlack />}
+                                        {clicked === "Income" && <UpWhite />}
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid xs={4}>
+                                <Card elevation={ 4 } onClick={() => handleClick("Expense")} sx ={{background: clicked === "Expense" ? "linear-gradient(to top right, #FFFFFF, #E60000)" : styles.default }}>
+                                    <CardContent sx={{ textAlign: "center" }}>
+                                        <Typography sx={{color: clicked === "Expense" ? "#FFFFFF" : styles.default.color, fontSize: 14, fontWeight: "bold" }} gutterBottom>
+                                        Expenses
+                                        </Typography>
+                                        {clicked !== "Expense" && <DownBlack />}
+                                        {clicked === "Expense" && <DownWhite />}
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        </Grid>
+                    </Box>
+
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
                         <Typography style={ styles.label } variant="h6">{clicked === "All" ? "Transactions" : clicked}</Typography>
-                        <Button style={ styles.button } variant="contained" onClick={handleViewAllTrans}>VIEW ALL</Button>
+                        <WhiteReusableButton function={ handleViewAllTrans } buttonText="VIEW ALL" />
                     </Grid>
                     
                     <Card style={ styles.card2 } elevation={ 4 }>
