@@ -13,7 +13,7 @@ const styles = {
 
 const WhiteReusableButton = (props) => {
     return (
-        <Button style={ styles.button } variant="contained">{props.buttonText}</Button>
+        <Button style={ styles.button } variant="contained" onClick={ props.function } >{props.buttonText}</Button>
     )
 }
 

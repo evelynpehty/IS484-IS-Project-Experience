@@ -10,8 +10,8 @@ import { ReactComponent as AddIcon } from "../../assets/icons/plus-line-red.svg"
 
 // Customised Components
 import MainAppBar from "../../components/MainAppBar";
-import MainBottomNavigation from "../../components/MainBottomNavigation";
 import WhiteReusableButton from "../../components/WhiteButton";
+import FabButton from "../../components/FabButton";
 
 function DepositSummary() {
     // Styling for Deposit Summary Page
@@ -58,7 +58,7 @@ function DepositSummary() {
         <React.Fragment>
             <MainAppBar />
             <Container maxWidth="lg">
-                <Box sx={{ pt: 10, mb: 10 }}>
+                <Box sx={{ pt: 10, pb: 10 }}>
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
                         <Typography style={ styles.label } variant="h6">Deposit Accounts</Typography>
                         <WhiteReusableButton buttonText="MANAGE ACCOUNTS" />
@@ -67,37 +67,33 @@ function DepositSummary() {
                     { !isEmpty && depositList.map ((value, index) => {
                         return (
                             <Link to={`/account-details/${value.DepositAccountID}`} key={value.DepositAccountID}> 
-                            <Card style={ styles.card } key={ index } >
-                                <CardContent style={ styles.cardContent }>
-                                    <Typography sx={{ fontSize: 12 }} color="white">
-                                        UBS
-                                    </Typography>
-                                    <Typography sx={{ fontSize: 16, fontWeight:"bold" }} color="white">
-                                        { value.AccountName }
-                                    </Typography>
-                                    <Typography sx={{ fontSize: 12 }} color="white">
-                                        { value.DepositAccountID.substr(0, 4) } { value.DepositAccountID.substr(4, 4) } { value.DepositAccountID.substr(8, 4) }
-                                    </Typography>
-                                    <Typography sx={{ fontSize: 12 }} textAlign="end" color="white">
-                                        Available Balance
-                                    </Typography>
-                                    <Typography sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="white">
-                                        SGD ${ value.AvailBalance.toLocaleString("en-US") }
-                                    </Typography>
-                                </CardContent>
-                            </Card>
+                                <Card style={ styles.card } key={ index } >
+                                    <CardContent style={ styles.cardContent }>
+                                        <Typography sx={{ fontSize: 12 }} color="white">
+                                            UBS
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 16, fontWeight:"bold" }} color="white">
+                                            { value.AccountName }
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 12 }} color="white">
+                                            { value.DepositAccountID.substr(0, 4) } { value.DepositAccountID.substr(4, 4) } { value.DepositAccountID.substr(8, 4) }
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 12 }} textAlign="end" color="white">
+                                            Available Balance
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="white">
+                                            SGD ${ value.AvailBalance.toLocaleString("en-US") }
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
                             </Link>
                         );
                     })}
                     {/* to beautify */}
-                    {isEmpty && <p>you do not hvae any deposit account</p>}
+                    {isEmpty && <p>You do not have any deposit account</p>}
                 </Box>
-
-                <Fab style={ styles.fabButton } color="primary" aria-label="add">
-                    <AddIcon />
-                </Fab>
+                <FabButton />
             </Container>
-            <MainBottomNavigation />
         </React.Fragment>
     );
 }

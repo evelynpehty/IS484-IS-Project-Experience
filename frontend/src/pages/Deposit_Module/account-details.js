@@ -9,13 +9,9 @@ import { Link } from "react-router-dom";
 import Grid from '@mui/material/Unstable_Grid2';
 import { Container, Box, Button, Card, CardContent, Typography, AppBar, Toolbar } from "@mui/material";
 
-import { ReactComponent as Arrow } from "../../assets/icons/arrow-red.svg";
-
 // Customised Components
-import MainAppBar from "../../components/MainAppBar";
-import MainBottomNavigation from "../../components/MainBottomNavigation";
+import SecondaryAppBar from "../../components/SecondaryAppBar";
 import WhiteReusableButton from "../../components/WhiteButton";
-
 
 import {
     AreaChart,
@@ -38,15 +34,6 @@ function AccountDetails() {
             fontWeight: "bold",
             color: "#4B4948",
             fontSize: "16px"
-        },
-
-        button: {
-            paddingTop: "8px",
-            paddingBottom: "8px",
-            borderRadius: "30px",
-            fontSize: "12px",
-            color: "#4B4948",
-            backgroundColor: "#E5E7EC"
         },
 
         card: {
@@ -213,18 +200,9 @@ function AccountDetails() {
 
     return (
         <React.Fragment>
-            <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="fixed" color="primary">
-                <Toolbar>
-                    <Arrow component={ Link } to={  "/deposit" } />
-                    <Typography component={ Link } to={  "/deposit" } sx={{ flexGrow: 1, fontWeight: "bold", ml: 2 }} color="#4B4948">
-                        All Accounts
-                    </Typography>
-                </Toolbar>
-                </AppBar>
-            </Box>
+            <SecondaryAppBar link="/deposit" text="All Accounts" />
             <Container maxWidth="lg">
-                <Box sx={{ mt: 10, mb: 10 }}>
+                <Box sx={{ pt: 10, pb: 10 }}>
                     <Card style={ styles.card }>
                         <CardContent style={ styles.cardContent }>
                             <Typography sx={{ fontSize: 12 }} color="white">
@@ -247,7 +225,7 @@ function AccountDetails() {
 
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
                         <Typography style={ styles.label } variant="h6">Cash Flow</Typography>
-                        <Button style={ styles.button } variant="contained" onClick={handleExpand}>EXPAND</Button>
+                        <WhiteReusableButton function={handleExpand} buttonText="EXPAND" />
                     </Grid>
 
 
@@ -341,7 +319,7 @@ function AccountDetails() {
 
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
                         <Typography style={ styles.label } variant="h6">Recent Transactions</Typography>
-                        <Button style={ styles.button } variant="contained" onClick={handleViewAll}>VIEW ALL</Button>
+                        <WhiteReusableButton function={ handleViewAll } buttonText="VIEW ALL" />
                     </Grid>
 
                     <Card style={ styles.card2 } elevation={ 4 }>

@@ -44,8 +44,10 @@ function DashBoard() {
   
   
   return (
-    <>
-    </>
+    <React.Fragment>
+      <MainAppBar />
+      <MainBottomNavigation />
+    </React.Fragment>
   )
   
 }

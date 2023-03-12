@@ -1,10 +1,10 @@
 import React from "react";
-import { useTheme, createTheme } from "@mui/material";
+import { createTheme } from "@mui/material";
 
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
+// import '@fontsource/roboto/300.css';
+// import '@fontsource/roboto/400.css';
+// import '@fontsource/roboto/500.css';
+// import '@fontsource/roboto/700.css';
 
 export const appTheme = createTheme({
     palette: {
@@ -31,7 +31,9 @@ export const appTheme = createTheme({
             lightPurple: "#B5A4D2",
             mainPurple: "#5C42FF",
             lightGreen: "#8AB8B2",
-            mainGreen: "#109878"
+            mainGreen: "#109878",
+            lightRed: "#F7E6E6",
+            sucess: "#3BB537"
         }
     },
 
@@ -39,3 +41,5 @@ export const appTheme = createTheme({
         fontFamily: ["Roboto", "Arial"].join(","),
     }
 });
+
+export default appTheme;
