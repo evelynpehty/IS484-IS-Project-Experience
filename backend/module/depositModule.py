@@ -1,6 +1,7 @@
 from module.databaseConnection import create_engine
 from module.classes.deposit_account import Deposit_Account
 from module.classes.transaction_log import Transaction_Log
+from module.classes.product import Product
 # from module.accountModule import get_net_worth
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -17,7 +18,11 @@ def get_view_all_deposit_accounts(userID):
                 info[0], info[1], info[2], info[3], info[4], info[5], info[6], info[7],
                 info[8], info[9], info[10], info[11], info[12], info[13], info[14], info[15],
                 info[16]
-            ).to_dict()
+            )
+            productID = depositAccountInfo.get_productID()
+            productName = get_product_name(productID)
+            depositAccountInfo = depositAccountInfo.to_dict()
+            depositAccountInfo["ProductName"] = productName
             accountInfo.append(depositAccountInfo)
         return{
             "code": 200,
@@ -41,7 +46,11 @@ def get_view_selected_deposit_account(depositAccountID):
                 info[0], info[1], info[2], info[3], info[4], info[5], info[6], info[7],
                 info[8], info[9], info[10], info[11], info[12], info[13], info[14], info[15],
                 info[16]
-            ).to_dict()
+            )
+        productID = depositAccountInfo.get_productID()
+        productName = get_product_name(productID)
+        depositAccountInfo = depositAccountInfo.to_dict()
+        depositAccountInfo["ProductName"] = productName
         return{
             "code": 200,
             "data": depositAccountInfo
@@ -390,6 +399,17 @@ def remove_monthly_balance(depositAccountID):
         "code": 404,
         "message": "no monthly balance has been found",
     }
+
+def get_product_name(productID):
+    engine = create_engine()
+    sql = "SELECT * FROM product WHERE productID = %s" % productID
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        for info in result.fetchall():
+            product = Product(info[0], info[1], info[2], info[3])
+            return product.get_productName()
+    return ""
+
 
 
 
