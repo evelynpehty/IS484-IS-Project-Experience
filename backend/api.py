@@ -713,7 +713,7 @@ LOAN MODULE
  LOAN CALCULATOR - /get_calculate_loan_repayment_detail
  REPAYMENT - /view_loan_transactions_by_account, /view_loan_transactions_by_user
 
-  UPDATE ACCOUNT NAME - 
+  UPDATE ACCOUNT NAME - /update_loan_account_name
 
 
 
