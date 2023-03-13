@@ -322,3 +322,11 @@ def get_product_name(productID):
 
 
 #update loan account name 
+# def update_loan_account_name(loanAccountID, newAccountName):
+#     engine = create_engine()
+#     sql = "UPDATE deposit_account SET accountName = '%s' WHERE loanAccountID = '%s';" % (newAccountName, loanAccountID)
+#     engine.execute(sql)
+#     return {
+#         "code": 200,
+#         "message": "account name has updated successfully"
+#     }
