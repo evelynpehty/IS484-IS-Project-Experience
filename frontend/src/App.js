@@ -15,6 +15,7 @@ import AccountDetails from './pages/Deposit_Module/account-details.js'
 import TransactionHistory from './pages/Deposit_Module/view-transaction-history.js'
 import CashFlow from './pages/Deposit_Module/cashflow.js'
 import LoanSummary from './pages/Loan_Module/loan-summary.js'
+import LoanAccountDetails from './pages/Loan_Module/loan-account-details.js'
 import ManageDeposit from "./pages/Deposit_Module/manage-deposit.js"
 
 import MainBottomNavigation from "./components/MainBottomNavigation";
@@ -68,6 +69,7 @@ useEffect(() => {
               <Route exact path={"/account-details/:id"} element={<AccountDetails />} />
               <Route exact path={"/cashflow"} element={<CashFlow />} />
               <Route exact path={"/loan"} element={<LoanSummary />} />
+              <Route exact path={"/loan-account-details/:id"} element={<LoanAccountDetails />} />
               <Route exact path={"/manage-deposit/:id"} element={<ManageDeposit />} />
             </Routes>
             {(showBottomNavigation) && <MainBottomNavigation></MainBottomNavigation>}

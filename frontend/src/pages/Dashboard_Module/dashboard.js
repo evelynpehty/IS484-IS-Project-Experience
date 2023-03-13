@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { deposit } from "../../actions/deposit";
-import { depositTransactionHistory } from "../../actions/deposit";
-import { loan } from "../../actions/loan";
+import { deposit, depositTransactionHistory } from "../../actions/deposit";
+import { loan, loanTransactionHistory } from "../../actions/loan";
 import { RemoveFirstLoad } from "../../actions/auth";
 
 import Loading from "../../components/loading.js";
@@ -19,6 +18,7 @@ function DashBoard() {
   // const { depositList } = useSelector((state) => state.deposit);
   // const { transactionHistoryList } = useSelector((state) => state.deposit);
   // const { loanList } = useSelector((state) => state.loan);
+  // const { loan_transactionHistoryList } = useSelector((state) => state.loan);
   const [loading, setLoading] = useState(false);
   const UserID = user.data.UserID
   
@@ -30,7 +30,8 @@ function DashBoard() {
       const p1 = dispatch(loan(UserID))
       const p2 = dispatch(deposit(UserID))
       const p3 = dispatch(depositTransactionHistory(UserID))
-      Promise.all([p1,p2,p3]).then(()=>{
+      const p4 = dispatch(loanTransactionHistory(UserID))
+      Promise.all([p1,p2,p3,p4]).then(()=>{
         dispatch(RemoveFirstLoad())
         setLoading(false)
     })

@@ -1,5 +1,6 @@
 const initialState = {
-    loanList: []
+    loanList: [],
+    loan_transactionHistoryList: []
 }
 
 const loanReducer = (state = initialState, action) => {
@@ -15,6 +16,16 @@ switch (type) {
     return {
         ...state,
         loanList: []
+    };
+    case "LOAN_TRANSACTION_HISTORY_SUCCESS":
+      return {
+          ...state,
+          loan_transactionHistoryList: payload.loan_transactionHistoryList,
+      };
+    case "LOAN_TRANSACTION_HISTORY_FAIL":
+    return {
+        ...state,
+        loan_transactionHistoryList: []
     };
     
     default:
