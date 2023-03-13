@@ -77,12 +77,34 @@ def get_view_calculate_loan_repayment_detail(principal, rate, payment_period_in_
     monthly_payment = principal*((r*((r+1)**n))/(((r+1)**n)-1))
     total_interest_paid = monthly_payment*12*payment_period_in_year
     total_amount = total_interest_paid + principal
+    schedule_for_payment = generate_debt_paydown(principal, payment_period_in_year, rate, monthly_payment)
     return {
         "code": 200,
         "monthly_payment": monthly_payment,
         "total_interest_paid": total_interest_paid,
-        "total_payment_amount": total_amount
+        "total_payment_amount": total_amount,
+        "schedule_for_payment": schedule_for_payment
     }
+
+def generate_debt_paydown(principal, payment_period_in_year, rate, monthly_payment):
+    print(principal, payment_period_in_year, rate, monthly_payment)
+    monthly_interest_rate = float(rate)/12 
+    loan_term_in_months = round(float(payment_period_in_year) * 12)
+    balance = principal
+    result = {
+
+    }
+    for month in range(1, loan_term_in_months+1):
+        this_month_detail = {} 
+        this_month_detail["begin_balance"] = balance
+        interest_payment = balance * monthly_interest_rate
+        principal_payment = monthly_payment - interest_payment
+        balance -= principal_payment
+        this_month_detail["interest"] = interest_payment
+        this_month_detail["principal"] = principal_payment
+        this_month_detail["end_balance"] = balance
+        result[month] = this_month_detail
+    return result 
 
 # def get_calculate_partial_loan_repayment(amount, rate, no_of_year):
 #     totalAmount = amount
