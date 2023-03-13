@@ -7,7 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { ThemeProvider, CssBaseline, Box } from "@mui/material";
 
 // Pages
-import Login from "./pages/Account_Module/login";
+import PeekBalance from "./pages/Account_Module/peekBalance.js";
+import Login from "./pages/Account_Module/login.js";
 import DashBoard from './pages/Dashboard_Module/dashboard.js'
 import DepositSummary from './pages/Deposit_Module/deposit-summary.js'
 import AccountDetails from './pages/Deposit_Module/account-details.js'
@@ -56,15 +57,16 @@ useEffect(() => {
         <header className="App-header">
           <CssBaseline enableColorScheme />
           <>
-            {(showBottomNavigation) && <MainBottomNavigation></MainBottomNavigation>}
             <Routes>
-              <Route exact path={"/"} element= {!currentUser && <Login></Login>} />
+              <Route exact path={"/"} element= {!currentUser && <PeekBalance></PeekBalance>} />
+              <Route exact path={"/login"} element= {<Login />} />
               <Route exact path={"/dashboard"} element={<DashBoard />} />
               <Route exact path={"/deposit"} element={<DepositSummary />} />
               <Route exact path={"/view-transaction-history"} element={<TransactionHistory />} />
               <Route exact path={"/account-details/:id"} element={<AccountDetails />} />
               <Route exact path={"/cashflow"} element={<CashFlow />} />
             </Routes>
+            {(showBottomNavigation) && <MainBottomNavigation></MainBottomNavigation>}
           </>
         </header>
       </div>
