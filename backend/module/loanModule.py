@@ -1,4 +1,5 @@
 from module.databaseConnection import create_engine
+from module.classes.product import Product
 from module.classes.loan_account import Loan_Account
 from module.classes.transaction_log import Transaction_Log
 
@@ -21,7 +22,10 @@ def get_view_all_loan_account(userID):
                                                                    loanAccountInfo.get_loanTerm())
             
             totalMonthlyRepayment += loan_detail["monthly_payment"]
+            productID = loanAccountInfo.get_productID()
+            productName = get_product_name(productID)
             loanAccountInfo = loanAccountInfo.to_dict()
+            loanAccountInfo["ProductName"] = productName
             loanAccountInfo["Detail"] = loan_detail
             accountInfo.append(loanAccountInfo)
         return{
@@ -55,7 +59,10 @@ def get_view_loan_account_detail(loanAccountID):
                                                                    loanAccountInfo.get_loanTerm())
         
         historical_transaction = view_loan_transactions_by_account(loanAccountInfo.get_loanAccountID())
+        productID = loanAccountInfo.get_productID()
+        productName = get_product_name(productID)
         loanAccountInfo = loanAccountInfo.to_dict()
+        loanAccountInfo["ProductName"] = productName
         loanAccountInfo["Detail"] = loan_detail
         loanAccountInfo["Transactions"] = historical_transaction
         
@@ -303,3 +310,15 @@ def consolidated_loan_repayment(userID):
     return result
 
 
+def get_product_name(productID):
+    engine = create_engine()
+    sql = "SELECT * FROM product WHERE productID = %s" % productID
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        for info in result.fetchall():
+            product = Product(info[0], info[1], info[2], info[3])
+            return product.get_productName()
+    return ""
+
+
+#update loan account name 
