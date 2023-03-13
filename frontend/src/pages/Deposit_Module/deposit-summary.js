@@ -1,16 +1,19 @@
+// Packages
 import React from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
+// MUI Components
 import Grid from '@mui/material/Unstable_Grid2';
-import { Container, Box, Card, CardContent, Typography, Fab } from "@mui/material";
-
-import { ReactComponent as AddIcon } from "../../assets/icons/plus-line-red.svg";
+import { Container, Box, Typography } from "@mui/material";
 
 // Customised Components
 import MainAppBar from "../../components/MainAppBar";
 import WhiteReusableButton from "../../components/WhiteButton";
+import OutlinedReusableButton from "../../components/OutlinedButton";
+import DepositCard from "../../components/DepositCard";
+import EditDepositCard from "../../components/EditDepositCard";
 import FabButton from "../../components/FabButton";
 
 function DepositSummary() {
@@ -26,17 +29,6 @@ function DepositSummary() {
             fontSize: "16px"
         },
 
-        card: {
-            background: "linear-gradient(to top right, #E69F9F, #E60000)",
-            marginBottom: "24px",
-            borderRadius: "15px",
-            padding: 10
-        },
-
-        cardContent: {
-            paddingBottom: "16px"
-        },
-
         fabButton: {
             position: "absolute",
             bottom: 80,
@@ -44,6 +36,9 @@ function DepositSummary() {
             backgroundColor: "#F7E6E6"
         }
     }
+
+    // Change State of page
+    const [show, setShow] = useState(false);
 
  
     // Get list of deposit account from state
@@ -61,31 +56,17 @@ function DepositSummary() {
                 <Box sx={{ pt: 10, pb: 10 }}>
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
                         <Typography style={ styles.label } variant="h6">Deposit Accounts</Typography>
-                        <WhiteReusableButton buttonText="MANAGE ACCOUNTS" />
+                        { show === false ? <WhiteReusableButton function={ () => setShow(prev => !prev) } buttonText="MANAGE ACCOUNTS" /> : <OutlinedReusableButton function={ () => setShow(prev => !prev) } buttonText="DONE" /> }           
                     </Grid>
 
                     { !isEmpty && depositList.map ((value, index) => {
                         return (
                             <Link to={`/account-details/${value.DepositAccountID}`} key={value.DepositAccountID}> 
-                                <Card style={ styles.card } key={ index } >
-                                    <CardContent style={ styles.cardContent }>
-                                        <Typography sx={{ fontSize: 12 }} color="white">
-                                            UBS
-                                        </Typography>
-                                        <Typography sx={{ fontSize: 16, fontWeight:"bold" }} color="white">
-                                            { value.AccountName }
-                                        </Typography>
-                                        <Typography sx={{ fontSize: 12 }} color="white">
-                                            { value.DepositAccountID.substr(0, 4) } { value.DepositAccountID.substr(4, 4) } { value.DepositAccountID.substr(8, 4) }
-                                        </Typography>
-                                        <Typography sx={{ fontSize: 12 }} textAlign="end" color="white">
-                                            Available Balance
-                                        </Typography>
-                                        <Typography sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="white">
-                                            SGD ${ value.AvailBalance.toLocaleString("en-US") }
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
+                                {/* <DepositCard index={ index } accountName={ value.AccountName } accountID={ value.DepositAccountID } availableBalance={ value.AvailBalance } /> */}
+                                { show === false ? 
+                                    <DepositCard index={ index } accountName={ value.AccountName } accountID={ value.DepositAccountID } availableBalance={ value.AvailBalance } /> :
+                                    <EditDepositCard index={ index } accountName={ value.AccountName } accountID={ value.DepositAccountID } availableBalance={ value.AvailBalance } link={ `/manage-deposit/${value.DepositAccountID}` } />
+                                }
                             </Link>
                         );
                     })}

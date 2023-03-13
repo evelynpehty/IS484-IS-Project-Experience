@@ -1,7 +1,11 @@
-from module.databaseConnection import create_engine
+from module.databaseConnection import *
 from module.classes.user import User
+from module.depositModule import get_net_worth_deposit
+from module.loanModule import get_net_worth_loan
 import time
+"""
 
+"""
 #LOGIN
 def verify_password(username, password):
   engine = create_engine()
@@ -67,3 +71,141 @@ def register(username, password):
     "code": 200,
     "message": "register successful"
   }
+
+
+# FUNCTION BEFORE MIDTERM 
+
+
+
+#reset password
+def reset_password(username, password, new_password):
+    info = verify_password(username, password)
+    if info["code"] == 404:
+       return info 
+    engine = create_engine()
+    # sql = "SELECT * FROM user WHERE username='%s'" %username
+    sql = "SELECT * FROM user WHERE username='%s'" %username
+    result = engine.execute(sql)
+    if(result.rowcount == 0):
+        return {
+        "code": 404,
+        "message": "username is not found"
+      }
+    sql ="UPDATE user SET password='%s' WHERE username='%s'" % (new_password, username)
+    print(sql)
+    result = engine.execute(sql)
+    return {
+      "code": 200,
+      "message": "password reset successful"
+    }
+
+#edit personal detail 
+def edit_personal_detail(userID, familyName, givenName, 
+                         taxIdentifier, dateOfBirth, postalCode, 
+                         addressLine1, addressLine2, country, 
+                         city, state, countryCode, phoneNo, homeNo, 
+                         registrationDate, nationality, gender, 
+                         ethnicity, occupation, jobTitle, 
+                         employerName, maritalStatus, 
+                         email, chosenColor):
+    engine = create_engine()
+    sql = "SELECT * FROM user WHERE userID='%s'" %userID
+    result = engine.execute(sql)
+    if(result.rowcount == 0):
+        return {
+        "code": 404,
+        "message": "username is not found"
+      }
+    sql = """
+        UPDATE user_details
+        SET
+          familyName = '%s',
+          givenName = '%s',
+          taxIdentifier = '%s',
+          dateOfBirth = '%s',
+          postalCode = '%s',
+          addressLine1 = '%s',
+          addressLine2 = '%s',
+          country = '%s',
+          city = '%s',
+          state = '%s',
+          countryCode = '%s',
+          phoneNo = '%s',
+          homeNo  = '%s',
+          registrationDate  = '%s',
+          nationality  = '%s',
+          gender  = '%s',
+          ethnicity  = '%s',
+          occupation  = '%s',
+          jobTitle  = '%s',
+          employerName  = '%s',
+          maritalStatus  = '%s',
+          email  = '%s',
+          chosenColor  = '%s'
+        WHERE  userID  = '%s';
+      """ % (familyName, givenName, 
+                             taxIdentifier, dateOfBirth, postalCode, 
+                             addressLine1, addressLine2, country, 
+                             city, state, countryCode, phoneNo, homeNo, 
+                             registrationDate, nationality, gender, 
+                             ethnicity, occupation, jobTitle, 
+                             employerName, maritalStatus, 
+                             email, chosenColor, userID)
+    result = engine.execute(sql)
+    return {
+      "code": 200,
+      "message": "edit personal detail successful"
+    }
+    
+
+#peek details 
+def peek_detail(userID):
+  net_worth_deposit = get_net_worth_deposit(userID)
+  net_worth_loan = get_net_worth_loan(userID)
+  return {
+     "code": 200,
+     "message": "Peek data successfully",
+     "data": {
+        "deposit_net_worth": net_worth_deposit,
+        "loan_net_worth": net_worth_loan
+     }
+  }
+
+#self-customization (type: dictionary: {userID: [functions]})
+# SELF_CUSTOMIZATION = {
+   
+# }
+
+
+#LOOKING INTO SELF_CUSTOMIZATION.json for records 
+# implement by json file to store the customization function; can consider it with fornt end cookies in futures
+def get_self_customization_functions(userID):
+   SELF_CUSTOMIZATION = get_SELF_CUSTOMIZATION()
+   DEFAULT_FUNCTION_FOR_CUSTOMIZATION = "Saving,Loan,Investments,Personalise"
+   if userID in SELF_CUSTOMIZATION:
+      return {
+         "code": 200,
+         "data":{ 
+         "functions": SELF_CUSTOMIZATION[userID].replace(" ", "").split(",")
+         }
+      }
+   SELF_CUSTOMIZATION[userID] = DEFAULT_FUNCTION_FOR_CUSTOMIZATION
+   update_SELF_CUSTOMIZATION(SELF_CUSTOMIZATION)
+   return {
+      "code": 404,
+      "data":{ 
+         "functions": DEFAULT_FUNCTION_FOR_CUSTOMIZATION.replace(" ", "").split(",")
+        }
+   }
+
+def update_self_customization_functions(userID, functions_for_customization):
+   SELF_CUSTOMIZATION = dict(get_SELF_CUSTOMIZATION())
+   print("functions_for_customization", functions_for_customization)
+   SELF_CUSTOMIZATION[userID] = functions_for_customization
+   update_SELF_CUSTOMIZATION(SELF_CUSTOMIZATION)
+   return {
+      "code": 200,
+      "message": "update self customization functions successfully!",
+      "data": SELF_CUSTOMIZATION[userID].replace(" ", "").split(",")
+   }
+

@@ -20,7 +20,8 @@ export const appTheme = createTheme({
         },
 
         neutral: {
-            main: "#FFFFFF"
+            main: "#FFFFFF",
+            gray: "#918C8A"
         },
 
         other: {

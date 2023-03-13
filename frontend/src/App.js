@@ -7,13 +7,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { ThemeProvider, CssBaseline, Box } from "@mui/material";
 
 // Pages
-import Login from "./pages/Account_Module/login";
+import PeekBalance from "./pages/Account_Module/peekBalance.js";
+import Login from "./pages/Account_Module/login.js";
 import DashBoard from './pages/Dashboard_Module/dashboard.js'
 import DepositSummary from './pages/Deposit_Module/deposit-summary.js'
 import AccountDetails from './pages/Deposit_Module/account-details.js'
 import TransactionHistory from './pages/Deposit_Module/view-transaction-history.js'
 import CashFlow from './pages/Deposit_Module/cashflow.js'
 import LoanSummary from './pages/Loan_Module/loan-summary.js'
+import ManageDeposit from "./pages/Deposit_Module/manage-deposit.js"
 
 import MainBottomNavigation from "./components/MainBottomNavigation";
 import theme from "./paletteTheme"
@@ -57,16 +59,18 @@ useEffect(() => {
         <header className="App-header">
           <CssBaseline enableColorScheme />
           <>
-            {(showBottomNavigation) && <MainBottomNavigation></MainBottomNavigation>}
             <Routes>
-              <Route exact path={"/"} element= {!currentUser && <Login></Login>} />
+              <Route exact path={"/"} element= {!currentUser && <PeekBalance></PeekBalance>} />
+              <Route exact path={"/login"} element= {<Login />} />
               <Route exact path={"/dashboard"} element={<DashBoard />} />
               <Route exact path={"/deposit"} element={<DepositSummary />} />
               <Route exact path={"/view-transaction-history"} element={<TransactionHistory />} />
               <Route exact path={"/account-details/:id"} element={<AccountDetails />} />
               <Route exact path={"/cashflow"} element={<CashFlow />} />
               <Route exact path={"/loan"} element={<LoanSummary />} />
+              <Route exact path={"/manage-deposit/:id"} element={<ManageDeposit />} />
             </Routes>
+            {(showBottomNavigation) && <MainBottomNavigation></MainBottomNavigation>}
           </>
         </header>
       </div>
