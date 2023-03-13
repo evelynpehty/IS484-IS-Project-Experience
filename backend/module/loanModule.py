@@ -5,17 +5,32 @@ def get_view_all_loan_account(userID):
     engine = create_engine()
     sql = "SELECT * FROM loan_account WHERE userID = "+str(userID)
     result = engine.execute(sql)
+    totalOutstandingLoan = 0.0 
+    totalMonthlyRepayment = 0.0 
     if result.rowcount>0:
         accountInfo = []
         for info in result.fetchall():
-            depositAccountInfo = Loan_Account(
+            loanAccountInfo = Loan_Account(
                 info[0], info[1], info[2], info[3], info[4], info[5], info[6], info[7],
                 info[8], info[9], info[10], info[11], info[12]
-            ).to_dict()
-            accountInfo.append(depositAccountInfo)
+            )
+            totalOutstandingLoan += loanAccountInfo.get_loanBalance()
+            loan_detail = get_view_calculate_loan_repayment_detail(loanAccountInfo.get_loanAmount(), 
+                                                                   loanAccountInfo.get_interestRate(),
+                                                                   loanAccountInfo.get_loanTerm())
+            
+            totalMonthlyRepayment += loan_detail["monthly_payment"]
+            loanAccountInfo = loanAccountInfo.to_dict()
+            loanAccountInfo["Detail"] = loan_detail
+            accountInfo.append(loanAccountInfo)
         return{
             "code": 200,
-            "data": accountInfo
+            "data": {
+                "accountInformation": accountInfo, 
+                "totalOutstandLoan":totalOutstandingLoan,
+                "totalMonthlyRepayment": totalMonthlyRepayment
+            }
+            
         }
 
     return {
@@ -33,7 +48,16 @@ def get_view_loan_account_detail(loanAccountID):
         loanAccountInfo = Loan_Account(
                 info[0], info[1], info[2], info[3], info[4], info[5], info[6], info[7],
                 info[8], info[9], info[10], info[11], info[12]
-            ).to_dict()
+            )
+        loan_detail = get_view_calculate_loan_repayment_detail(loanAccountInfo.get_loanAmount(), 
+                                                                   loanAccountInfo.get_interestRate(),
+                                                                   loanAccountInfo.get_loanTerm())
+        
+        historical_transaction = view_loan_transactions_by_account(loanAccountInfo.get_loanAccountID())
+        loanAccountInfo = loanAccountInfo.to_dict()
+        loanAccountInfo["Detail"] = loan_detail
+        loanAccountInfo["Transactions"] = historical_transaction
+        
         return{
             "code": 200,
             "data": loanAccountInfo

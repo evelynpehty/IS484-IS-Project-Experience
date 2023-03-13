@@ -317,9 +317,9 @@ DEPOSIT MODULE
 
   MANAGE ACCOUNT - 
 
-  EDIT ACCOUNT - /remove_deposit_account, 
+    EDIT ACCOUNT - /remove_deposit_account, update_deposit_account_name
 
-  ADD ACCOUNT - /add_new_deposit_account (add_new_deposit_account_with_default_values, add_new_deposit_account_without_default_values)
+    ADD ACCOUNT - /add_new_deposit_account (add_new_deposit_account_with_default_values, add_new_deposit_account_without_default_values)
 
   TRANSACTIONS/CASH FLOW  
                 - /filter_transaction_history_by_account (by individual account)
@@ -680,7 +680,28 @@ def remove_deposit_account_request():
       "data": None
     }), 500
   
+# required attribute: depositAccountID, newAccountName
+@api.route('/update_deposit_account_name',methods = ['POST', 'GET'])
+def update_deposit_account_name_request():
+  depositAccountID = None
+  newAccountName = None 
+  try: 
+    if request.method == 'POST':
+      depositAccountID = request.form['depositAccountID']
+      newAccountName = request.form['newAccountName']
+    else:
+      depositAccountID = request.args.get('depositAccountID')
+      newAccountName = request.args.get('newAccountName')
+    print(depositAccountID)
+    userInfo = update_deposit_account_name(depositAccountID, newAccountName)
+    return jsonify(userInfo), userInfo["code"]
+  except Exception as e:
 
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
 
 ### loan module --- 
 

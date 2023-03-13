@@ -400,6 +400,15 @@ def remove_monthly_balance(depositAccountID):
         "message": "no monthly balance has been found",
     }
 
+def update_deposit_account_name(depositAccountID, newAccountName):
+    engine = create_engine()
+    sql = "UPDATE deposit_account SET accountName = '%s' WHERE depositAccountID = '%s';" % (newAccountName, depositAccountID)
+    engine.execute(sql)
+    return {
+        "code": 200,
+        "message": "account name has updated successfully"
+    }
+
 def get_product_name(productID):
     engine = create_engine()
     sql = "SELECT * FROM product WHERE productID = %s" % productID
