@@ -16,9 +16,9 @@ import MainBottomNavigation from "../../components/MainBottomNavigation";
 function DashBoard() {
   const { isFirstLoad } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.auth);
-  const { depositList } = useSelector((state) => state.deposit);
-  const { transactionHistoryList } = useSelector((state) => state.deposit);
-  const { loanList } = useSelector((state) => state.loan);
+  // const { depositList } = useSelector((state) => state.deposit);
+  // const { transactionHistoryList } = useSelector((state) => state.deposit);
+  // const { loanList } = useSelector((state) => state.loan);
   const [loading, setLoading] = useState(false);
   const UserID = user.data.UserID
   
@@ -27,12 +27,10 @@ function DashBoard() {
   useEffect(() => {
     if(isFirstLoad){
       setLoading(true)
-      console.log(UserID)
       const p1 = dispatch(loan(UserID))
       const p2 = dispatch(deposit(UserID))
       const p3 = dispatch(depositTransactionHistory(UserID))
       Promise.all([p1,p2,p3]).then(()=>{
-        console.log(transactionHistoryList)
         dispatch(RemoveFirstLoad())
         setLoading(false)
     })
@@ -41,8 +39,6 @@ function DashBoard() {
     }
     },[]);
 
-  
-  
   return (
     <React.Fragment>
       <MainAppBar />
