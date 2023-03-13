@@ -3,7 +3,9 @@ from module.classes.user import User
 from module.depositModule import get_net_worth_deposit
 from module.loanModule import get_net_worth_loan
 import time
+"""
 
+"""
 #LOGIN
 def verify_password(username, password):
   engine = create_engine()
@@ -179,12 +181,12 @@ def peek_detail(userID):
 # implement by json file to store the customization function; can consider it with fornt end cookies in futures
 def get_self_customization_functions(userID):
    SELF_CUSTOMIZATION = get_SELF_CUSTOMIZATION()
-   DEFAULT_FUNCTION_FOR_CUSTOMIZATION = "Saving, Loan, Investments, Personalise"
+   DEFAULT_FUNCTION_FOR_CUSTOMIZATION = "Saving,Loan,Investments,Personalise"
    if userID in SELF_CUSTOMIZATION:
       return {
          "code": 200,
          "data":{ 
-         "functions": SELF_CUSTOMIZATION[userID]
+         "functions": SELF_CUSTOMIZATION[userID].replace(" ", "").split(",")
          }
       }
    SELF_CUSTOMIZATION[userID] = DEFAULT_FUNCTION_FOR_CUSTOMIZATION
@@ -192,7 +194,7 @@ def get_self_customization_functions(userID):
    return {
       "code": 404,
       "data":{ 
-         "functions": DEFAULT_FUNCTION_FOR_CUSTOMIZATION
+         "functions": DEFAULT_FUNCTION_FOR_CUSTOMIZATION.replace(" ", "").split(",")
         }
    }
 
@@ -204,6 +206,6 @@ def update_self_customization_functions(userID, functions_for_customization):
    return {
       "code": 200,
       "message": "update self customization functions successfully!",
-      "data": SELF_CUSTOMIZATION[userID]
+      "data": SELF_CUSTOMIZATION[userID].replace(" ", "").split(",")
    }
 

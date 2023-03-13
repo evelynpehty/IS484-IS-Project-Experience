@@ -13,6 +13,17 @@ api = Blueprint('api', __name__)
 ### account module--- 
 """
 ACCOUNT MODULE 
+
+
+  LOGIN - /login 
+
+  PEEK NET WORTH - /peek_detail
+
+  PEEK ACCOUNT - /peek_detail
+
+  REGISTER - /register
+
+
 Functions: verify_password, get_net_worth, register, reset_password, edit_personal_detail, peek_detail
 
 API Integrated: verify_password, get_net_worth, register, reset_password, edit_personal_detail, peek_detail
@@ -299,7 +310,25 @@ def update_self_customization_functions_request():
 
 ### deposit module--- 
 """
-DEPOSIT MODULE 
+DEPOSIT MODULE
+  ALL ACCOUNTS - /get_all_deposit_accounts
+
+  ACCOUNTS DETAILS - /get_selected_deposit_account
+
+  MANAGE ACCOUNT - 
+
+  EDIT ACCOUNT - /remove_deposit_account, 
+
+  ADD ACCOUNT - /add_new_deposit_account (add_new_deposit_account_with_default_values, add_new_deposit_account_without_default_values)
+
+  TRANSACTIONS/CASH FLOW  
+                - /filter_transaction_history_by_account (by individual account)
+                - /filter_transaction_history_by_user (by user: to view all the user's transactions)
+
+
+
+
+
 Functions: get_view_all_deposit_accounts, get_view_selected_deposit_account, get_view_available_balance, 
                       get_view_recent_three_transaction, get_view_all_transaction, add_new_deposit_account_with_default_values,
                       add_new_deposit_account_without_default_values, get_new_productID, get_net_worth_deposit, filter_transaction_history_by_user,

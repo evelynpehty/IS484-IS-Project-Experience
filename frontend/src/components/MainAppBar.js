@@ -1,16 +1,17 @@
 import * as React from 'react';
 import { useDispatch } from "react-redux";
-import { AppBar, Toolbar, Box, Typography, IconButton, MenuItem, Menu } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from "react-router-dom";
 
-import '../styles/main.css';
-import account_service from "../services/account.js";
+// MUI Components
+import { AppBar, Toolbar, Box, Typography, IconButton, MenuItem, Menu } from '@mui/material';
 
+// Assets (Images & Icons)
 import logo from "../assets/images/appbar_logo.png";
-import { logout } from "../actions/auth";
-
+import MenuIcon from '@mui/icons-material/Menu';
 import { ReactComponent as User } from "../assets/icons/user-red.svg";
+
+// Functions
+import { logout } from "../actions/auth";
 
 function MainAppBar() {
     const navigate = useNavigate();

@@ -1,17 +1,27 @@
 import React from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useParams } from 'react-router-dom';
 import moment from "moment";
-import * as V from 'victory';
 import { Link } from "react-router-dom";
 
 import Grid from '@mui/material/Unstable_Grid2';
 import { Container, Box, Button, Card, CardContent, Typography, AppBar, Toolbar } from "@mui/material";
-import { VictoryChart, VictoryLine, VictoryScatter, VictoryArea, VictoryAxis } from 'victory';
 
-import { ReactComponent as Arrow } from "../../assets/icons/arrow-red.svg";
-import { ModeCommentSharp, Savings } from "@mui/icons-material";
+// Customised Components
+import SecondaryAppBar from "../../components/SecondaryAppBar";
+import WhiteReusableButton from "../../components/WhiteButton";
+
+import {
+    AreaChart,
+    ResponsiveContainer,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Area,
+  } from "recharts";
 
 function AccountDetails() {
     // Styling for Account Details Page
@@ -24,15 +34,6 @@ function AccountDetails() {
             fontWeight: "bold",
             color: "#4B4948",
             fontSize: "16px"
-        },
-
-        button: {
-            paddingTop: "8px",
-            paddingBottom: "8px",
-            borderRadius: "30px",
-            fontSize: "12px",
-            color: "#4B4948",
-            backgroundColor: "#E5E7EC"
         },
 
         card: {
@@ -67,22 +68,27 @@ function AccountDetails() {
     }
 
     var months = ["Jan","Feb", "Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    //const currentMonth = moment().month()
-    //const currentMontName = moment(currentMonth+1, 'MM').format('MMM')
+    var current_Year = moment().year()
+    const currentMonth = moment().month()
     const sixMonthAgo = moment().subtract(5, 'months').format("MMM")
-    
-    var monthRange = []
+
+   // var monthRange = []
+    var monthRangeYear = []
     const indexof = months.indexOf(sixMonthAgo)
     const limit = indexof + 5
 
-
     for (let i = indexof; i <= limit; i++) {
-        monthRange.push(months[i%12])
+        var y = current_Year
+        if((i%12) > currentMonth){
+            y = current_Year - 1
+        }
+        const label = months[i%12] + " " + y
+        //monthRange.push(months[i%12])
+        monthRangeYear.push(label)
     }
-    
     const income_data = []
     const expense_data = []
-    monthRange.forEach(month => {
+    monthRangeYear.forEach(month => {
         var currentobj = {}
         currentobj["x"] = month
         currentobj["y"] = 0
@@ -94,6 +100,12 @@ function AccountDetails() {
     const { id } = useParams()
     const { depositList } = useSelector((state) => state.deposit);
     const { transactionHistoryList } = useSelector((state) => state.deposit);
+
+    const [selectedMonth, setSelectedMonth] = useState("");
+    const [totalIncome, setTotalIncome] = useState("");
+    const [totalExpense, setTotalExpense] = useState("");
+    const [netCashFlow, setNetCashflow] = useState("");
+    const [type, setType] = useState("");
 
     const deposit_item = depositList.filter(function (el)
     {
@@ -118,11 +130,14 @@ function AccountDetails() {
     })
 
     expenses_transaction_item.forEach(element => {
+        const yearNum = moment(element.transactionDate).year()
         const monthNum = moment(element.transactionDate).month() + 1
         var monthName = moment(monthNum, 'MM').format('MMM');
 
+        const temp_str = monthName + " " + yearNum
+
         expense_data.forEach(obj =>{
-            if (obj.x === monthName){
+            if (obj.x === temp_str){
                 obj.y += element.transactionAmount
             }
         })
@@ -130,49 +145,29 @@ function AccountDetails() {
     });
 
     income_transaction_data.forEach(element => {
+        const yearNum = moment(element.transactionDate).year()
         const monthNum = moment(element.transactionDate).month() + 1
         var monthName = moment(monthNum, 'MM').format('MMM');
 
+        const temp_str = monthName + " " + yearNum
+
         income_data.forEach(obj =>{
-            if (obj.x === monthName){
+            if (obj.x === temp_str){
                 obj.y += element.transactionAmount
             }
         })
     });
 
-    const expense_latest_obj = [expense_data[5]]
-    const income_latest_obj = [income_data[5]]
+    const final_data = []
 
-    const latest_month = income_latest_obj[0].x
-    const total_income = income_latest_obj[0].y
-    const total_expense = expense_latest_obj[0].y
-
-    var expense_max = expense_data.reduce(
-        (prev, current) => {
-          return prev.y > current.y ? prev : current
-        }
-      );
-    var income_max = income_data.reduce(
-        (prev, current) => {
-          return prev.y > current.y ? prev : current
-        }
-      );
-
-    var max = 0
-  
-    if (income_max.y > expense_max.y){
-       max = income_max.y
-    } else{
-       max = expense_max.y
+    for(let ll = 0; ll<6; ll++){
+        var temp_obj = {"Name": "", "Income": 0, "Expense": 0, "Net": 0}
+        temp_obj["Name"] = income_data[ll].x
+        temp_obj["Income"] = income_data[ll].y
+        temp_obj["Expense"] = expense_data[ll].y
+        temp_obj["Net"] = temp_obj["Income"] - temp_obj["Expense"]
+        final_data.push(temp_obj)
     }
-
-    const arrayRange = (start, stop, step) =>
-    Array.from(
-    { length: (stop - start) / step + 1 },
-        (value, index) => start + index * step
-    );
-    var tickers = arrayRange(0, max+5000, 5000)
-    console.log(tickers)
 
     var recent_transactions = transaction_item.slice(0, 3)
 
@@ -180,20 +175,34 @@ function AccountDetails() {
         navigate('/view-transaction-history', {replace: true , state: { transaction_item: transaction_item, id: id } })  
     }
 
+    const handleExpand = () => {
+        navigate('/cashflow', {replace: true , state: { transaction_item: transaction_item, id: id } })  
+
+    }
+
+    const handleIncome = (event,payload) => {
+       const datapoint = payload.payload
+       setSelectedMonth(datapoint["Name"])
+       setTotalIncome(datapoint["Income"])
+       setTotalExpense(datapoint["Expense"])
+       setNetCashflow(datapoint["Net"])
+       setType("Income")
+    }
+
+    const handleExpense = (event,payload) => {
+        const datapoint = payload.payload
+        setSelectedMonth(datapoint["Name"])
+        setTotalIncome(datapoint["Income"])
+        setTotalExpense(datapoint["Expense"])
+        setNetCashflow(datapoint["Net"])
+        setType("Expense")
+     }
+
     return (
         <React.Fragment>
-            <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="fixed" color="primary">
-                <Toolbar>
-                    <Arrow component={ Link } to={  "/deposit" } />
-                    <Typography component={ Link } to={  "/deposit" } sx={{ flexGrow: 1, fontWeight: "bold", ml: 2 }} color="#4B4948">
-                        All Accounts
-                    </Typography>
-                </Toolbar>
-                </AppBar>
-            </Box>
+            <SecondaryAppBar link="/deposit" text="All Accounts" />
             <Container maxWidth="lg">
-                <Box sx={{ mt: 10, mb: 10 }}>
+                <Box sx={{ pt: 10, pb: 10 }}>
                     <Card style={ styles.card }>
                         <CardContent style={ styles.cardContent }>
                             <Typography sx={{ fontSize: 12 }} color="white">
@@ -216,105 +225,101 @@ function AccountDetails() {
 
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
                         <Typography style={ styles.label } variant="h6">Cash Flow</Typography>
-                        <Button component={ Link } to={ `/cashflow/${id}` } style={ styles.button } variant="contained">EXPAND</Button>
+                        <WhiteReusableButton function={handleExpand} buttonText="EXPAND" />
                     </Grid>
 
+
                     <Card style={ styles.card2 } elevation={ 4 }>
-                        <VictoryChart>
-                            <VictoryAxis
-                                style={{
-                                    axis: { stroke: 'none' },
-                                    ticks: { stroke: 'none' },
-                                    tickLabels: { fill: '#454459' },
-                                }}
-                            />
-                            <VictoryAxis
-                                dependentAxis
-                                style={{
-                                    axis: { stroke: 'none' },
-                                    ticks: { stroke: 'none' },
-                                    tickLabels: { fill: '#454459' }
-                                }}
-                                tickValues={tickers}
-                            />
-
-                            {/* Expenses Line Chart */}
-                            <VictoryLine
-                                interpolation="natural"
-                                data={ expense_data }
-                                style={{ 
-                                    data: { stroke: "#E60000", strokeWidth: 6 },
-                                    parent: { border: "1px solid #E60000"}
-                                }}
-                            />
-                            <VictoryArea
-                                interpolation="natural"
-                                style={{ data: { fill: "#FF9364", fillOpacity: 0.3, stroke: "none" } }}
-                                data={ expense_data }
-                            />
-                            <VictoryScatter 
-                                data={expense_latest_obj}
-                                size={ 7 }
-                                style={{
-                                    data: { fill: "#E60000", stroke: "#F3F3F3", strokeWidth: 3 }
-                                }}
-                            />
-
-                            {/* Income Line Chart */}
-                            <VictoryLine
-                                interpolation="natural"
-                                data={ income_data }
-                                style={{ 
-                                    data: { stroke: "#109878", strokeWidth: 6 },
-                                }}
-                            />
-                            <VictoryArea
-                                interpolation="natural"
-                                style={{ data: { fill: "#01A099", fillOpacity: 0.3, stroke: "none"} }}
-                                data={ income_data }
-                            />
-                            <VictoryScatter 
-                                data={income_latest_obj}
-                                size={ 7 }
-                                style={{
-                                    data: { fill: "#109878", stroke: "#F3F3F3", strokeWidth: 3 }
-                                }}
-                            />
-                        </VictoryChart>
-                        <CardContent style={ styles.cardContent }>
-                            <Grid container direction="row" justifyContent="space-between" alignItems="center">
-                                <Grid xs={8}>
-                                    <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">
-                                        NET CASH FLOW
-                                    </Typography>
-                                    <Typography sx={{ fontSize: 18, fontWeight:"bold" }} color="#4B4948">
-                                        SGD ${total_income-total_expense.toLocaleString("en-US")}
-                                    </Typography>
-                                    <Typography sx={{ fontSize: 10 }} color="#9197A4">
-                                        For month of {latest_month} 2023
-                                    </Typography>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <AreaChart width={730} height={250} data={final_data}
+                                margin={{ top: 10, right: 30, left: 0, bottom: 0 }} >
+                                <defs>
+                                    <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="#109878" stopOpacity={0.8}/>
+                                        <stop offset="95%" stopColor="#109878" stopOpacity={0}/>
+                                        </linearGradient>
+                                        <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="#E60000" stopOpacity={0.8}/>
+                                        <stop offset="95%" stopColor="#E60000" stopOpacity={0}/>
+                                    </linearGradient>
+                                </defs>
+                                <XAxis dataKey="Name" />
+                                <YAxis tickCount={3}/>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <Tooltip />
+                                <Area type="monotone" stackId="1" dataKey="Income" stroke="#109878" strokeWidth="5" fillOpacity={1} fill="url(#colorUv)" activeDot={{ r:8, onClick: handleIncome }} />
+                                <Area type="monotone"  dataKey="Expense" stroke="#E60000" strokeWidth="5" fillOpacity={1} fill="url(#colorPv)" activeDot={{ r:8, onClick: handleExpense }} />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                       
+                       {selectedMonth!=="" && 
+                       <CardContent style={ styles.cardContent }>
+                            {type==="Income" &&  
+                                <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                    <Grid xs={8}>
+                                        <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">
+                                            TOTAL INCOME
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 18, fontWeight:"bold" }} color="#3BB537">
+                                            SGD ${totalIncome.toLocaleString("en-US")}
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 10 }} color="#9197A4">
+                                            For month of {selectedMonth}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid xs={4}>
+                                        <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">
+                                            NET CASH FLOW
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} style={ netCashFlow<0 ? styles.negative : styles.positive }>
+                                            SGD ${netCashFlow.toLocaleString("en-US")}
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">
+                                            TOTAL EXPENSES
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 14, fontWeight:"bold" }} color="#E60000">
+                                            SGD ${totalExpense.toLocaleString("en-US")}
+                                        </Typography>
+                                    </Grid>
                                 </Grid>
-                                <Grid xs={4}>
-                                    <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">
-                                        TOTAL INCOME
-                                    </Typography>
-                                    <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} color="#3BB537">
-                                        SGD ${total_income.toLocaleString("en-US")}
-                                    </Typography>
-                                    <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">
-                                        TOTAL EXPENSES
-                                    </Typography>
-                                    <Typography sx={{ fontSize: 14, fontWeight:"bold" }} color="#E60000">
-                                        SGD ${total_expense.toLocaleString("en-US")}
-                                    </Typography>
+                            }
+
+                            {type==="Expense" &&  
+                                <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                    <Grid xs={8}>
+                                        <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">
+                                            TOTAL EXPENSE
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 18, fontWeight:"bold" }} color="#E60000">
+                                            SGD ${totalExpense.toLocaleString("en-US")}
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 10 }} color="#9197A4">
+                                            For month of {selectedMonth}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid xs={4}>
+                                        <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">
+                                            NET CASH FLOW
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} style={ netCashFlow<0 ? styles.negative : styles.positive }>
+                                            SGD ${netCashFlow.toLocaleString("en-US")}
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">
+                                            TOTAL INCOME
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 14, fontWeight:"bold" }} color="#3BB537">
+                                            SGD ${totalIncome.toLocaleString("en-US")}
+                                        </Typography>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
-                        </CardContent>
+                            }
+
+                        </CardContent>} 
                     </Card>
 
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
                         <Typography style={ styles.label } variant="h6">Recent Transactions</Typography>
-                        <Button style={ styles.button } variant="contained" onClick={handleViewAll}>VIEW ALL</Button>
+                        <WhiteReusableButton function={ handleViewAll } buttonText="VIEW ALL" />
                     </Grid>
 
                     <Card style={ styles.card2 } elevation={ 4 }>

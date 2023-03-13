@@ -79,56 +79,56 @@ function SignIn() {
     };
 
     return (
-        <Container maxWidth="xl">
-            {/* { loading && <Loading></Loading> } */}
-            <Box sx={{ m: 5 }}>
+        <Container maxWidth="lg">
+            {/* { loading && <Loading></Loading> } */} 
+            <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
                 <Grid container style={ styles.grid }>
                     <Grid xs={12} lg={6}>
-                            <Stack spacing={4} mb={5} alignItems="center">
-                                <Box
-                                    component="img"
-                                    sx={{
-                                        maxHeight: { xs: 150, sm: 180, md: 200, lg: 230, xl: 300 },
-                                        maxWidth: { xs: 150, sm: 180, md: 200, lg: 230, xl: 300 },
-                                    }}
-                                    alt="logo"
-                                    src={ logo }
+                        <Stack spacing={4} mb={5} alignItems="center">
+                            <Box
+                                component="img"
+                                sx={{
+                                    maxHeight: { xs: 150, sm: 180, md: 200, lg: 230, xl: 300 },
+                                    maxWidth: { xs: 150, sm: 180, md: 200, lg: 230, xl: 300 }
+                                }}
+                                alt="logo"
+                                src={ logo }
+                            />
+                            {error && <Stack sx={{ width: '100%' }} spacing={2}>
+                            <Alert severity="error" onClose={() => {setError(false)}}><AlertTitle>Error</AlertTitle>{message}</Alert>
+                            </Stack>}
+                            <form onSubmit={handleLogin}>
+                                <TextField
+                                    required
+                                    id="inputUsername"
+                                    name='username'
+                                    label="Username"
+                                    value={username}
+                                    onChange={onChangeUsername}
+                                    fullWidth={ true }
+                                    sx={{ mb: 5 }}
+                                    
                                 />
-                                {error && <Stack sx={{ width: '100%' }} spacing={2}>
-                                <Alert severity="error" onClose={() => {setError(false)}}><AlertTitle>Error</AlertTitle>{message}</Alert>
-                                </Stack>}
-                                <form onSubmit={handleLogin}>
-                                    <TextField
-                                        required
-                                        id="inputUsername"
-                                        name='username'
-                                        label="Username"
-                                        value={username}
-                                        onChange={onChangeUsername}
-                                        fullWidth={ true }
-                                        sx={{ mb: 5 }}
-                                        
-                                    />
-                                    <TextField
-                                        required
-                                        id="inputPassword"
-                                        name="password"
-                                        label="Password"
-                                        value={password}
-                                        onChange={onChangePassword}
-                                        type="password"
-                                        fullWidth={ true }
-                                        sx={{ mb: 5 }}
-                                        
-                                    />
-                                    <Button type="submit" id="loginBtn" variant="contained" fullWidth={ true }>LOG IN</Button>
-                                </form>
-                        
-                                <Button sx={{ color: "gray" }} fullWidth={ true }>FORGOT PASSWORD</Button>
-                                <p style={ styles.paragraph }>or</p>
-                                <Button id="registerBtn" variant="contained" fullWidth={ true }>REGISTER</Button>
-                                <Typography variant="subtitle2" align="center">Privacy Policy & Terms and Conditions</Typography>
-                            </Stack>
+                                <TextField
+                                    required
+                                    id="inputPassword"
+                                    name="password"
+                                    label="Password"
+                                    value={password}
+                                    onChange={onChangePassword}
+                                    type="password"
+                                    fullWidth={ true }
+                                    sx={{ mb: 5 }}
+                                    
+                                />
+                                <Button type="submit" id="loginBtn" variant="contained" fullWidth={ true }>LOG IN</Button>
+                            </form>
+                    
+                            <Button sx={{ color: "gray" }} fullWidth={ true }>FORGOT PASSWORD</Button>
+                            <p style={ styles.paragraph }>or</p>
+                            <Button id="registerBtn" variant="contained" fullWidth={ true }>REGISTER</Button>
+                            <Typography variant="subtitle2" align="center">Privacy Policy & Terms and Conditions</Typography>
+                        </Stack>
                     </Grid>
                     <Grid container lg={6} display={{ xs: "none", sm: "none", lg: "block" }} alignItems="center" >
                         <Typography variant="p" style={ styles.paragraph } sx={{ paddingLeft: "64px" }}>Quick Actions</Typography>
