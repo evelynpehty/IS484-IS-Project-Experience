@@ -1,5 +1,6 @@
 from module.databaseConnection import create_engine
 from module.classes.loan_account import Loan_Account
+from module.classes.transaction_log import Transaction_Log
 
 def get_view_all_loan_account(userID):
     engine = create_engine()
@@ -121,9 +122,55 @@ def generate_debt_paydown(principal, payment_period_in_year, rate, monthly_payme
 
 #view loan transactions 
 def view_loan_transactions_by_account(loanAccountID):
-    pass 
+    engine = create_engine()
+    sql = """
+        SELECT *  FROM transaction_log
+            WHERE accountTo IN 
+            (SELECT loanAccountID 
+            FROM loan_account WHERE loanAccountID='%s')
+    """ % loanAccountID
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        transactions = []
+        
+        for info in result.fetchall():
+            transaction = Transaction_Log(
+                info[0], info[1], info[2], info[3], 
+                info[4], info[5], info[6], info[7],
+                info[8], info[9], info[10]
+            ).to_dict()
+            transactions.append(transaction)
+        return {
+            "code": 200,
+            "transactions": transactions
+        }
+    return {
+            "code": 404,
+            "transactions": []
+        }
 def view_loan_transactions_by_user(userID):
-    pass 
+    engine = create_engine()
+    sql = """
+        SELECT *  FROM transaction_log
+            WHERE accountTo IN 
+            (SELECT loanAccountID 
+            FROM loan_account WHERE userID='%s')
+    """ % userID
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        transactions = []
+        
+        for info in result.fetchall():
+            transaction = Transaction_Log(
+                info[0], info[1], info[2], info[3], 
+                info[4], info[5], info[6], info[7],
+                info[8], info[9], info[10]
+            ).to_dict()
+            transactions.append(transaction)
+    return {
+        "code": 200,
+        "transactions": transactions
+    }
 
 # PEEK for loan 
 def get_net_worth_loan(userID):

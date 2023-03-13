@@ -706,7 +706,18 @@ def update_deposit_account_name_request():
 ### loan module --- 
 
 """
+
 LOAN MODULE 
+ ALL LOANS - /get_all_loan_account ( but Account name hasn't updated)
+ ACCOUNT DETAILS - /get_loan_account_detail
+ LOAN CALCULATOR - /get_calculate_loan_repayment_detail
+ REPAYMENT - /view_loan_transactions_by_account, /view_loan_transactions_by_user
+
+
+
+
+
+
 functions: get_view_all_loan_account, get_view_loan_account_detail, get_view_calculate_loan_repayment_detail,
                     view_loan_transactions_by_account, view_loan_transactions_by_user, get_net_worth_loan, add_loan_account, 
                     delelte_loan_account, calculate_partial_loan_repayment, consolidated_loan_repayment, consolidated_loan_repayment
@@ -725,7 +736,7 @@ API function no tested:
 """
 # required attribute(default): userID
 @api.route('/get_all_loan_account',methods = ['POST', 'GET'])
-def get_all_loan_account():
+def get_all_loan_account_request():
   try:
     userID = None 
     if request.method == 'POST':
@@ -939,4 +950,40 @@ def consolidated_loan_repayment_request():
       "data": None
     }), 500
   
+# required attribute(default): loanAccountID
+@api.route('/view_loan_transactions_by_account',methods = ['POST', 'GET'])
+def view_loan_transactions_by_account_request():
+  try: 
+    loanAccountID = None 
+    if request.method == 'POST':
+      loanAccountID = request.form['loanAccountID']
+    else:
+      loanAccountID = request.args.get('loanAccountID')
+    result = view_loan_transactions_by_account(loanAccountID)
+    return jsonify(result), result["code"]
+  except Exception as e:
 
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+
+# required attribute(default): userID
+@api.route('/view_loan_transactions_by_user',methods = ['POST', 'GET'])
+def view_loan_transactions_by_user_request():
+  try: 
+    userID = None 
+    if request.method == 'POST':
+      userID = request.form['userID']
+    else:
+      userID = request.args.get('userID')
+    result = view_loan_transactions_by_user(userID)
+    return jsonify(result), result["code"]
+  except Exception as e:
+
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
