@@ -14,6 +14,7 @@ import DepositSummary from './pages/Deposit_Module/deposit-summary.js'
 import AccountDetails from './pages/Deposit_Module/account-details.js'
 import TransactionHistory from './pages/Deposit_Module/view-transaction-history.js'
 import CashFlow from './pages/Deposit_Module/cashflow.js'
+import ManageDeposit from "./pages/Deposit_Module/manage-deposit.js"
 
 import MainBottomNavigation from "./components/MainBottomNavigation";
 import theme from "./paletteTheme"
@@ -65,6 +66,7 @@ useEffect(() => {
               <Route exact path={"/view-transaction-history"} element={<TransactionHistory />} />
               <Route exact path={"/account-details/:id"} element={<AccountDetails />} />
               <Route exact path={"/cashflow"} element={<CashFlow />} />
+              <Route exact path={"/manage-deposit/:id"} element={<ManageDeposit />} />
             </Routes>
             {(showBottomNavigation) && <MainBottomNavigation></MainBottomNavigation>}
           </>
