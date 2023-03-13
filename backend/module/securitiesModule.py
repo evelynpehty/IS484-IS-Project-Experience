@@ -12,3 +12,23 @@ def get_stock_price(stock_name):
     return {
         stock_name: price
     }
+
+# FUNCTION BEFORE MIDTERM 
+
+
+# View My Positions
+
+# Select Stock
+
+# View Stock Details
+
+# Create Watch List
+
+# Update Watch List
+
+# Select Watch List
+
+# Update Watch List (Add or Remove)
+
+# View Dollar Cost Average
+

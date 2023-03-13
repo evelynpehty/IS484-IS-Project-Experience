@@ -1,7 +1,8 @@
 from module.databaseConnection import create_engine
 from module.classes.deposit_account import Deposit_Account
 from module.classes.transaction_log import Transaction_Log
-from module.accountModule import get_net_worth
+from module.classes.product import Product
+# from module.accountModule import get_net_worth
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
@@ -17,7 +18,11 @@ def get_view_all_deposit_accounts(userID):
                 info[0], info[1], info[2], info[3], info[4], info[5], info[6], info[7],
                 info[8], info[9], info[10], info[11], info[12], info[13], info[14], info[15],
                 info[16]
-            ).to_dict()
+            )
+            productID = depositAccountInfo.get_productID()
+            productName = get_product_name(productID)
+            depositAccountInfo = depositAccountInfo.to_dict()
+            depositAccountInfo["ProductName"] = productName
             accountInfo.append(depositAccountInfo)
         return{
             "code": 200,
@@ -41,7 +46,11 @@ def get_view_selected_deposit_account(depositAccountID):
                 info[0], info[1], info[2], info[3], info[4], info[5], info[6], info[7],
                 info[8], info[9], info[10], info[11], info[12], info[13], info[14], info[15],
                 info[16]
-            ).to_dict()
+            )
+        productID = depositAccountInfo.get_productID()
+        productName = get_product_name(productID)
+        depositAccountInfo = depositAccountInfo.to_dict()
+        depositAccountInfo["ProductName"] = productName
         return{
             "code": 200,
             "data": depositAccountInfo
@@ -54,7 +63,7 @@ def get_view_selected_deposit_account(depositAccountID):
 #
 def get_view_available_balance(userID):
     #same return as this function in accountModule
-    return get_net_worth(userID)
+    return get_net_worth_deposit(userID)
 
 def get_view_recent_three_transaction(userID):
     transactions = get_view_all_transaction(userID)
@@ -194,5 +203,223 @@ def get_new_productID(userID):
     # try to generate the productID
     return productID
 
-#Deposit Account UI
-#more operation 
+
+# FUNCTION BEFORE MIDTERM 
+def get_net_worth_deposit(userID):
+    engine = create_engine()
+    sql = "SELECT * FROM deposit_account WHERE userID = "+str(userID)
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        availBalance = 0.0
+        for info in result.fetchall():
+            availBalance += info[6]
+        return{
+        "code": 200,
+        "message": "Deposit information retireve successfully",
+        "data": availBalance
+        }
+
+    return {
+        "code": 404,
+        "message": "no available information found",
+        "data": None
+    }
+
+
+#fiter transaction history 
+def filter_transaction_history_by_user(userID, start_date, end_date):
+    engine = create_engine()
+    sql = """
+        SELECT *
+        FROM transaction_log
+        WHERE (accountFrom IN (SELECT depositAccountID FROM deposit_account WHERE userID = '%s')
+        OR accountTo IN (SELECT depositAccountID FROM deposit_account WHERE userID = '%s'))
+        AND (transactionDate BETWEEN 
+        '%s' AND '%s')
+        """ % (userID, userID, start_date, end_date)
+    print(sql)
+    result = engine.execute(sql)
+    
+    if result.rowcount > 0:
+        transactions = []
+        
+        for info in result.fetchall():
+            transaction = Transaction_Log(
+                info[0], info[1], info[2], info[3], 
+                info[4], info[5], info[6], info[7],
+                info[8], info[9], info[10]
+            ).to_dict()
+            transactions.append(transaction)
+        return {
+            "code": 200,
+            "data":transactions
+        }
+
+    return {
+        "code": 404,
+        "message": "no available information found",
+        "data":[
+
+        ]
+    } 
+def filter_transaction_history_by_account(depositAccountID, start_date, end_date):
+    engine = create_engine()
+    sql = """
+        SELECT *
+        FROM transaction_log
+        WHERE (accountFrom = '%s'
+        OR accountTo = '%s')
+        AND (transactionDate BETWEEN 
+        '%s' AND '%s')
+        """ % (depositAccountID, depositAccountID, start_date, end_date)
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        transactions = []
+        
+        for info in result.fetchall():
+            transaction = Transaction_Log(
+                info[0], info[1], info[2], info[3], 
+                info[4], info[5], info[6], info[7],
+                info[8], info[9], info[10]
+            ).to_dict()
+            transactions.append(transaction)
+        return {
+            "code": 200,
+            "data":transactions
+        }
+
+    return {
+        "code": 404,
+        "message": "no available information found",
+        "data":[
+
+        ]
+    } 
+
+#view large spending view_large_spending_by_user
+def view_large_spending_by_user(userID, large_amount_threshold):
+    engine = create_engine()
+    sql = """
+        SELECT *
+        FROM transaction_log
+        WHERE transactionAmount >= %s
+        AND (accountFrom IN (SELECT depositAccountID FROM deposit_account WHERE userID = '%s')
+        OR accountTo IN (SELECT depositAccountID FROM deposit_account WHERE userID = '%s'));
+    """% (large_amount_threshold, userID, userID)
+    print(sql)
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        transactions = []
+        
+        for info in result.fetchall():
+            transaction = Transaction_Log(
+                info[0], info[1], info[2], info[3], 
+                info[4], info[5], info[6], info[7],
+                info[8], info[9], info[10]
+            ).to_dict()
+            transactions.append(transaction)
+        return {
+            "code": 200,
+            "data":transactions
+        }
+
+    return {
+        "code": 404,
+        "message": "no available information found",
+        "data":[
+
+        ]
+    } 
+
+#view large spending 
+def view_large_spending_by_account(depositAccountID, large_amount_threshold):
+    engine = create_engine()
+    sql = """
+        SELECT *
+        FROM transaction_log
+        WHERE transactionAmount >= %s
+        AND (accountFrom = %s OR accountTo = %s);
+    """% (large_amount_threshold, depositAccountID, depositAccountID)
+    print(sql)
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        transactions = []
+        
+        for info in result.fetchall():
+            transaction = Transaction_Log(
+                info[0], info[1], info[2], info[3], 
+                info[4], info[5], info[6], info[7],
+                info[8], info[9], info[10]
+            ).to_dict()
+            transactions.append(transaction)
+        return {
+            "code": 200,
+            "data":transactions
+        }
+
+    return {
+        "code": 404,
+        "message": "no available information found",
+        "data":[
+
+        ]
+    } 
+
+#delete deposit account 
+def remove_deposit_account(depositAccountID):
+    engine = create_engine()
+    monthly_balance_record = remove_monthly_balance(depositAccountID)
+    print(monthly_balance_record)
+    sql = "DELETE FROM deposit_account WHERE depositAccountID ='%s'" % depositAccountID
+    print(sql)
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        return {
+            "code": 200,
+            "message": "deposit account has been successfully removed",
+            "monthly balance": monthly_balance_record
+        }
+    return {
+        "code": 404,
+        "message": "no deposit account has been found"
+    }
+
+#sub function for remove_deposit_account
+def remove_monthly_balance(depositAccountID):
+    engine = create_engine()
+    sql = "DELETE FROM monthly_balance WHERE depositAccountID ='%s'" % depositAccountID
+    print(sql)
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        return {
+            "code": 200,
+            "message": "%s monthly balance(s) have been successfully removed" % str(result.rowcount),
+        }
+    return {
+        "code": 404,
+        "message": "no monthly balance has been found",
+    }
+
+def update_deposit_account_name(depositAccountID, newAccountName):
+    engine = create_engine()
+    sql = "UPDATE deposit_account SET accountName = '%s' WHERE depositAccountID = '%s';" % (newAccountName, depositAccountID)
+    engine.execute(sql)
+    return {
+        "code": 200,
+        "message": "account name has updated successfully"
+    }
+
+def get_product_name(productID):
+    engine = create_engine()
+    sql = "SELECT * FROM product WHERE productID = %s" % productID
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        for info in result.fetchall():
+            product = Product(info[0], info[1], info[2], info[3])
+            return product.get_productName()
+    return ""
+
+
+
+
+
