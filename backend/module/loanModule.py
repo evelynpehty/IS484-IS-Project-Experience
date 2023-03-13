@@ -14,7 +14,7 @@ def get_view_all_loan_account(userID):
         for info in result.fetchall():
             loanAccountInfo = Loan_Account(
                 info[0], info[1], info[2], info[3], info[4], info[5], info[6], info[7],
-                info[8], info[9], info[10], info[11], info[12]
+                info[8], info[9], info[10], info[11], info[12], info[13]
             )
             totalOutstandingLoan += loanAccountInfo.get_loanBalance()
             loan_detail = get_view_calculate_loan_repayment_detail(loanAccountInfo.get_loanAmount(), 
@@ -52,7 +52,7 @@ def get_view_loan_account_detail(loanAccountID):
     if info:
         loanAccountInfo = Loan_Account(
                 info[0], info[1], info[2], info[3], info[4], info[5], info[6], info[7],
-                info[8], info[9], info[10], info[11], info[12]
+                info[8], info[9], info[10], info[11], info[12], info[13]
             )
         loan_detail = get_view_calculate_loan_repayment_detail(loanAccountInfo.get_loanAmount(), 
                                                                    loanAccountInfo.get_interestRate(),
@@ -322,11 +322,11 @@ def get_product_name(productID):
 
 
 #update loan account name 
-# def update_loan_account_name(loanAccountID, newAccountName):
-#     engine = create_engine()
-#     sql = "UPDATE deposit_account SET accountName = '%s' WHERE loanAccountID = '%s';" % (newAccountName, loanAccountID)
-#     engine.execute(sql)
-#     return {
-#         "code": 200,
-#         "message": "account name has updated successfully"
-#     }
+def update_loan_account_name(loanAccountID, newAccountName):
+    engine = create_engine()
+    sql = "UPDATE loan_account SET accountName = '%s' WHERE loanAccountID = '%s'" % (newAccountName, loanAccountID)
+    engine.execute(sql)
+    return {
+        "code": 200,
+        "message": "account name has updated successfully"
+    }

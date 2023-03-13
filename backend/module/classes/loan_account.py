@@ -1,9 +1,10 @@
 class Loan_Account:
-  def __init__(self, loanAccountID, userID, productID, loanStartDate, loanMaturityDate, loanTerm, loanAmount,
+  def __init__(self, loanAccountID, userID, productID, accountName,loanStartDate, loanMaturityDate, loanTerm, loanAmount,
                 loanBalance, loanPurpose, ltvRatio, interestRate, penaltyRate, loanEmployeeID):
     self.loanAccountID = loanAccountID
     self.userID = userID
     self.productID = productID
+    self.accountName = accountName
     self.loanStartDate = loanStartDate
     self.loanMaturityDate = loanMaturityDate
     self.loanTerm = loanTerm
@@ -20,6 +21,7 @@ class Loan_Account:
       "LoanAccountID": self.loanAccountID,
       "UserID": self.userID,
       "ProductID": self.productID,
+      "AccountName":self.accountName,
       "LoanStartDate": self.loanStartDate,
       "LoanMaturityDate": self.loanMaturityDate,
       "LoanTerm": self.loanTerm,
@@ -41,6 +43,9 @@ class Loan_Account:
 
   def get_productID(self):
     return self.productID
+  
+  def get_accountName(self):
+    return self.accountName
 
   def get_loanStartDate(self):
     return self.loanStartDate
@@ -82,6 +87,9 @@ class Loan_Account:
   def set_productID(self, productID):
     self.productID = productID
 
+  def set_accountName(self, accountName):
+    self.accountName = accountName
+
   def set_loanStartDate(self, loanStartDate):
     self.loanStartDate = loanStartDate
 
@@ -114,10 +122,10 @@ class Loan_Account:
 
   # Default methods
   def __str__(self):
-    return f"LoanAccountID: {self.loanAccountID}, UserID: {self.userID}, ProductID: {self.productID}, LoanStartDate: {self.loanStartDate}, LoanMaturityDate: {self.loanMaturityDate}, LoanTerm: {self.loanTerm}, LoanAmount: {self.loanAmount}, LoanBalance: {self.loanBalance}, LoanPurpose: {self.loanPurpose}, LtvRatio: {self.ltvRatio}, InterestRate: {self.interestRate}, PenaltyRate: {self.penaltyRate}, LoanEmployeeID: {self.loanEmployeeID}"
+    return f"LoanAccountID: {self.loanAccountID}, UserID: {self.userID}, ProductID: {self.productID}, AccountName:{self.accountName}, LoanStartDate: {self.loanStartDate}, LoanMaturityDate: {self.loanMaturityDate}, LoanTerm: {self.loanTerm}, LoanAmount: {self.loanAmount}, LoanBalance: {self.loanBalance}, LoanPurpose: {self.loanPurpose}, LtvRatio: {self.ltvRatio}, InterestRate: {self.interestRate}, PenaltyRate: {self.penaltyRate}, LoanEmployeeID: {self.loanEmployeeID}"
 
   def __repr__(self):
-    return f"Loan_Account(loanAccountID={self.loanAccountID}, userID={self.userID}, productID={self.productID}, loanStartDate={self.loanStartDate}, loanMaturityDate={self.loanMaturityDate}, loanTerm={self.loanTerm}, loanAmount={self.loanAmount}, loanBalance={self.loanBalance}, loanPurpose={self.loanPurpose}, ltvRatio={self.ltvRatio}, interestRate={self.interestRate}, penaltyRate={self.penaltyRate}, loanEmployeeID={self.loanEmployeeID})"
+    return f"Loan_Account(loanAccountID={self.loanAccountID}, userID={self.userID}, productID={self.productID}, accountName:{self.accountName},loanStartDate={self.loanStartDate}, loanMaturityDate={self.loanMaturityDate}, loanTerm={self.loanTerm}, loanAmount={self.loanAmount}, loanBalance={self.loanBalance}, loanPurpose={self.loanPurpose}, ltvRatio={self.ltvRatio}, interestRate={self.interestRate}, penaltyRate={self.penaltyRate}, loanEmployeeID={self.loanEmployeeID})"
 
   def __eq__(self, other):
     if isinstance(other, Loan_Account):

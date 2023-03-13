@@ -713,7 +713,7 @@ LOAN MODULE
  LOAN CALCULATOR - /get_calculate_loan_repayment_detail
  REPAYMENT - /view_loan_transactions_by_account, /view_loan_transactions_by_user
 
-
+  UPDATE ACCOUNT NAME - 
 
 
 
@@ -758,7 +758,7 @@ def get_all_loan_account_request():
 
 # required attribute(default): loanAccountID
 @api.route('/get_loan_account_detail',methods = ['POST', 'GET'])
-def get_loan_account_detail():
+def get_loan_account_detail_request():
   try:
     loanAccountID = None 
     if request.method == 'POST':
@@ -781,7 +781,7 @@ def get_loan_account_detail():
 
 # required attribute(default): principal, rate, payment_period_in_year
 @api.route('/get_calculate_loan_repayment_detail',methods = ['POST', 'GET'])
-def get_calculate_loan_repayment_detail():
+def get_calculate_loan_repayment_detail_request():
   try:
     principal = None
     rate = None 
@@ -979,6 +979,29 @@ def view_loan_transactions_by_user_request():
     else:
       userID = request.args.get('userID')
     result = view_loan_transactions_by_user(userID)
+    return jsonify(result), result["code"]
+  except Exception as e:
+
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+  
+
+# required attribute(default): userID
+@api.route('/update_loan_account_name',methods = ['POST', 'GET'])
+def update_loan_account_name_request():
+  try: 
+    loanAccountID = None
+    newAccountName = None
+    if request.method == 'POST':
+      loanAccountID = request.form['loanAccountID']
+      newAccountName = request.form['newAccountName']
+    else:
+      loanAccountID = request.args.get('loanAccountID')
+      newAccountName = request.args.get('newAccountName')
+    result = update_loan_account_name(loanAccountID, newAccountName)
     return jsonify(result), result["code"]
   except Exception as e:
 
