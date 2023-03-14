@@ -13,7 +13,7 @@ const WhiteReusableButton = (props) => {
     }
 }
     return (
-        <Button style={ styles.button } variant="contained" onClick={ props.function } >{props.buttonText}</Button>
+        <Button style={ styles.button } variant="contained" startIcon={ props.icon } onClick={ props.function } >{props.buttonText}</Button>
     )
 }
 

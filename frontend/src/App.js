@@ -19,6 +19,7 @@ import LoanTransactionHistory from './pages/Loan_Module/view-loan-transaction-hi
 import LoanAccountDetails from './pages/Loan_Module/loan-account-details.js'
 import ManageDeposit from "./pages/Deposit_Module/manage-deposit.js"
 
+// Customised Components
 import MainBottomNavigation from "./components/MainBottomNavigation";
 import theme from "./paletteTheme"
 import { clearMessage } from "./actions/message";
@@ -62,17 +63,23 @@ useEffect(() => {
           <CssBaseline enableColorScheme />
           <>
             <Routes>
+              {/* Account Module */}
               <Route exact path={"/"} element= {!currentUser && <PeekBalance></PeekBalance>} />
               <Route exact path={"/login"} element= {<Login />} />
               <Route exact path={"/dashboard"} element={<DashBoard />} />
+
+              {/* Loan */}
               <Route exact path={"/deposit"} element={<DepositSummary />} />
               <Route exact path={"/view-transaction-history"} element={<TransactionHistory />} />
               <Route exact path={"/account-details/:id"} element={<AccountDetails />} />
               <Route exact path={"/cashflow"} element={<CashFlow />} />
+              <Route exact path={"/manage-deposit/:id"} element={<ManageDeposit />} />
+
+              {/* Loan Module */}
               <Route exact path={"/loan"} element={<LoanSummary />} />
               <Route exact path={"/loan-account-details/:id"} element={<LoanAccountDetails />} />
               <Route exact path={"/view-loan-transaction-history"} element={<LoanTransactionHistory />} />
-              <Route exact path={"/manage-deposit/:id"} element={<ManageDeposit />} />
+              
             </Routes>
             {(showBottomNavigation) && <MainBottomNavigation></MainBottomNavigation>}
           </>
