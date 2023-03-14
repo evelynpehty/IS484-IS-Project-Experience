@@ -287,26 +287,12 @@ def calculate_partial_loan_repayment(principal, rate, payment_period_in_year, pa
 
 #Consolidated Loan Repayment
 def consolidated_loan_repayment(userID):
-    all_bank_loans = get_view_all_loan_account(userID)["data"]
-    total_loan_repayment = 0.0 
+    TotalLoanRepayment = get_view_all_loan_account(userID)["data"]["totalMonthlyRepayment"]
     result = {
         "code": 200,
-        "LoanDetails": [],
+        "message":"consolidated loan repayment generated successfully",
+        "TotalLoanRepayment": TotalLoanRepayment
     }
-    for loan in all_bank_loans:
-        LoanAccountID = loan["LoanAccountID"]
-        LoanAmount = loan["LoanAmount"] # principal 
-        InterestRate = loan["InterestRate"] # rate
-        LoanTerm = loan["LoanTerm"] # payment_period_in_year
-        loan_repayment_detail = get_view_calculate_loan_repayment_detail(LoanAmount, InterestRate, LoanTerm)
-        repayment = loan_repayment_detail["monthly_payment"]
-        result["LoanDetails"].append({
-            "LoanAccountID": LoanAccountID, 
-            "Repayment": repayment
-        })
-        total_loan_repayment += repayment
-    result["TotalLoanPayment"] = total_loan_repayment
-
     return result
 
 
