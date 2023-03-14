@@ -29,7 +29,7 @@ export default function MainBottomNavigation() {
             >
                 <BottomNavigationAction sx={{ "& .Mui-selected": { color: "#E60000", fontWeight: "bold"} }} component={ Link } to={"/dashboard"} label="Dashboard" icon={value === 0 ? <DashboardRed /> : <Dashboard />} />
                 <BottomNavigationAction sx={{ "& .Mui-selected": { color: "#E60000", fontWeight: "bold"} }} component={ Link } to={"/deposit"} label="Savings" icon={value === 1 ? <SavingsRed /> : <Savings /> } />
-                <BottomNavigationAction sx={{ "& .Mui-selected": { color: "#E60000", fontWeight: "bold"} }} label="Loans" icon={value === 2 ? <LoansRed /> : <Loans /> } />
+                <BottomNavigationAction sx={{ "& .Mui-selected": { color: "#E60000", fontWeight: "bold"} }} component={ Link } to={"/loan"} label="Loans" icon={value === 2 ? <LoansRed /> : <Loans /> } />
                 <BottomNavigationAction sx={{ "& .Mui-selected": { color: "#E60000", fontWeight: "bold"} }} label="Investments" icon={value === 3 ? <InvestmentsRed /> : <Investments /> } />
             </BottomNavigation>
             </Paper>

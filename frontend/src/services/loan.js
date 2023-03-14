@@ -17,8 +17,24 @@ const getallloanaccounts = (userID) => {
       });
   };
 
-  const loan_service = { 
-    getallloanaccounts
-  }
+const loanTransactionHistory = (userID) => {
+  var bodyFormData = new FormData();
+  bodyFormData.append("userID", userID)
 
-  export default loan_service;
+  return axios
+  ({
+      method: "post",
+      url: API_URL + "view_loan_transactions_by_user",
+      data: bodyFormData,
+  })
+    .then((response) => {
+      return response.data;
+    });
+};
+
+const loan_service = { 
+  getallloanaccounts,
+  loanTransactionHistory
+}
+
+export default loan_service;

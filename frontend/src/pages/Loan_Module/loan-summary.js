@@ -1,7 +1,6 @@
-// Packages
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+
 import { Link } from "react-router-dom";
 
 // MUI Components
@@ -16,7 +15,8 @@ import DepositCard from "../../components/DepositCard";
 import EditDepositCard from "../../components/EditDepositCard";
 import FabButton from "../../components/FabButton";
 
-function DepositSummary() {
+
+function LoanSummary() {
     // Styling for Deposit Summary Page
     const styles = {
         grid: {
@@ -40,43 +40,35 @@ function DepositSummary() {
     // Change State of page
     const [show, setShow] = useState(false);
 
- 
-    // Get list of deposit account from state
-    const { depositList } = useSelector((state) => state.deposit);
+    // Get list of loan account from state
+    const { loanList } = useSelector((state) => state.loan);
+    const loan_DisplayArray = loanList.accountInformation
+    // const { loan_transactionHistoryList } = useSelector((state) => state.loan);
+    // console.log(loan_transactionHistoryList)
     const [isEmpty, setIsEmpty] = useState(false);
     
-    if(depositList.length === 0){
+    if(loan_DisplayArray.length === 0){
         setIsEmpty(true)
     }
-    
+
     return (
         <React.Fragment>
             <MainAppBar />
             <Container maxWidth="lg">
                 <Box sx={{ pt: 10, pb: 10 }}>
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
-                        <Typography style={ styles.label } variant="h6">Deposit Accounts</Typography>
+                        <Typography style={ styles.label } variant="h6">Loan Accounts</Typography>
                         { show === false ? <WhiteReusableButton function={ () => setShow(prev => !prev) } buttonText="MANAGE ACCOUNTS" /> : <OutlinedReusableButton function={ () => setShow(prev => !prev) } buttonText="DONE" /> }           
                     </Grid>
 
-                    { !isEmpty && depositList.map ((value, index) => {
-                        return (
-                            <Link to={`/account-details/${value.DepositAccountID}`} key={value.DepositAccountID}> 
-                                {/* <DepositCard index={ index } accountName={ value.AccountName } accountID={ value.DepositAccountID } availableBalance={ value.AvailBalance } /> */}
-                                { show === false ? 
-                                    <DepositCard index={ index } accountName={ value.AccountName } accountID={ value.DepositAccountID } availableBalance={ value.AvailBalance } /> :
-                                    <EditDepositCard index={ index } accountName={ value.AccountName } accountID={ value.DepositAccountID } availableBalance={ value.AvailBalance } link={ `/manage-deposit/${value.DepositAccountID}` } />
-                                }
-                            </Link>
-                        );
-                    })}
+           
                     {/* to beautify */}
-                    {isEmpty && <p>You do not have any deposit account</p>}
+                    {isEmpty && <p>You do not have any loan account</p>}
                 </Box>
                 <FabButton />
             </Container>
         </React.Fragment>
-    );
+    )
 }
 
-export default DepositSummary;
+export default LoanSummary;
