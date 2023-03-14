@@ -168,6 +168,7 @@ function AccountDetails() {
         temp_obj["Net"] = temp_obj["Income"] - temp_obj["Expense"]
         final_data.push(temp_obj)
     }
+    console.log(final_data)
 
     var recent_transactions = transaction_item.slice(0, 3)
 

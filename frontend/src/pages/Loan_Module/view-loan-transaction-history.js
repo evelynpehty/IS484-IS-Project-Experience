@@ -31,17 +31,6 @@ export default function LoanTransactionHistory() {
             fontSize: "16px"
         },
 
-        card: {
-            background: "linear-gradient(to top right, #E69F9F, #E60000)",
-            marginBottom: "24px",
-            borderRadius: "15px",
-            padding: 10
-        },
-
-        cardContent: {
-            paddingBottom: "16px"
-        },
-
         card2: {
             marginBottom: "24px",
             borderRadius: "15px",
@@ -87,8 +76,7 @@ export default function LoanTransactionHistory() {
 
     //const {state} = useLocation(); 
     // const { transaction_item, id } = state;
-    const id = 1 //to be removed after page linking is done
-
+    const id = 321456789001 //to be removed after page linking is done
     const { loanList } = useSelector((state) => state.loan); //to be commented out after page linking is done
     const transitem = loanList.accountInformation[0] //to be replaced with data passed from loan-account-details page, data come from loan account details api not loan transactions api
 

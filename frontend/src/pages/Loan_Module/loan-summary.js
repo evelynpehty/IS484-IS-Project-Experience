@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 // MUI Components
 import Grid from '@mui/material/Unstable_Grid2';
@@ -27,13 +26,6 @@ function LoanSummary() {
             fontWeight: "bold",
             color: "#4B4948",
             fontSize: "16px"
-        },
-
-        fabButton: {
-            position: "absolute",
-            bottom: 80,
-            right: 16,
-            backgroundColor: "#F7E6E6"
         }
     }
 
@@ -43,6 +35,8 @@ function LoanSummary() {
     // Get list of loan account from state
     const { loanList } = useSelector((state) => state.loan);
     const loan_DisplayArray = loanList.accountInformation
+
+    console.log(loan_DisplayArray[0])
     // const { loan_transactionHistoryList } = useSelector((state) => state.loan);
     // console.log(loan_transactionHistoryList)
     const [isEmpty, setIsEmpty] = useState(false);
@@ -61,7 +55,7 @@ function LoanSummary() {
                         { show === false ? <WhiteReusableButton function={ () => setShow(prev => !prev) } buttonText="MANAGE ACCOUNTS" /> : <OutlinedReusableButton function={ () => setShow(prev => !prev) } buttonText="DONE" /> }           
                     </Grid>
 
-           
+                    <Link to={`/loan-account-details/${loan_DisplayArray[0].LoanAccountID}`}>ID</Link>
                     {/* to beautify */}
                     {isEmpty && <p>You do not have any loan account</p>}
                 </Box>
