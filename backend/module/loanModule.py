@@ -96,7 +96,7 @@ def get_view_calculate_loan_repayment_detail(principal, rate, payment_period_in_
 
 def generate_debt_paydown(principal, payment_period_in_year, rate, monthly_payment):
     print(principal, payment_period_in_year, rate, monthly_payment)
-    monthly_interest_rate = float(rate)/12 
+    monthly_interest_rate = float(rate)/12/100 
     loan_term_in_months = round(float(payment_period_in_year) * 12)
     balance = principal
     result = {
