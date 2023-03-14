@@ -1,10 +1,8 @@
 // Packages
 import * as React from 'react';
+import { useEffect, useState } from "react";
 import moment from 'moment';
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 // MUI Components
@@ -13,10 +11,8 @@ import { Container, Box, Typography, Accordion, AccordionDetails, AccordionSumma
 
 // Customised Components
 import SecondaryAppBar from "../../components/SecondaryAppBar";
-// import WhiteReusableButton from "../../components/WhiteButton";
 
 // Assets (Images & Icons)
-import { ReactComponent as FilterIcon } from "../../assets/icons/filter-line-red.svg";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 
@@ -57,18 +53,10 @@ export default function LoanTransactionHistory() {
             borderBottom: "1px dashed #BFBFBF"
         },
 
-        positive: {
-            color: theme.palette.other.sucess
-        },
-
         negative: {
             color: theme.palette.primary.main
         },
 
-        searchBar: {
-            border: "1px solid #BFBFBF"
-        },
-        
         iconButton: {
             border: "1px solid #BFBFBF",
             borderRadius: "10px"
@@ -97,21 +85,22 @@ export default function LoanTransactionHistory() {
         }
     }
 
-    //const {state} = useLocation();
+    //const {state} = useLocation(); 
     // const { transaction_item, id } = state;
-    const id = 1
-    const { loanList } = useSelector((state) => state.loan);
-    const transitem = loanList.accountInformation[0]
+    const id = 1 //to be removed after page linking is done
+
+    const { loanList } = useSelector((state) => state.loan); //to be commented out after page linking is done
+    const transitem = loanList.accountInformation[0] //to be replaced with data passed from loan-account-details page, data come from loan account details api not loan transactions api
 
     const monthly_payment = transitem.Detail.monthly_payment
     const LoanStartDate = transitem.LoanStartDate
     const LoanMaturity = transitem.LoanMaturityDate
     const schedule_for_payment = transitem.Detail.schedule_for_payment
 
-    const [chipValue, setChipValue] = React.useState([]);
-    const [selectedChip, setSelectedChip] = React.useState("");
-    const [transactionDisplay, setTransDisplay] = React.useState([]);
-    const [originalDisplay, setOriginalDisplay] = React.useState([]);
+    const [chipValue, setChipValue] = useState([]);
+    const [selectedChip, setSelectedChip] = useState("");
+    const [transactionDisplay, setTransDisplay] = useState([]);
+    const [originalDisplay, setOriginalDisplay] = useState([]);
 
     useEffect(() => {
         var curr = moment(LoanStartDate).year()
