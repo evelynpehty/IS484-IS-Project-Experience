@@ -7,7 +7,7 @@ def create_engine():
     #local database
     # return db.create_engine()
     # return db.create_engine(BaseConfig.SQLALCHEMY_DATABASE_URI)
-    return db.create_engine(BaseConfig.SQLALCHEMY_DATABASE_URI)
+    return db.create_engine(BaseConfig.SQLALCHEMY_DATABASE_URI_LOCAL)
 
 def get_SELF_CUSTOMIZATION():
     with open('.\\module\\DataStore\\SELF_CUSTOMIZATION.json', 'r') as openfile:

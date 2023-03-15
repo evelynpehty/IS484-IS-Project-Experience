@@ -17,7 +17,7 @@ def get_view_all_deposit_accounts(userID):
             depositAccountInfo = Deposit_Account(
                 info[0], info[1], info[2], info[3], info[4], info[5], info[6], info[7],
                 info[8], info[9], info[10], info[11], info[12], info[13], info[14], info[15],
-                info[16]
+                info[16], info[17]
             )
             productID = depositAccountInfo.get_productID()
             productName = get_product_name(productID)
@@ -45,7 +45,7 @@ def get_view_selected_deposit_account(depositAccountID):
         depositAccountInfo = Deposit_Account(
                 info[0], info[1], info[2], info[3], info[4], info[5], info[6], info[7],
                 info[8], info[9], info[10], info[11], info[12], info[13], info[14], info[15],
-                info[16]
+                info[16], info[17]
             )
         productID = depositAccountInfo.get_productID()
         productName = get_product_name(productID)
@@ -151,11 +151,12 @@ def add_new_deposit_account_with_default_values(depositAccountID, userID, accoun
     minimumAmount = 1
     cardNo = 78123456
     CVV = 111
+    chosenColor = "linear-gradient(to top right, #A4B6D2, #0085FF)"
     result = add_new_deposit_account_without_default_values(depositAccountID, userID, productID, accountName,
         crr_date, expire_date, availBalance, 
         pendingBalance, currentStatus, interestRate, depositTerm, 
         openEmployeeID, minimumAmount, cardNo, crr_date,
-        expire_date, CVV)
+        expire_date, CVV, chosenColor)
         
     return result
 
@@ -166,7 +167,7 @@ def add_new_deposit_account_without_default_values(depositAccountID ,  userID , 
         accountOpenDate ,  accountCloseDate ,  availBalance , 
         pendingBalance ,  currentStatus ,  interestRate ,  depositTerm , 
         openEmployeeID ,  minimumAmount ,  cardNo ,  cardStartDate , 
-        cardExpiryDate ,  CVV ):
+        cardExpiryDate ,  CVV, chosenColor ):
     
     sql = """
         INSERT INTO  deposit_account
@@ -174,7 +175,7 @@ def add_new_deposit_account_without_default_values(depositAccountID ,  userID , 
         accountOpenDate ,  accountCloseDate ,  availBalance , 
         pendingBalance ,  currentStatus ,  interestRate ,  depositTerm , 
         openEmployeeID ,  minimumAmount ,  cardNo ,  cardStartDate , 
-        cardExpiryDate ,  CVV ) 
+        cardExpiryDate ,  CVV , chosenColor) 
         VALUES ('%s', '%s', '%s', '%s', 
                 '%s', '%s', '%s', 
                 '%s', '%s', '%s', '%s',
@@ -185,7 +186,7 @@ def add_new_deposit_account_without_default_values(depositAccountID ,  userID , 
         accountOpenDate ,  accountCloseDate ,  availBalance , 
         pendingBalance ,  currentStatus ,  interestRate ,  depositTerm , 
         openEmployeeID ,  minimumAmount ,  cardNo ,  cardStartDate , 
-        cardExpiryDate ,  CVV 
+        cardExpiryDate ,  CVV ,chosenColor
         )
     engine = create_engine()
     engine.execute(sql)
@@ -419,7 +420,15 @@ def get_product_name(productID):
             return product.get_productName()
     return ""
 
-
+def update_deposit_account_color(depositAccountID, newColor):
+    engine = create_engine()
+    sql = "UPDATE deposit_account SET chosenColor = '%s' WHERE depositAccountID = '%s';" % (newColor, depositAccountID)
+    print(sql)
+    engine.execute(sql)
+    return {
+        "code": 200,
+        "message": "deposit account color has updated successfully"
+    }
 
 
 

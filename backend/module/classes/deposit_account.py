@@ -1,7 +1,7 @@
 class Deposit_Account:
   def __init__(self, depositAccountID, userID, productID, accountName, accountOpenDate, accountCloseDate,
   availBalance, pendingBalance, currentStatus, interestRate, depositTerm, openEmployeeID, minimumAmount,
-  cardNo, cardStartDate, cardExpiryDate, CVV):
+  cardNo, cardStartDate, cardExpiryDate, CVV, chosenColor):
     self.depositAccountID = depositAccountID
     self.userID = userID
     self.productID = productID
@@ -20,7 +20,8 @@ class Deposit_Account:
     self.cardStartDate = cardStartDate
     self.cardExpiryDate = cardExpiryDate
     self.CVV = CVV
-
+    self.chosenColor = chosenColor
+    
   def to_dict(self):
     return{
       "DepositAccountID": self.depositAccountID,
@@ -40,6 +41,7 @@ class Deposit_Account:
       "CardStartDate": self.cardStartDate,
       "CardExpiryDate": self.cardExpiryDate,
       "CVV": self.CVV,
+      "ChosenColor": self.chosenColor,
     }
     # Getter methods
   def get_depositAccountID(self):
@@ -92,6 +94,9 @@ class Deposit_Account:
 
   def get_CVV(self):
     return self.CVV
+  
+  def get_chosenColor(self):
+    return self.chosenColor
 
   # Setter methods
   def set_depositAccountID(self, depositAccountID):
@@ -145,11 +150,14 @@ class Deposit_Account:
   def set_CVV(self, CVV):
     self.CVV = CVV
   
+  def set_chosenColor(self, chosenColor):
+    self.chosenColor = chosenColor
+
   def str(self):
-    return f"DepositAccountID: {self.depositAccountID}, UserID: {self.userID}, ProductID: {self.productID}, AccountName: {self.accountName}, AccountOpenDate: {self.accountOpenDate}, AccountCloseDate: {self.accountCloseDate}, AvailBalance: {self.availBalance}, PendingBalance: {self.pendingBalance}, CurrentStatus: {self.currentStatus}, InterestRate: {self.interestRate}, DepositTerm: {self.depositTerm}, OpenEmployeeID: {self.openEmployeeID}, MinimumAmount: {self.minimumAmount}, CardNo: {self.cardNo}, CardStartDate: {self.cardStartDate}, CardExpiryDate: {self.cardExpiryDate}, CVV: {self.CVV}"
+    return f"DepositAccountID: {self.depositAccountID}, UserID: {self.userID}, ProductID: {self.productID}, AccountName: {self.accountName}, AccountOpenDate: {self.accountOpenDate}, AccountCloseDate: {self.accountCloseDate}, AvailBalance: {self.availBalance}, PendingBalance: {self.pendingBalance}, CurrentStatus: {self.currentStatus}, InterestRate: {self.interestRate}, DepositTerm: {self.depositTerm}, OpenEmployeeID: {self.openEmployeeID}, MinimumAmount: {self.minimumAmount}, CardNo: {self.cardNo}, CardStartDate: {self.cardStartDate}, CardExpiryDate: {self.cardExpiryDate}, CVV: {self.CVV}, ChosenColor: {self.chosenColor}"
 
   def repr(self):
-    return f"Deposit_Account(depositAccountID={self.depositAccountID}, userID={self.userID}, productID={self.productID}, accountName={self.accountName}, accountOpenDate={self.accountOpenDate}, accountCloseDate={self.accountCloseDate}, availBalance={self.availBalance}, pendingBalance={self.pendingBalance}, currentStatus={self.currentStatus}, interestRate={self.interestRate}, depositTerm={self.depositTerm}, openEmployeeID={self.openEmployeeID}, minimumAmount={self.minimumAmount}, cardNo={self.cardNo}, cardStartDate={self.cardStartDate}, cardExpiryDate={self.cardExpiryDate}, CVV={self.CVV})"
+    return f"Deposit_Account(depositAccountID={self.depositAccountID}, userID={self.userID}, productID={self.productID}, accountName={self.accountName}, accountOpenDate={self.accountOpenDate}, accountCloseDate={self.accountCloseDate}, availBalance={self.availBalance}, pendingBalance={self.pendingBalance}, currentStatus={self.currentStatus}, interestRate={self.interestRate}, depositTerm={self.depositTerm}, openEmployeeID={self.openEmployeeID}, minimumAmount={self.minimumAmount}, cardNo={self.cardNo}, cardStartDate={self.cardStartDate}, cardExpiryDate={self.cardExpiryDate}, CVV={self.CVV}, ChosenColor: {self.chosenColor})"
 
   def eq(self, other):
     if isinstance(other, Deposit_Account):
