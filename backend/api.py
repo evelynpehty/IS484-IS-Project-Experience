@@ -1010,3 +1010,42 @@ def update_loan_account_name_request():
       "message": str(e),
       "data": None
     }), 500
+  
+# required attribute(default): userID
+@api.route('/get_view_all_credit_card',methods = ['POST', 'GET'])
+def get_view_all_credit_card_request():
+  try: 
+    userID = None
+    if request.method == 'POST':
+      userID = request.form['userID']
+    else:
+      userID = request.args.get('userID')
+    result = get_view_all_credit_card(userID)
+    return jsonify(result), result["code"]
+  except Exception as e:
+
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+
+
+# required attribute(default): creditCardAccountID
+@api.route('/get_view_all_credit_card_detail',methods = ['POST', 'GET'])
+def get_view_all_credit_card_detail_request():
+  try: 
+    creditCardAccountID = None
+    if request.method == 'POST':
+      creditCardAccountID = request.form['creditCardAccountID']
+    else:
+      creditCardAccountID = request.args.get('creditCardAccountID')
+    result = get_view_all_credit_card_detail(creditCardAccountID)
+    return jsonify(result), result["code"]
+  except Exception as e:
+
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500

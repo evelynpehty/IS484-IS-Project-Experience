@@ -2,6 +2,8 @@ from module.databaseConnection import create_engine
 from module.classes.product import Product
 from module.classes.loan_account import Loan_Account
 from module.classes.transaction_log import Transaction_Log
+from module.classes.credit_card import Credit_Card
+from datetime import datetime
 
 def get_view_all_loan_account(userID):
     engine = create_engine()
@@ -316,3 +318,86 @@ def update_loan_account_name(loanAccountID, newAccountName):
         "code": 200,
         "message": "account name has updated successfully"
     }
+
+
+# find the day difference - for due date 
+def day_diff(repayment_date):
+    # payment_date for example, '2022-12-15'
+    crr_date = datetime.now()
+    repayment_date = datetime.strptime(repayment_date, "%Y-%m-%d")
+    delta =  repayment_date - crr_date
+    return delta.days
+
+
+def get_view_all_credit_card(userID):
+    engine = create_engine()
+    sql = "SELECT * FROM credit_card WHERE userID = '%s'"%userID
+    result = engine.execute(sql)
+    cardInfo = []
+    if result.rowcount>0:
+        for info in result.fetchall():
+            creditCardInfo = Credit_Card(
+                info[0], info[1], info[2], info[3], 
+                info[4], info[5], info[6], info[7],
+                info[8]
+            )
+            transactions = get_view_all_transaction_by_credit_card(creditCardInfo.get_creditCardAccountID())
+            creditCardInfo = creditCardInfo.to_dict()
+            creditCardInfo["transactions"] = transactions["data"]
+            cardInfo.append(creditCardInfo)
+        return{
+            "code": 200,
+            "data": cardInfo
+        }
+    return{
+        "code": 404,
+        "data": cardInfo
+    }
+
+
+def get_view_all_credit_card_detail(creditCardAccountID):
+    engine = create_engine()
+    sql = "SELECT * FROM credit_card WHERE creditCardAccountID = '%s'"%creditCardAccountID
+    info  = engine.execute(sql).fetchone()
+    if info: 
+        creditCardInfo = Credit_Card(
+                info[0], info[1], info[2], info[3], 
+                info[4], info[5], info[6], info[7],
+                info[8]
+            )
+        transactions = get_view_all_transaction_by_credit_card(creditCardInfo.get_creditCardAccountID())
+        creditCardInfo = creditCardInfo.to_dict()
+        creditCardInfo["transactions"] = transactions["data"]
+        return{
+            "code": 200,
+            "data": creditCardInfo
+        }
+    return{
+        "code": 404,
+        "data": None
+    }
+
+def get_view_all_transaction_by_credit_card(creditCardAccountID):
+    engine = create_engine()
+    sql = "SELECT * FROM transaction_log WHERE accountFrom='%s' or accountFrom = '%s'" %(creditCardAccountID, creditCardAccountID)
+    result = engine.execute(sql)
+    transactions = []
+    if result.rowcount > 0:
+
+        for info in result.fetchall():
+            transaction = Transaction_Log(
+                info[0], info[1], info[2], info[3], 
+                info[4], info[5], info[6], info[7],
+                info[8], info[9], info[10]
+            )
+            transaction = transaction.to_dict()
+            transactions.append(transaction)
+        return {
+            "code": 200,
+            "data": transactions 
+        }
+    return {
+        "code": 404,
+        "data": transactions
+    }
+
