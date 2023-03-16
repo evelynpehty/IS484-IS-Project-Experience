@@ -23,6 +23,7 @@ def get_view_all_loan_account(userID):
             loan_detail = get_view_calculate_loan_repayment_detail(loanAccountInfo.get_loanAmount(), 
                                                                    loanAccountInfo.get_interestRate(),
                                                                    loanAccountInfo.get_loanTerm())
+            loan_reminder = get_loan_reminder_by_loan_account(loanAccountInfo.get_loanAccountID())
             
             totalMonthlyRepayment += loan_detail["monthly_payment"]
             productID = loanAccountInfo.get_productID()
@@ -30,6 +31,7 @@ def get_view_all_loan_account(userID):
             loanAccountInfo = loanAccountInfo.to_dict()
             loanAccountInfo["ProductName"] = productName
             loanAccountInfo["Detail"] = loan_detail
+            loanAccountInfo["Reminder"] = loan_reminder
             accountInfo.append(loanAccountInfo)
         return{
             "code": 200,
@@ -62,12 +64,15 @@ def get_view_loan_account_detail(loanAccountID):
                                                                    loanAccountInfo.get_loanTerm())
         
         historical_transaction = view_loan_transactions_by_account(loanAccountInfo.get_loanAccountID())
+        loan_reminder = get_loan_reminder_by_loan_account(loanAccountInfo.get_loanAccountID())
+
         productID = loanAccountInfo.get_productID()
         productName = get_product_name(productID)
         loanAccountInfo = loanAccountInfo.to_dict()
         loanAccountInfo["ProductName"] = productName
         loanAccountInfo["Detail"] = loan_detail
         loanAccountInfo["Transactions"] = historical_transaction
+        loanAccountInfo["Reminder"] = loan_reminder
         
         return{
             "code": 200,
@@ -346,8 +351,10 @@ def get_view_all_credit_card(userID):
                 info[8], info[9]
             )
             transactions = get_view_all_transaction_by_credit_card(creditCardInfo.get_creditCardAccountID())
+            productName = get_product_name(creditCardInfo.get_productID())
             creditCardInfo = creditCardInfo.to_dict()
             creditCardInfo["transactions"] = transactions["data"]
+            creditCardInfo["productName"] = productName
             cardInfo.append(creditCardInfo)
         return{
             "code": 200,
@@ -369,9 +376,11 @@ def get_view_all_credit_card_detail(creditCardAccountID):
                 info[4], info[5], info[6], info[7],
                 info[8], info[9]
             )
+        productName = get_product_name(creditCardInfo.get_productID())
         transactions = get_view_all_transaction_by_credit_card(creditCardInfo.get_creditCardAccountID())
         creditCardInfo = creditCardInfo.to_dict()
         creditCardInfo["transactions"] = transactions["data"]
+        creditCardInfo["productName"] = productName
         return{
             "code": 200,
             "data": creditCardInfo
@@ -394,6 +403,7 @@ def get_view_all_transaction_by_credit_card(creditCardAccountID):
                 info[4], info[5], info[6], info[7],
                 info[8], info[9], info[10]
             )
+            
             transaction = transaction.to_dict()
             transactions.append(transaction)
         return {
@@ -451,6 +461,24 @@ def get_all_loan_detail_with_reminder(userID):
         "data": loan_with_reminder #[] 
     }
 
+def remove_reminder(loanReminderID):
+    engine = create_engine()
+    sql = "DELETE FROM loan_reminder WHERE loanReminderID='%s';" % (loanReminderID)
+    engine.execute(sql)
+    return {
+        "code": 200,
+        "message": "new loan reminder has removed successfully"
+    }
+
+def update_new_reminder(loanAccountID, ReminderType):
+    engine = create_engine()
+    sql = "INSERT INTO loan_reminder (loanAccountID, ReminderType) VALUES ('%s', '%s');" % (loanAccountID, ReminderType)
+    engine.execute(sql)
+    return {
+        "code": 200,
+        "message": "new loan reminder has updated/add successfully"
+    }
+
 
 def update_credit_card_color(creditCardAccountID, newColor):
     engine = create_engine()
@@ -462,9 +490,9 @@ def update_credit_card_color(creditCardAccountID, newColor):
         "message": "credit card color has updated successfully"
     }
 
-def update_loan_account_color(loanAccountID, newColor):
+def update_loan_account_color_and_name(loanAccountID, newColor, newName):
     engine = create_engine()
-    sql = "UPDATE loan_account SET chosenColor = '%s' WHERE loanAccountID = '%s';" % (newColor, loanAccountID)
+    sql = "UPDATE loan_account SET chosenColor = '%s', loanAccountName = '%s' WHERE loanAccountID = '%s';" % (newColor, newName, loanAccountID)
     print(sql)
     engine.execute(sql)
     return {
@@ -472,3 +500,28 @@ def update_loan_account_color(loanAccountID, newColor):
         "message": "loan account color has updated successfully"
     }
 
+
+
+def get_credit_card_net_worth(userID):
+    engine = create_engine()
+    sql = "SELECT * FROM credit_card WHERE userID = '%s'"%userID
+    result = engine.execute(sql)
+    cardInfo = []
+    net_worth = 0.0
+    if result.rowcount>0:
+        
+        for info in result.fetchall():
+            creditCardInfo = Credit_Card(
+                info[0], info[1], info[2], info[3], 
+                info[4], info[5], info[6], info[7],
+                info[8], info[9]
+            )
+            net_worth += creditCardInfo.get_creditCardLimit()
+        return{
+            "code": 200,
+            "data": net_worth
+        }
+    return{
+        "code": 404,
+        "data": net_worth
+    }

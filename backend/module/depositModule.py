@@ -420,9 +420,9 @@ def get_product_name(productID):
             return product.get_productName()
     return ""
 
-def update_deposit_account_color(depositAccountID, newColor):
+def update_deposit_account_color_and_name(depositAccountID, newColor, newName):
     engine = create_engine()
-    sql = "UPDATE deposit_account SET chosenColor = '%s' WHERE depositAccountID = '%s';" % (newColor, depositAccountID)
+    sql = "UPDATE deposit_account SET chosenColor = '%s', accountName= '%s' WHERE depositAccountID = '%s';" % (newColor, newName, depositAccountID)
     print(sql)
     engine.execute(sql)
     return {

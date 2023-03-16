@@ -703,19 +703,21 @@ def update_deposit_account_name_request():
       "data": None
     }), 500
 
-# required attribute: depositAccountID, newColor
-@api.route('/update_deposit_account_color',methods = ['POST', 'GET'])
-def update_deposit_account_color_request():
+# required attribute: depositAccountID, newColor, newName
+@api.route('/update_deposit_account_color_and_name',methods = ['POST', 'GET'])
+def update_deposit_account_color_and_name_request():
   try:
     depositAccountID = None
     newColor = None 
     if request.method == 'POST':
       depositAccountID = request.form['depositAccountID']
       newColor = request.form['newColor']
+      newName = request.form['newName']
     else:
       depositAccountID = request.args.get('depositAccountID')
       newColor = request.args.get('newColor')
-    result = update_deposit_account_color(depositAccountID, newColor)
+      newName = request.args.get('newName')
+    result = update_deposit_account_color_and_name(depositAccountID, newColor, newName)
     code = result["code"]
     return jsonify(result), code
   except Exception as e:
@@ -1139,19 +1141,62 @@ def update_credit_card_color_request():
       "data": None
     }), 500
 
-# required attribute(default): loanAccountID, newColor
-@api.route('/update_loan_account_color',methods = ['POST', 'GET'])
-def update_loan_account_color_request():
+# required attribute(default): loanAccountID, newColor, newName
+@api.route('/update_loan_account_color_and_name',methods = ['POST', 'GET'])
+def update_loan_account_color_and_name_request():
   try: 
     loanAccountID = None
     newColor = None
     if request.method == 'POST':
       loanAccountID = request.form['loanAccountID']
       newColor = request.form['newColor']
+      newName = request.form['newName']
     else:
       loanAccountID = request.args.get('loanAccountID')
       newColor = request.args.get('newColor')
-    result = update_loan_account_color(loanAccountID, newColor)
+      newName = request.args.get('newName')
+    result = update_loan_account_color_and_name(loanAccountID, newColor, newName)
+    return jsonify(result), result["code"]
+  except Exception as e:
+
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+
+# required attribute(default): loanReminderID
+@api.route('/remove_reminder',methods = ['POST', 'GET'])
+def remove_reminder_request():
+  try: 
+    loanReminderID = None
+    if request.method == 'POST':
+      loanReminderID = request.form['loanReminderID']
+    else:
+      loanReminderID = request.args.get('loanReminderID')
+    result = remove_reminder(loanReminderID)
+    return jsonify(result), result["code"]
+  except Exception as e:
+
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+  
+# required attribute(default): loanAccountID, ReminderType
+@api.route('/update_new_reminder',methods = ['POST', 'GET'])
+def remove_reminder_request():
+  try: 
+    loanAccountID = None
+    ReminderType = None
+    if request.method == 'POST':
+      loanAccountID = request.form['loanAccountID']
+      ReminderType = request.form['ReminderType']
+    else:
+      loanAccountID = request.args.get('loanAccountID')
+      ReminderType = request.args.get('ReminderType')
+    result = update_new_reminder(loanAccountID, ReminderType)
     return jsonify(result), result["code"]
   except Exception as e:
 
