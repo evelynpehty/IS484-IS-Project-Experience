@@ -1,6 +1,7 @@
 const initialState = {
     loanList: [],
-    loan_transactionHistoryList: []
+    loan_transactionHistoryList: [],
+    loan_reminder: []
 }
 
 const loanReducer = (state = initialState, action) => {
@@ -27,10 +28,20 @@ switch (type) {
         ...state,
         loan_transactionHistoryList: []
     };
+    case "LOAN_REMINDER_SUCCESS":
+      return {
+          ...state,
+          loan_reminder: payload.loan_reminder,
+      };
+    case "LOAN_REMINDER_FAIL":
+    return {
+        ...state,
+        loan_reminder: []
+    };
     
     default:
     return state;
-}
   }
+}
 
 export default loanReducer;

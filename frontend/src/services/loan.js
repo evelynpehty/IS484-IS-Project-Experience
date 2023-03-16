@@ -32,9 +32,25 @@ const loanTransactionHistory = (userID) => {
     });
 };
 
+const loanReminder = (loanAccountID) => {
+  var bodyFormData = new FormData();
+  bodyFormData.append("loanAccountID", loanAccountID)
+
+  return axios
+  ({
+      method: "post",
+      url: API_URL + "get_loan_reminder_by_loan_account",
+      data: bodyFormData,
+  })
+    .then((response) => {
+      return response.data;
+    });
+};
+
 const loan_service = { 
   getallloanaccounts,
-  loanTransactionHistory
+  loanTransactionHistory,
+  loanReminder
 }
 
 export default loan_service;
