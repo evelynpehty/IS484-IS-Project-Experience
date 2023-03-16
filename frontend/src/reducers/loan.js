@@ -1,6 +1,7 @@
 const initialState = {
     loanList: [],
-    loan_transactionHistoryList: []
+    loan_transactionHistoryList: [],
+    loan_reminder: []
 }
 
 const loanReducer = (state = initialState, action) => {
@@ -27,10 +28,9 @@ switch (type) {
         ...state,
         loan_transactionHistoryList: []
     };
-    
     default:
     return state;
-}
   }
+}
 
 export default loanReducer;

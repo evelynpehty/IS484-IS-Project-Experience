@@ -79,3 +79,39 @@ export const loanTransactionHistory = (UserID) => (dispatch) => {
     }
   );
 };
+
+export const updateLoanAccount = (input) => (dispatch) => {
+  return loan_service.updateLoanAccount(input).then(
+    (data) => {
+        return Promise.resolve(data);
+    },
+    (error) => {
+      console.log(error)
+      return Promise.reject(error);
+    }
+  );
+};
+
+export const updateLoanReminder = (input) => (dispatch) => {
+  return loan_service.updateLoanReminder(input).then(
+    (data) => {
+        return Promise.resolve(data);
+    },
+    (error) => {
+      console.log(error)
+      return Promise.reject(error);
+    }
+  );
+};
+
+export const removeLoanReminder = (loanReminderID) => (dispatch) => {
+  return loan_service.removeLoanReminder(loanReminderID).then(
+    (data) => {
+        return Promise.resolve(data);
+    },
+    (error) => {
+      console.log(error)
+      return Promise.reject(error);
+    }
+  );
+};
