@@ -704,7 +704,7 @@ def update_deposit_account_name_request():
     }), 500
 
 # required attribute: depositAccountID, newColor, newName
-@api.route('/update_deposit_account_color_and_name',methods = ['POST', 'GET'])
+@api.route('/update_deposit_account',methods = ['POST', 'GET'])
 def update_deposit_account_color_and_name_request():
   try:
     depositAccountID = None
@@ -1142,7 +1142,7 @@ def update_credit_card_color_request():
     }), 500
 
 # required attribute(default): loanAccountID, newColor, newName
-@api.route('/update_loan_account_color_and_name',methods = ['POST', 'GET'])
+@api.route('/update_loan_account',methods = ['POST', 'GET'])
 def update_loan_account_color_and_name_request():
   try: 
     loanAccountID = None
@@ -1186,7 +1186,7 @@ def remove_reminder_request():
   
 # required attribute(default): loanAccountID, ReminderType
 @api.route('/update_new_reminder',methods = ['POST', 'GET'])
-def remove_reminder_request():
+def update_reminder_request():
   try: 
     loanAccountID = None
     ReminderType = None

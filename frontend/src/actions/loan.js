@@ -80,42 +80,38 @@ export const loanTransactionHistory = (UserID) => (dispatch) => {
   );
 };
 
-export const loanReminder = (loanAccountID) => (dispatch) => {
-  return loan_service.loanReminder(loanAccountID).then(
+export const updateLoanAccount = (input) => (dispatch) => {
+  return loan_service.updateLoanAccount(input).then(
     (data) => {
-      if(data.code === 200){
-        dispatch({
-          type: "LOAN_REMINDER_SUCCESS",
-          payload: { loan_reminder: data.data },
-        });
-      }
-      else{
-        dispatch({
-          type: "LOAN_REMINDER_FAIL"
-        });
-
-        dispatch({
-          type: "SET_MESSAGE",
-          payload: "You have not set any loan reminder for this loan account",
-        });
-        return Promise.reject();
-      }
-
-      return Promise.resolve();
+        return Promise.resolve(data);
     },
     (error) => {
       console.log(error)
-      const message = error.message
-      dispatch({
-        type: "LOAN_REMINDER_FAIL",
-      });
+      return Promise.reject(error);
+    }
+  );
+};
 
-      dispatch({
-        type: "SET_MESSAGE",
-        payload: message,
-      });
+export const updateLoanReminder = (input) => (dispatch) => {
+  return loan_service.updateLoanReminder(input).then(
+    (data) => {
+        return Promise.resolve(data);
+    },
+    (error) => {
+      console.log(error)
+      return Promise.reject(error);
+    }
+  );
+};
 
-      return Promise.reject();
+export const removeLoanReminder = (loanReminderID) => (dispatch) => {
+  return loan_service.removeLoanReminder(loanReminderID).then(
+    (data) => {
+        return Promise.resolve(data);
+    },
+    (error) => {
+      console.log(error)
+      return Promise.reject(error);
     }
   );
 };

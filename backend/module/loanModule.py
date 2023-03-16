@@ -497,7 +497,7 @@ def update_loan_account_color_and_name(loanAccountID, newColor, newName):
     engine.execute(sql)
     return {
         "code": 200,
-        "message": "loan account color has updated successfully"
+        "message": "loan account has been updated successfully"
     }
 
 

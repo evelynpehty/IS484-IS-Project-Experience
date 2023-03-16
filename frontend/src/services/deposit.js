@@ -32,27 +32,28 @@ const getalldepositaccounts = (userID) => {
       });
   };
 
-/*  
-  const updateDepositAccount = (input) => {
-    var bodyFormData = new FormData();
-    bodyFormData.append("depositAccountID", input.depositAccountID)
-    bodyFormData.append("newAccountName", input.newAccountName)
-    bodyFormData.append("newColor", input.newColor)
 
-    return axios
-    ({
-        method: "post",
-        url: API_URL + "update_deposit_account",
-        data: bodyFormData,
-    })
-      .then((response) => {
-        return response.data;
-      });
-  }; */
+const updateDepositAccount = (input) => {
+  var bodyFormData = new FormData();
+  bodyFormData.append("depositAccountID", input.depositAccountID)
+  bodyFormData.append("newName", input.newName)
+  bodyFormData.append("newColor", input.newColor)
+
+  return axios
+  ({
+      method: "post",
+      url: API_URL + "update_deposit_account",
+      data: bodyFormData,
+  })
+    .then((response) => {
+      return response.data;
+    });
+}; 
 
   const deposit_service = { 
     getalldepositaccounts,
-    getDepositTransactionHistory
+    getDepositTransactionHistory,
+    updateDepositAccount
   }
 
   export default deposit_service;

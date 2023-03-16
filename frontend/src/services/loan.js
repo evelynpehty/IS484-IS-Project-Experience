@@ -32,14 +32,47 @@ const loanTransactionHistory = (userID) => {
     });
 };
 
-const loanReminder = (loanAccountID) => {
+const updateLoanAccount = (input) => {
   var bodyFormData = new FormData();
-  bodyFormData.append("loanAccountID", loanAccountID)
+  bodyFormData.append("loanAccountID", input.loanAccountID)
+  bodyFormData.append("newName", input.newName)
+  bodyFormData.append("newColor", input.newColor)
 
   return axios
   ({
       method: "post",
-      url: API_URL + "get_loan_reminder_by_loan_account",
+      url: API_URL + "update_loan_account",
+      data: bodyFormData,
+  })
+    .then((response) => {
+      return response.data;
+    });
+}; 
+
+const updateLoanReminder = (input) => {
+  var bodyFormData = new FormData();
+  bodyFormData.append("loanAccountID", input.loanAccountID)
+  bodyFormData.append("ReminderType", input.ReminderType)
+
+  return axios
+  ({
+      method: "post",
+      url: API_URL + "update_new_reminder",
+      data: bodyFormData,
+  })
+    .then((response) => {
+      return response.data;
+    });
+};
+
+const removeLoanReminder = (loanReminderID) => {
+  var bodyFormData = new FormData();
+  bodyFormData.append("loanReminderID", loanReminderID)
+
+  return axios
+  ({
+      method: "post",
+      url: API_URL + "remove_reminder",
       data: bodyFormData,
   })
     .then((response) => {
@@ -50,7 +83,9 @@ const loanReminder = (loanAccountID) => {
 const loan_service = { 
   getallloanaccounts,
   loanTransactionHistory,
-  loanReminder
+  updateLoanReminder,
+  updateLoanAccount,
+  removeLoanReminder
 }
 
 export default loan_service;

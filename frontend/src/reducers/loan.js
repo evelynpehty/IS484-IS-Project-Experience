@@ -28,17 +28,6 @@ switch (type) {
         ...state,
         loan_transactionHistoryList: []
     };
-    case "LOAN_REMINDER_SUCCESS":
-      return {
-          ...state,
-          loan_reminder: payload.loan_reminder,
-      };
-    case "LOAN_REMINDER_FAIL":
-    return {
-        ...state,
-        loan_reminder: []
-    };
-    
     default:
     return state;
   }

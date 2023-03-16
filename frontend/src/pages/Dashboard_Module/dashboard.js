@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { deposit, depositTransactionHistory } from "../../actions/deposit";
-import { loan, loanTransactionHistory } from "../../actions/loan";
+import { loan, loanTransactionHistory, updateLoanReminder } from "../../actions/loan";
 import { creditcard } from "../../actions/creditcard";
 import { peekDetail } from "../../actions/peekdetail";
 import { RemoveFirstLoad } from "../../actions/auth";
