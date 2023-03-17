@@ -84,7 +84,7 @@ function LoanAccountDetails() {
         }
     }
 
-    const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+    const BorderLinearProgress = styled(LinearProgress) (({ theme }) => ({
         height: 20,
         borderRadius: 5,
         [`&.${linearProgressClasses.colorPrimary}`]: {
@@ -95,8 +95,6 @@ function LoanAccountDetails() {
           backgroundColor: theme.palette.mode === 'light' ? 'linear-gradient(to top right, #E69F9F, #E60000)' : 'linear-gradient(to top right, #E69F9F, #E60000)',
         },
     }));
-
-    
 
     // Fetch Loan Account
     const navigate = useNavigate();
@@ -123,6 +121,11 @@ function LoanAccountDetails() {
     const [timeToCompletion, setTimeToCompletion] = useState("");
     const [progress, setProgress] = useState("");
 
+    // Navigation to Payment Reminders Page
+    const handlePaymentReminders = () => {
+        navigate("/payment-reminders", { replace: true, state: {id: id} })
+    }
+
     // Navigation to View All Loan Repayment Transaction
     const handleViewAll = () => {
         navigate('/view-loan-transaction-history', {replace: true , state: { loan_item: loan_item[0], id: id } })  
@@ -138,7 +141,7 @@ function LoanAccountDetails() {
 
     const currentMonth = moment().month() +1 // jan=0, dec=11
     const currentYear = moment().year() 
-    var r_date =  (currentMonth) + "/1/" + currentYear //fixed repayment date to be first of the month
+    var r_date =  (currentMonth) + "/1/" + currentYear // Fixed repayment date to be first of the month
     const monthDifference =  Math.ceil(moment(new Date(r_date)).diff(new Date(LoanStartDate), 'months', true));
     // const display = []
 
