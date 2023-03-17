@@ -107,6 +107,11 @@ function LoanAccountDetails() {
         navigate('/view-loan-transaction-history', {replace: true , state: { transaction_item: transaction_item, id: id } })  
     }
 
+    // Navigation to View All Loan Repayment Transaction
+    const handlePaymentReminders = () => {
+        navigate('/payment-reminders', {replace: true , state: { transaction_item: transaction_item, id: id } })  
+    }
+
     // Testing Data
     const data = [
         {
@@ -161,7 +166,7 @@ function LoanAccountDetails() {
 
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
                         <Typography style={ styles.label } variant="h6">Debt Paydown</Typography>
-                        <WhiteReusableButton icon={ <BellIcon /> } buttonText="REMINDERS" />
+                        <WhiteReusableButton function={ handlePaymentReminders } icon={ <BellIcon /> } buttonText="REMINDERS" />
                     </Grid>
 
                     <Card style={ styles.card2 } elevation={ 4 }>
