@@ -31,7 +31,7 @@ function App() {
 const [showAppBar, setAppBar] = useState(false);
 const [showBottomNavigation, setBottomNavigation] = useState(false);
 
-const { user: currentUser } = useSelector((state) => state.auth);
+const { isDataLoaded: currentUser } = useSelector((state) => state.auth);
 const dispatch = useDispatch();
 
 let location = useLocation();
@@ -45,7 +45,6 @@ useEffect(() => {
 
 useEffect(() => {
   if (currentUser) {
-    console.log(currentUser)
     setBottomNavigation(true);
     setAppBar(true);
     }

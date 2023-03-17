@@ -1,11 +1,11 @@
 // Packages
 import React from "react";
-import { useState } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useParams } from 'react-router-dom';
 import { Link } from "react-router-dom";
-import moment from "moment";
+import { useDispatch, useSelector } from "react-redux";
+import { QuickAction } from "../../actions/auth";
+
+
 
 // MUI Components
 import Grid from '@mui/material/Unstable_Grid2';
@@ -58,6 +58,17 @@ function PeekBalance() {
     }
 
     // const [show, setShow] = useState(false);
+    const { user: currentUser } = useSelector((state) => state.auth);
+    const navigate = useNavigate();
+    const dispatch = useDispatch()
+
+    function handleClick(route){
+        console.log(route)
+        dispatch(QuickAction(route))
+        if(!currentUser){
+            navigate("/login")
+        }        
+    }
 
     return (
         <React.Fragment>
@@ -119,7 +130,7 @@ function PeekBalance() {
                                     gap: 2,
                                 }}
                             >
-                                <Card style={ styles.card2 }>
+                                <Card style={ styles.card2 }  onClick={()=>handleClick("deposit")}>
                                     <CardContent sx={{ pt: "24px", textAlign: "center" }}>
                                         <Savings className="small-icon"/>
                                         <Typography sx={{ fontSize: 12, fontWeight: "bold" }} color="text.secondary" gutterBottom>

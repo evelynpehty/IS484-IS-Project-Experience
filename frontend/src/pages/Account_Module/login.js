@@ -22,9 +22,11 @@ import { ReactComponent as CashFlow } from "../../assets/icons/cashflow-red.svg"
 import { ReactComponent as Recommendations } from "../../assets/icons/recommendations-red.svg";
 import Loading from '../../components/loading.js'
 
+import { deposit, depositTransactionHistory } from "../../actions/deposit";
+import { loan } from "../../actions/loan";
 
 //import account_service from "../services/account.js";
-import { login } from "../../actions/auth";
+import { login, DataLoaded } from "../../actions/auth";
 
 function SignIn() {
     // Styling for Login Page
@@ -52,7 +54,8 @@ function SignIn() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    // const { isLoggedIn } = useSelector(state => state.auth);    
+    // const { isLoggedIn } = useSelector(state => state.auth);
+    const { route } = useSelector((state) => state.auth);    
     const { message } = useSelector(state => state.message);
     const handleLogin = (e) => {
         
@@ -60,8 +63,27 @@ function SignIn() {
         setLoading(true);
         setError(false)
         
-        dispatch(login(username, password)).then(() => {
-            navigate("/dashboard")
+        dispatch(login(username, password)).then((response) => {
+            const UserID = response.data.UserID
+        
+            const p1 = dispatch(loan(UserID))
+            const p2 = dispatch(deposit(UserID))
+            const p3 = dispatch(depositTransactionHistory(UserID))
+            // const p4 = dispatch(loanTransactionHistory(UserID))
+            // const p5 = dispatch(creditcard(UserID))
+            // const p6 = dispatch(peekDetail(UserID))
+            Promise.all([p1,p2,p3]).then(()=>{
+                dispatch(DataLoaded())
+
+                if(route){
+                    navigate(`/${route}`)
+                }else{
+                    navigate("/dashboard")
+                }
+                
+                
+            })
+            
         }).catch(() => {
             setLoading(false)
             setError(true)
