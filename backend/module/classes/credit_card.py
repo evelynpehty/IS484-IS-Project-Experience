@@ -1,6 +1,6 @@
 class Credit_Card:
   def __init__(self, creditCardAccountID, userID, productID, creditCardIssuer, creditCardLimit,
-  creditCardStartDate, creditCardExpiryDate, CVV, status):
+  creditCardStartDate, creditCardExpiryDate, CVV, status, chosenColor):
     self.creditCardAccountID = creditCardAccountID
     self.userID = userID
     self.productID = productID
@@ -10,6 +10,7 @@ class Credit_Card:
     self.creditCardExpiryDate = creditCardExpiryDate
     self.CVV = CVV
     self.status = status
+    self.chosenColor = chosenColor
 
   def to_dict(self):
     return{
@@ -21,7 +22,8 @@ class Credit_Card:
       "CreditCardStartDate": self.creditCardStartDate,
       "CreditCardExpiryDate": self.creditCardExpiryDate,
       "CVV": self.CVV,
-      "Status": self.status
+      "Status": self.status,
+      "ChosenColor": self.chosenColor,
     }
   
    # Getter methods
@@ -52,6 +54,8 @@ class Credit_Card:
   def get_status(self):
     return self.status
 
+  def get_chosenColor(self):
+    return self.chosenColor
   # Setter methods
   def set_creditCardAccountID(self, creditCardAccountID):
     self.creditCardAccountID = creditCardAccountID
@@ -80,12 +84,14 @@ class Credit_Card:
   def set_status(self, status):
     self.status = status
 
+  def set_chosenColor(self, chosenColor):
+    self.chosenColor = chosenColor
   # Default methods
   def __str__(self):
-    return f"CreditCardAccountID: {self.creditCardAccountID}, UserID: {self.userID}, ProductID: {self.productID}, CreditCardIssuer: {self.creditCardIssuer}, CreditCardLimit: {self.creditCardLimit}, CreditCardStartDate: {self.creditCardStartDate}, CreditCardExpiryDate: {self.creditCardExpiryDate}, CVV: {self.CVV}, Status: {self.status}"
+    return f"CreditCardAccountID: {self.creditCardAccountID}, UserID: {self.userID}, ProductID: {self.productID}, CreditCardIssuer: {self.creditCardIssuer}, CreditCardLimit: {self.creditCardLimit}, CreditCardStartDate: {self.creditCardStartDate}, CreditCardExpiryDate: {self.creditCardExpiryDate}, CVV: {self.CVV}, Status: {self.status}, ChosenColor: {self.chosenColor}"
 
   def __repr__(self):
-    return f"Credit_Card(creditCardAccountID={self.creditCardAccountID}, userID={self.userID}, productID={self.productID}, creditCardIssuer={self.creditCardIssuer}, creditCardLimit={self.creditCardLimit}, creditCardStartDate={self.creditCardStartDate}, creditCardExpiryDate={self.creditCardExpiryDate}, CVV={self.CVV}, status={self.status})"
+    return f"Credit_Card(creditCardAccountID={self.creditCardAccountID}, userID={self.userID}, productID={self.productID}, creditCardIssuer={self.creditCardIssuer}, creditCardLimit={self.creditCardLimit}, creditCardStartDate={self.creditCardStartDate}, creditCardExpiryDate={self.creditCardExpiryDate}, CVV={self.CVV}, status={self.status}, ChosenColor: {self.chosenColor})"
 
   def __eq__(self, other):
     if isinstance(other, Credit_Card):

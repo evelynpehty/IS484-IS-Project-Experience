@@ -1,6 +1,6 @@
 class Loan_Account:
   def __init__(self, loanAccountID, userID, productID, accountName,loanStartDate, loanMaturityDate, loanTerm, loanAmount,
-                loanBalance, loanPurpose, ltvRatio, interestRate, penaltyRate, loanEmployeeID):
+                loanBalance, loanPurpose, ltvRatio, interestRate, penaltyRate, loanEmployeeID, chosenColor):
     self.loanAccountID = loanAccountID
     self.userID = userID
     self.productID = productID
@@ -15,6 +15,7 @@ class Loan_Account:
     self.interestRate = interestRate
     self.penaltyRate = penaltyRate
     self.loanEmployeeID = loanEmployeeID
+    self.chosenColor = chosenColor
 
   def to_dict(self):
     return{
@@ -31,7 +32,8 @@ class Loan_Account:
       "LtvRatio": self.ltvRatio,
       "InterestRate": self.interestRate,
       "PenaltyRate": self.penaltyRate,
-      "LoanEmployeeID": self.loanEmployeeID
+      "LoanEmployeeID": self.loanEmployeeID,
+      "ChosenColor": self.chosenColor,
     }
   
     # Getter methods
@@ -76,6 +78,9 @@ class Loan_Account:
 
   def get_loanEmployeeID(self):
     return self.loanEmployeeID
+  
+  def get_chosenColor(self):
+    return self.chosenColor
 
   # Setter methods
   def set_loanAccountID(self, loanAccountID):
@@ -120,12 +125,15 @@ class Loan_Account:
   def set_loanEmployeeID(self, loanEmployeeID):
     self.loanEmployeeID = loanEmployeeID
 
+  def set_chosenColor(self, chosenColor):
+    self.chosenColor = chosenColor
+
   # Default methods
   def __str__(self):
-    return f"LoanAccountID: {self.loanAccountID}, UserID: {self.userID}, ProductID: {self.productID}, AccountName:{self.accountName}, LoanStartDate: {self.loanStartDate}, LoanMaturityDate: {self.loanMaturityDate}, LoanTerm: {self.loanTerm}, LoanAmount: {self.loanAmount}, LoanBalance: {self.loanBalance}, LoanPurpose: {self.loanPurpose}, LtvRatio: {self.ltvRatio}, InterestRate: {self.interestRate}, PenaltyRate: {self.penaltyRate}, LoanEmployeeID: {self.loanEmployeeID}"
+    return f"LoanAccountID: {self.loanAccountID}, UserID: {self.userID}, ProductID: {self.productID}, AccountName:{self.accountName}, LoanStartDate: {self.loanStartDate}, LoanMaturityDate: {self.loanMaturityDate}, LoanTerm: {self.loanTerm}, LoanAmount: {self.loanAmount}, LoanBalance: {self.loanBalance}, LoanPurpose: {self.loanPurpose}, LtvRatio: {self.ltvRatio}, InterestRate: {self.interestRate}, PenaltyRate: {self.penaltyRate}, LoanEmployeeID: {self.loanEmployeeID}, ChosenColor: {self.chosenColor}"
 
   def __repr__(self):
-    return f"Loan_Account(loanAccountID={self.loanAccountID}, userID={self.userID}, productID={self.productID}, accountName:{self.accountName},loanStartDate={self.loanStartDate}, loanMaturityDate={self.loanMaturityDate}, loanTerm={self.loanTerm}, loanAmount={self.loanAmount}, loanBalance={self.loanBalance}, loanPurpose={self.loanPurpose}, ltvRatio={self.ltvRatio}, interestRate={self.interestRate}, penaltyRate={self.penaltyRate}, loanEmployeeID={self.loanEmployeeID})"
+    return f"Loan_Account(loanAccountID={self.loanAccountID}, userID={self.userID}, productID={self.productID}, accountName:{self.accountName},loanStartDate={self.loanStartDate}, loanMaturityDate={self.loanMaturityDate}, loanTerm={self.loanTerm}, loanAmount={self.loanAmount}, loanBalance={self.loanBalance}, loanPurpose={self.loanPurpose}, ltvRatio={self.ltvRatio}, interestRate={self.interestRate}, penaltyRate={self.penaltyRate}, loanEmployeeID={self.loanEmployeeID}, ChosenColor: {self.chosenColor})"
 
   def __eq__(self, other):
     if isinstance(other, Loan_Account):

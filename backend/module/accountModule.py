@@ -1,7 +1,7 @@
 from module.databaseConnection import *
 from module.classes.user import User
 from module.depositModule import get_net_worth_deposit
-from module.loanModule import get_net_worth_loan
+from module.loanModule import get_net_worth_loan, get_credit_card_net_worth
 import time
 """
 
@@ -162,12 +162,14 @@ def edit_personal_detail(userID, familyName, givenName,
 def peek_detail(userID):
   net_worth_deposit = get_net_worth_deposit(userID)
   net_worth_loan = get_net_worth_loan(userID)
+  net_worth_credit_card = get_credit_card_net_worth(userID)
   return {
      "code": 200,
      "message": "Peek data successfully",
      "data": {
         "deposit_net_worth": net_worth_deposit,
-        "loan_net_worth": net_worth_loan
+        "loan_net_worth": net_worth_loan,
+        "net_worth_credit_card": net_worth_credit_card
      }
   }
 
