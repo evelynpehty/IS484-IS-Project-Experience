@@ -74,16 +74,13 @@ export default function LoanTransactionHistory() {
         }
     }
 
-    //const {state} = useLocation(); 
-    // const { transaction_item, id } = state;
-    const id = 321456789001 //to be removed after page linking is done
-    const { loanList } = useSelector((state) => state.loan); //to be commented out after page linking is done
-    const transitem = loanList.accountInformation[0] //to be replaced with data passed from loan-account-details page, data come from loan account details api not loan transactions api
+    const {state} = useLocation(); 
+    const { loan_item, id } = state;
 
-    const monthly_payment = transitem.Detail.monthly_payment
-    const LoanStartDate = transitem.LoanStartDate
-    const LoanMaturity = transitem.LoanMaturityDate
-    const schedule_for_payment = transitem.Detail.schedule_for_payment
+    const monthly_payment = loan_item.Detail.monthly_payment
+    const LoanStartDate = loan_item.LoanStartDate
+    const LoanMaturity = loan_item.LoanMaturityDate
+    const schedule_for_payment = loan_item.Detail.schedule_for_payment
 
     const [chipValue, setChipValue] = useState([]);
     const [selectedChip, setSelectedChip] = useState("");
@@ -93,7 +90,7 @@ export default function LoanTransactionHistory() {
     useEffect(() => {
         var curr = moment(LoanStartDate).year()
         var yearRange = []
-        for(let x = curr; x <= moment(LoanMaturity).year(); x++){
+        for(let x = curr; x <= moment().year(); x++){
             yearRange.push(curr.toString())
             curr += 1
         }
@@ -101,7 +98,7 @@ export default function LoanTransactionHistory() {
 
         const currentMonth = moment().month() +1 // jan=0, dec=11
         const currentYear = moment().year() 
-        var r_date =   currentMonth + "/1/" + currentYear //fixed repayment date to be first of the month
+        var r_date = currentMonth + "/1/" + currentYear //fixed repayment date to be first of the month
         const monthDifference =  Math.ceil(moment(new Date(r_date)).diff(new Date(LoanStartDate), 'months', true));
         const display = []
 

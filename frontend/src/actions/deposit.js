@@ -4,6 +4,7 @@ export const deposit = (UserID) => (dispatch) => {
     return deposit_service.getalldepositaccounts(UserID).then(
       (data) => {
         if(data.code === 200){
+          console.log(data.data)
           dispatch({
             type: "DEPOSIT_SUCCESS",
             payload: { depositList: data.data },

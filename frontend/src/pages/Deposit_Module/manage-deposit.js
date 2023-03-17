@@ -1,9 +1,11 @@
 // Packages
 import React from "react";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useParams } from 'react-router-dom';
 import { Link } from "react-router-dom";
+
+import { deposit, updateDepositAccount } from "../../actions/deposit"
 
 // MUI Components
 import { Container, Box, Typography, Paper, useTheme, styled } from "@mui/material";
@@ -43,6 +45,15 @@ function ManageDeposit() {
             bottom: 80,
             right: 16,
             backgroundColor: "#F7E6E6"
+        },
+
+        chipSelected: {
+            borderStyle: "solid",
+            borderColour: "gray"
+        }, 
+
+        chipUnSelected: {
+            borderStyle: "none"
         }
     }
 
@@ -55,12 +66,54 @@ function ManageDeposit() {
         borderRadius: 50,
       }));
 
-    const { id } = useParams()
+    const { id } = useParams() //depositAccountId
     const { depositList } = useSelector((state) => state.deposit);
     const deposit_item = depositList.filter(function (el)
     {
       return el.DepositAccountID === id
     })
+
+    const [accoutName, setAccountName] = useState(deposit_item[0].AccountName);
+    const [chosenColor, setChosenColor] = useState(deposit_item[0].ChosenColor);
+    const dispatch = useDispatch()
+    const colorChoiceArray = [
+        "linear-gradient(to top right, #E69F9F, #E60000)",
+        "linear-gradient(to top right, #DBBB9E, #FF7D1F)",
+        "linear-gradient(to top right, #A4B6D2, #0085FF)",
+        "linear-gradient(to top right, #B5A4D2, #745DFF)",
+        "linear-gradient(to top right, #D2A4C5, #FF42BF)"
+    ]
+
+    const onChangeAccountName = (e) => {
+        const input_accountName = e.target.value;
+        setAccountName(input_accountName);
+    };
+
+    function handleColourChange(index){
+        setChosenColor(colorChoiceArray[index])
+    }
+
+    const { user } = useSelector((state) => state.auth);
+    const UserID = user.data.UserID
+
+    const handleSave = () => {
+        
+        const input = {
+            "depositAccountID": id,
+            "newColor": chosenColor,
+            "newName": accoutName
+        }
+
+        console.log(input)
+        
+        dispatch(updateDepositAccount(input)).then((response)=>{
+            console.log(response)
+        }).then(()=>{
+            dispatch(deposit(UserID))
+        }).catch((error)=>{
+            console.log(error)
+        })
+    }
 
     return (
         <React.Fragment>
@@ -76,7 +129,7 @@ function ManageDeposit() {
                     {/* Account Name */}
                     <Typography style={ styles.label }>Enter a Name</Typography>
                     <Typography style={ styles.inputLabel }>Name of Account</Typography>
-                    <InputBox placeholder="Give a name for your account" defaultValue={ deposit_item[0].AccountName } />
+                    <InputBox placeholder="Give a name for your account" value={ accoutName } id="accountName" name="accountName" onChange={onChangeAccountName}/>
                     
                     {/* Appearance */}
                     <Typography style={ styles.label }>Appearance</Typography>
@@ -90,14 +143,18 @@ function ManageDeposit() {
                             gap: 2,
                         }}
                     >
-                        <Item sx={{ background: "linear-gradient(to top right, #E69F9F, #E60000)" }}></Item>
-                        <Item sx={{ background: "linear-gradient(to top right, #DBBB9E, #FF7D1F)" }}></Item>
-                        <Item sx={{ background: "linear-gradient(to top right, #A4B6D2, #0085FF)" }}></Item>
-                        <Item sx={{ background: "linear-gradient(to top right, #B5A4D2, #745DFF)" }}></Item>
-                        <Item sx={{ background: "linear-gradient(to top right, #D2A4C5, #FF42BF)" }}></Item>
+                        {
+                            colorChoiceArray.map((item,index)=> {
+                                return (
+                                    <>
+                                     <Item key={index} sx={{ background: `${item}` }} style={(item === chosenColor) ? styles.chipSelected : styles.chipUnSelected } onClick={() => handleColourChange(index)}></Item>
+                                    </>
+                                )
+                            })
+                        }
                     </Box>
 
-                    <PrimaryButton buttonText="SAVE" />          
+                    <PrimaryButton buttonText="SAVE" function={handleSave}/>          
                 </Box>
             </Container>
         </React.Fragment>
