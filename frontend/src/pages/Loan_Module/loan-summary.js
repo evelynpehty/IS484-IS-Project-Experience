@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 // MUI Components
 import Grid from '@mui/material/Unstable_Grid2';
-import { Container, Box, Typography, Card, CardContent } from "@mui/material";
+import { Container, Box, Typography, Card, CardContent, Button } from "@mui/material";
 
 // Customised Components
 import MainAppBar from "../../components/MainAppBar";
@@ -14,6 +14,9 @@ import OutlinedReusableButton from "../../components/OutlinedButton";
 import DepositCard from "../../components/DepositCard";
 import EditDepositCard from "../../components/EditDepositCard";
 import FabButton from "../../components/FabButton";
+
+import { ReactComponent as calculator } from "../../assets/icons/calculator-line.svg";
+
 
 
 function LoanSummary() {
@@ -95,6 +98,41 @@ function LoanSummary() {
                     <Grid container style={styles.grid} direction="row" justifyContent="space-between" alignItems="center">
                         <Typography style={styles.label} variant="h6">Quick Tools</Typography>
                     </Grid>
+                    <Grid container spacing={2}>
+                        <Grid item xs={4}>
+                            <Button variant="outlined">xs=4</Button>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Button variant="outlined">xs=4</Button>
+                        </Grid>
+                        <Grid item xs={8}>
+                            <Button variant="outlined">xs=8</Button>
+                        </Grid>
+                    </Grid>
+                    <Box>
+                        <Button variant="outlined">Loan Calculator</Button>
+                        <Button variant="outlined">Payment Reminder</Button>
+                        <Button variant="outlined">Repayment History</Button>
+                    </Box>
+
+                    {/* Cards of every loan account */}
+                    <Card style={styles.card}>
+                        <CardContent style={styles.cardContent}>
+                            <Box
+                                sx={{
+                                    display: 'grid',
+                                    gridTemplateColumns: { xs: '1fr 1fr' },
+                                    gap: 2,
+                                }}
+                            >
+                                <Typography sx={{ fontSize: 12 }} color="white">UBS</Typography>
+                            </Box>
+                            <Typography sx={{ fontSize: 16, fontWeight: "bold" }} color="white">111</Typography>
+                            <Typography sx={{ fontSize: 12 }} color="white">111</Typography>
+                            <Typography sx={{ fontSize: 12 }} textAlign="end" color="white">Available Balance</Typography>
+                            <Typography sx={{ fontSize: 16, fontWeight: "bold" }} textAlign="end" color="white">SGD $111</Typography>
+                        </CardContent>
+                    </Card>
 
                     {/* to beautify */}
                     {isEmpty && <p>You do not have any loan account</p>}
