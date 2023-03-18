@@ -1,12 +1,12 @@
 // Packages
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 
 // MUI Components
 import Grid from '@mui/material/Unstable_Grid2';
-import { Container, Box, Card, CardContent, Typography, Chip, Paper, Modal, InputLabel, FormControl, MenuItem, Select, Button, useTheme } from "@mui/material";
+import { Container, Box, Card, CardContent, Alert, Stack, Typography, AlertTitle, Chip, Paper, Modal, InputLabel, FormControl, MenuItem, Select, Button, useTheme } from "@mui/material";
 
 // Customised Components
 import SecondaryAppBar from "../../components/SecondaryAppBar";
@@ -15,6 +15,8 @@ import NeutralButton from "../../components/NeutralButton";
 // Assets (Images & Icons)
 import { ReactComponent as DeleteIcon } from "../../assets/icons/delete.svg";
 import { ReactComponent as AddIcon } from "../../assets/icons/add.svg";
+import PrimaryButton from "../../components/PrimaryButton";
+import {loan, updateLoanReminder,removeLoanReminder } from "../../actions/loan";
 
 function PaymentReminders() {
     // Styling for Loan Account Details Page
@@ -59,16 +61,80 @@ function PaymentReminders() {
     }
 
     // Fetch Data
+    const { user } = useSelector((state) => state.auth);
+    const UserID = user.data.UserID
+
     const {state} = useLocation(); 
-    const { id } = state;
-    const { loanList } = useSelector((state) => state.loan);
-    const loan_DisplayArray = loanList.accountInformation
-    console.log(loan_DisplayArray)
+    const { loan_item, id } = state;
+
+    const [tempReminderArray, setTempReminderArray] = useState(loan_item[0].Reminder.data)
+    const [toAdd, setToAdd] = useState([])
+    const [toDelete, setToDelete] = useState([])
+    const [days, setDays] = useState(1)
+    const [period, setPeriod] = useState("day")
+    const [status, setStatus] = useState("")
+    const dispatch = useDispatch()
+
+    const handleAdd = () => {
+        setStatus("")
+
+        const input = {
+            "loanAccountID": id,
+            "ReminderType": `Remind ${days} ${period} before deduction`
+        }
+
+        tempReminderArray.push(input)
+        toAdd.push(input)
+        setOpen(false)
+    }
 
     // Delete Chip
-    const handleDelete = () => {
-        console.info('You clicked the delete icon.');
+    function handleDelete (reminder_obj) {
+        setStatus("")
+
+        if (reminder_obj.hasOwnProperty("LoanReminderID")) {
+            const filter = tempReminderArray.filter(function (el) {
+                return el.LoanReminderID !== reminder_obj.LoanReminderID;
+            });
+            setTempReminderArray(filter)
+            toDelete.push(reminder_obj.LoanReminderID)
+        }  
+        else{
+            const filter = tempReminderArray.filter(function (el) {
+                return el !== reminder_obj;
+            });
+            setTempReminderArray(filter)
+
+            const filter2 = toAdd.filter(function (el) {
+                return el !== reminder_obj;
+            });
+            setToAdd(filter2)
+        } 
     };
+
+    const handleSave = () => {
+        setStatus("")
+       const promiseArray = [] 
+
+       if(toAdd.length !== 0){
+            toAdd.forEach(input => {
+                promiseArray.push(dispatch(updateLoanReminder(input)))
+            });
+       }
+
+       if(toDelete.length !== 0){
+            toDelete.forEach(r_id =>{
+                promiseArray.push(dispatch(removeLoanReminder(r_id)))
+            })
+       }
+        
+        promiseArray.push(dispatch(loan(UserID)))
+        Promise.all(promiseArray).then(()=>{
+            setStatus("success")
+        }).catch((error)=>{
+            setStatus("error")
+        })
+    }
 
     // Modal Component Functions
     const [open, setOpen] = React.useState(false);
@@ -81,7 +147,21 @@ function PaymentReminders() {
             <SecondaryAppBar link={ `/loan-account-details/${id}` } text="Loan Details" />
             <Container maxWidth="lg">
                 <Box sx={{ pt: 10, pb: 10 }}>
-                    { loan_DisplayArray.map((value, index) => {
+                    {status==="success" && <Stack sx={{ width: '100%', mb:2 }} spacing={2}>
+                        <Alert severity="success" onClose={() => {setStatus("")}}>
+                            <AlertTitle>Success</AlertTitle>
+                            {"Loan Reminder Updated!"}
+                        </Alert>
+                    </Stack>}
+
+                    {status==="error" && <Stack sx={{ width: '100%', mb:2 }} spacing={2}>
+                        <Alert severity="error" onClose={() => {setStatus("")}}>
+                            <AlertTitle>Error</AlertTitle>
+                            {"Fail to Update. Please Try Again"}
+                        </Alert>
+                    </Stack>}
+
+                    { loan_item.map((value, index) => {
                         return (
                         <Card style={ styles.card } elevation={ 4 }>
                             <CardContent style={ styles.cardContent }>
@@ -103,20 +183,20 @@ function PaymentReminders() {
                                         </Typography>
                                     </Grid>
                                     <Grid xs={12}>
-                                        {/* <Chip label="Deletable" onDelete={handleDelete} />
-                                        <Chip label="Deletable" onDelete={handleDelete} /> */}
-                                        <Paper elevation={ 5 } sx={{ p: 1, borderRadius: 10, mt: 3 }}>
-                                            <Grid container direction="row" justifyContent="space-between" alignItems="center">
-                                                Remind 1 day before deduction
-                                                <DeleteIcon />
-                                            </Grid>
-                                        </Paper>
-                                        <Paper elevation={ 5 } sx={{ p: 1, borderRadius: 10, mt: 3 }}>
-                                            <Grid container direction="row" justifyContent="space-between" alignItems="center">
-                                            Remind 3 days before deduction
-                                            <DeleteIcon />
-                                            </Grid>
-                                        </Paper>
+                                        {
+                                            tempReminderArray.map((reminder, index) => {
+                                                return (
+                                                    <>
+                                                        <Paper elevation={ 5 } sx={{ p: 1, borderRadius: 10, mt: 3 }}>
+                                                            <Grid key={index} container direction="row" justifyContent="space-between" alignItems="center">
+                                                                {reminder.ReminderType}
+                                                                <DeleteIcon onClick={()=>handleDelete(reminder)}/>
+                                                            </Grid>
+                                                        </Paper>
+                                                    </>
+                                                )
+                                            })
+                                        }
                                     </Grid>
                                     <Grid xs={12} sx={{ mt: 3 }}>
                                         <Box onClick={ handleOpen }>
@@ -140,8 +220,8 @@ function PaymentReminders() {
                                                             required
                                                             labelId="demo-simple-select-standard-label"
                                                             id="demo-simple-select-standard"
-                                                            // value={age}
-                                                            // onChange={handleChange}
+                                                            value={days}
+                                                            onChange={e => setDays(e.target.value)}
                                                             label="Before Deduction"
                                                             >
                                                                 { num_array.map(index => <MenuItem value={ index+1 }>{ index+1 }</MenuItem>) }
@@ -155,13 +235,10 @@ function PaymentReminders() {
                                                             required
                                                             labelId="demo-simple-select-standard-label"
                                                             id="demo-simple-select-standard"
-                                                            // value={age}
-                                                            // onChange={handleChange}
+                                                            value={period}
+                                                            onChange={e => setPeriod(e.target.value)}
                                                             label="Period"
                                                             >
-                                                                <MenuItem value="">
-                                                                    <em>None</em>
-                                                                </MenuItem>
                                                                 <MenuItem value="day">Day</MenuItem>
                                                                 <MenuItem value="week">Week</MenuItem>
                                                                 <MenuItem value="month">Month</MenuItem>
@@ -172,7 +249,7 @@ function PaymentReminders() {
                                             
                                                 <Grid container direction="row" justifyContent="end" alignItems="center">
                                                     <NeutralButton function={ handleClose } text="CANCEL" />
-                                                    <NeutralButton text="SAVE" />
+                                                    <NeutralButton text="SAVE" function={ handleAdd }/>
                                                 </Grid>
                                             </Box>
                                         </Modal>
@@ -182,6 +259,7 @@ function PaymentReminders() {
                         </Card>
                         )               
                     })}
+                <   PrimaryButton buttonText="SAVE" function={handleSave}/>  
                 </Box>
             </Container>
         </React.Fragment>

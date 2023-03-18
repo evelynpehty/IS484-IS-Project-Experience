@@ -123,7 +123,7 @@ function LoanAccountDetails() {
 
     // Navigation to Payment Reminders Page
     const handlePaymentReminders = () => {
-        navigate("/payment-reminders", { replace: true, state: {id: id} })
+        navigate("/payment-reminders", { replace: true, state: {loan_item: loan_item, id: id} })
     }
 
     // Navigation to View All Loan Repayment Transaction
