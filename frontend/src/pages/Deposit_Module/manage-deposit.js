@@ -122,9 +122,9 @@ function ManageDeposit() {
                 <Box sx={{ pt: 10, pb: 10 }}>
 
                     {/* Account Type */}
-                    <Typography style={ styles.label }>Account Type</Typography>
-                    <Typography style={ styles.inputLabel }>Account Type</Typography>
-                    <InputBox disabled={ true } value={ deposit_item[0].ProductID } />
+                    <Typography style={ styles.label }>Product Name</Typography>
+                    <Typography style={ styles.inputLabel }>Product Name</Typography>
+                    <InputBox disabled={ true } value={ deposit_item[0].ProductName } />
                     
                     {/* Account Name */}
                     <Typography style={ styles.label }>Enter a Name</Typography>
