@@ -27,6 +27,7 @@ import LoanSummary from './pages/Loan_Module/loan-summary.js'
 import LoanTransactionHistory from './pages/Loan_Module/view-loan-transaction-history.js'
 import LoanAccountDetails from './pages/Loan_Module/loan-account-details.js'
 import PaymentReminders from "./pages/Loan_Module/payment-reminders.js"
+import ManageLoan from "./pages/Loan_Module/manage-loan.js"
 
 // Customised Components
 import MainBottomNavigation from "./components/MainBottomNavigation";
@@ -89,6 +90,7 @@ useEffect(() => {
               <Route exact path={"/loan-account-details/:id"} element={<LoanAccountDetails />} />
               <Route exact path={"/view-loan-transaction-history"} element={<LoanTransactionHistory />} />
               <Route exact path={"/payment-reminders"} element={<PaymentReminders />} />
+              <Route exact path={"/manage-loan/:id"} element={<ManageLoan />} />
               
             </Routes>
             {(showBottomNavigation) && <MainBottomNavigation></MainBottomNavigation>}

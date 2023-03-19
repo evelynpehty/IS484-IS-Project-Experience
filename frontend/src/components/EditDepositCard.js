@@ -13,7 +13,6 @@ const DepositCard = (props) => {
 
     const styles = {
         card: {
-            background: "linear-gradient(to top right, #E69F9F, #E60000)",
             marginBottom: "24px",
             borderRadius: "15px",
             padding: 10
@@ -25,9 +24,9 @@ const DepositCard = (props) => {
     }
 
     return (
-        <Card style={ styles.card } key={ props.index } >
+        <Card style={ styles.card } key={ props.index } sx={{background: `${props.chosenColor}`}}>
             <CardContent style={ styles.cardContent }>
-                <Grid container style={ styles.grid } justifyContent="center  ">
+                <Grid container style={ styles.grid } justifyContent="center">
                     <Grid xs={ 8 }>
                         <Typography sx={{ fontSize: 12 }} color="white">
                             UBS

@@ -21,6 +21,7 @@ import FabButton from "../../components/FabButton";
 import { ReactComponent as Calculator } from "../../assets/icons/calculator-line.svg";
 import { ReactComponent as Bell } from "../../assets/icons/bell-line.svg";
 import { ReactComponent as Repayment } from "../../assets/icons/paper-fold-text-line.svg";
+import { ReactComponent as EditIcon } from "../../assets/icons/edit-white.svg"
 
 
 function LoanSummary() {
@@ -80,14 +81,14 @@ function LoanSummary() {
 
     // Get list of loan account from state
     const { loanList } = useSelector((state) => state.loan);
-    const loan_DisplayArray = loanList.accountInformation;
-   
+    
     const outstanding_Loan = loanList.totalOutstandLoan
     const total_repayment = loanList.totalMonthlyRepayment
 
     const [isEmpty, setIsEmpty] = useState(false);
     const [totalLoanAmt, setTotalLoanAmt] = useState(false);
     const [repaymentDate, setRepaymentDate] = useState(false);
+    const [loan_DisplayArray, setLoanDisplayArray] = useState(loanList.accountInformation);
 
     if(loan_DisplayArray.length === 0){
          setIsEmpty(true)
@@ -103,17 +104,16 @@ function LoanSummary() {
         var temp_loan = 0
         loan_DisplayArray.forEach(element => {
             temp_loan += element.LoanAmount
-
             const monthDifference =  Math.ceil(moment(new Date(r_date)).diff(new Date(element.LoanStartDate), 'months', true));
             const schedule_for_payment = element.Detail.schedule_for_payment
             const end_balance = schedule_for_payment[monthDifference].end_balance
-            element["end_balance"] = end_balance  
-
+            element["end_balance"] = end_balance.toLocaleString("en-US")  
             const total_paid = (element.LoanAmount - end_balance).toFixed(2)    
             element["progress"]= (total_paid/ element.LoanAmount) * 100     
             
         });
         setTotalLoanAmt(temp_loan)
+        setLoanDisplayArray(loan_DisplayArray)
 
     }, []);
 
@@ -181,7 +181,7 @@ function LoanSummary() {
                             </Card>
                         </Box>
                     </Grid>
-
+                   
                     {/* Cards of every loan account */}
                     { !isEmpty && loan_DisplayArray.map((item,index)=>{
                             return (
@@ -189,26 +189,52 @@ function LoanSummary() {
                                 <Link to={`/loan-account-details/${item.LoanAccountID}`} key={item.LoanAccountID}> 
                                     <Card style={styles.card}>
                                         <CardContent style={styles.cardContent}>
-                                            <Typography sx={{ fontSize: 12 }} color="white">
-                                                { item.ProductName }
-                                            </Typography>
-                                            <Typography sx={{ fontSize: 16, fontWeight: "bold" }} color="white">
-                                                { item.AccountName } <Chip style={styles.chip} size="small" label={`${item.InterestRate}%`} />
-                                            </Typography>
-                                            <Typography sx={{ fontSize: 12 }} color="white">
-                                                { `SGD $${ item.Detail.monthly_payment.toLocaleString("en-US") }` } due on {repaymentDate} {/* !!! here need to connect the repayment value and date */}
-                                            </Typography>
+                                            {show && 
+                                                <Grid container style={ styles.grid } justifyContent="center  ">
+                                                    <Grid xs={8}>
+                                                        <Typography sx={{ fontSize: 12 }} color="white">
+                                                            { item.ProductName }
+                                                        </Typography>
+                                                        <Typography sx={{ fontSize: 16, fontWeight: "bold" }} color="white">
+                                                        { item.AccountName } <Chip style={styles.chip} size="small" label={`${item.InterestRate}%`} />
+                                                    </Typography>
+                                                    <Typography sx={{ fontSize: 12 }} color="white">
+                                                        { `SGD $${ (item.Detail.monthly_payment).toLocaleString("en-US")}` } due on {repaymentDate} {/* !!! here need to connect the repayment value and date */}
+                                                    </Typography>
+                                                </Grid>
+                                                    <Grid xs={ 4 }>
+                                                        <Typography textAlign="end" >
+                                                            <Link to={ `/manage-loan/${item.LoanAccountID}` }> 
+                                                                <EditIcon />
+                                                            </Link>
+                                                        </Typography>
+                                                    </Grid>
+                                                </Grid>
+                                            }
+                                            { !show &&
+                                                <>
+                                                    <Typography sx={{ fontSize: 12 }} color="white">
+                                                    { item.ProductName }
+                                                    </Typography>
+                                                    <Typography sx={{ fontSize: 16, fontWeight: "bold" }} color="white">
+                                                        { item.AccountName } <Chip style={styles.chip} size="small" label={`${item.InterestRate}%`} />
+                                                    </Typography>
+                                                    <Typography sx={{ fontSize: 12 }} color="white">
+                                                        { `SGD $${ (item.Detail.monthly_payment).toLocaleString("en-US")}` } due on {repaymentDate} {/* !!! here need to connect the repayment value and date */}
+                                                    </Typography>
+                                                </>
+                                            }
                                             <Grid container direction="row" justifyContent="space-between" alignItems="center" sx={{mt:1, mb: 2}}>
                                                     <Grid xs={12}>
                                                         <BorderLinearProgress variant="determinate" value={item.progress} />
                                                         <Typography sx={{ fontSize: 14, fontWeight:"light", textAlign: "center" }} color="#E60000">                                        </Typography>
                                                     </Grid>
-                                                </Grid>
+                                            </Grid>
                                             <Typography sx={{ fontSize: 12 }} textAlign="end" color="white">
                                                 Outstanding Amount
                                             </Typography>
                                             <Typography sx={{ fontSize: 16, fontWeight: "thin" }} textAlign="end" color="white">
-                                                { `SGD $${ item.end_balance.toLocaleString("en-US") }` }
+                                                { `SGD $${ item.end_balance}` }
                                             </Typography>
                                         </CardContent>
                                     </Card>
@@ -220,7 +246,7 @@ function LoanSummary() {
                     {/* to beautify */}
                     {isEmpty && <p>You do not have any loan account</p>}
                 </Box>
-                <FabButton />
+                {/*<FabButton />*/}
             </Container>
         </React.Fragment>
     )

@@ -5,22 +5,19 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from 'react-router-dom';
 import { Link } from "react-router-dom";
 
-import { deposit, updateDepositAccount } from "../../actions/deposit"
+import { loan, updateLoanAccount } from "../../actions/loan"
 
 // MUI Components
-import { Container, Box, Typography, Paper, useTheme, styled, Stack, Alert, AlertTitle } from "@mui/material";
+import { Container, Box, Typography, Paper, Stack, useTheme, styled, Alert, AlertTitle } from "@mui/material";
 
 // Customised Components
 import SecondaryAppBar from "../../components/SecondaryAppBar";
 import PrimaryButton from "../../components/PrimaryButton";
 import WhiteReusableButton from "../../components/WhiteButton";
 import OutlinedReusableButton from "../../components/OutlinedButton";
-import DepositCard from "../../components/DepositCard";
-import EditDepositCard from "../../components/EditDepositCard";
-import FabButton from "../../components/FabButton";
 import InputBox from "../../components/InputBox"
 
-function ManageDeposit() {
+function ManageLoan() {
     // Styling for Manage Deposit Page
     const theme = useTheme();
     const styles = {
@@ -66,16 +63,16 @@ function ManageDeposit() {
         borderRadius: 50,
       }));
 
-    const { id } = useParams() //depositAccountId
-    const { depositList } = useSelector((state) => state.deposit);
-    
-    const deposit_item = depositList.filter(function (el)
+    const { id } = useParams() //loanAccountID
+    const { loanList } = useSelector((state) => state.loan);
+    const loan_DisplayArray = loanList.accountInformation
+    const loan_item = loan_DisplayArray.filter(function (el)
     {
-      return el.DepositAccountID === id
+        return el.LoanAccountID === id
     })
 
-    const [accoutName, setAccountName] = useState(deposit_item[0].AccountName);
-    const [chosenColor, setChosenColor] = useState(deposit_item[0].ChosenColor);
+    const [accoutName, setAccountName] = useState(loan_item[0].AccountName);
+    const [chosenColor, setChosenColor] = useState(loan_item[0].ChosenColor);
     const [status, setStatus] = useState("")
     const dispatch = useDispatch()
     const colorChoiceArray = [
@@ -101,17 +98,17 @@ function ManageDeposit() {
     const handleSave = () => {
         setStatus("")
         const input = {
-            "depositAccountID": id,
+            "loanAccountID": id,
             "newColor": chosenColor,
             "newName": accoutName
         }
 
         console.log(input)
         
-        dispatch(updateDepositAccount(input)).then((response)=>{
+        dispatch(updateLoanAccount(input)).then((response)=>{
             console.log(response)
         }).then(()=>{
-            dispatch(deposit(UserID)).then(()=>{
+            dispatch(loan(UserID)).then(()=>{
                 setStatus("success")
             })
         }).catch((error)=>{
@@ -121,26 +118,27 @@ function ManageDeposit() {
 
     return (
         <React.Fragment>
-            <SecondaryAppBar link={ "/deposit" } text="All Accounts" />
+            <SecondaryAppBar link={ "/loan" } text="All Accounts" />
             <Container maxWidth="lg">
                 <Box sx={{ pt: 10, pb: 10 }}>
                     {status==="success" && <Stack sx={{ width: '100%', mb:2 }} spacing={2}>
-                            <Alert severity="success" onClose={() => {setStatus("")}}>
-                                <AlertTitle>Success</AlertTitle>
-                                {"Deposit Account Updated!"}
-                            </Alert>
-                        </Stack>}
+                        <Alert severity="success" onClose={() => {setStatus("")}}>
+                            <AlertTitle>Success</AlertTitle>
+                            {"Loan Account Updated!"}
+                        </Alert>
+                    </Stack>}
 
-                        {status==="error" && <Stack sx={{ width: '100%', mb:2 }} spacing={2}>
-                            <Alert severity="error" onClose={() => {setStatus("")}}>
-                                <AlertTitle>Error</AlertTitle>
-                                {"Fail to Update. Please Try Again"}
-                            </Alert>
-                        </Stack>}
+                    {status==="error" && <Stack sx={{ width: '100%', mb:2 }} spacing={2}>
+                        <Alert severity="error" onClose={() => {setStatus("")}}>
+                            <AlertTitle>Error</AlertTitle>
+                            {"Fail to Update. Please Try Again"}
+                        </Alert>
+                    </Stack>}
+
                     {/* Account Type */}
                     <Typography style={ styles.label }>Product Name</Typography>
                     <Typography style={ styles.inputLabel }>Product Name</Typography>
-                    <InputBox disabled={ true } value={ deposit_item[0].ProductName } />
+                    <InputBox disabled={ true } value={ loan_item[0].ProductName } />
                     
                     {/* Account Name */}
                     <Typography style={ styles.label }>Enter a Name</Typography>
@@ -177,4 +175,4 @@ function ManageDeposit() {
     );
 }
 
-export default ManageDeposit;
+export default ManageLoan;
