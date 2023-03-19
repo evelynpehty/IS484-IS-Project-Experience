@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
+import moment from 'moment';
 
 // MUI Components
 import Grid from '@mui/material/Unstable_Grid2';
@@ -62,13 +63,6 @@ function LoanSummary() {
         },
     }
 
-    // Change State of page
-    const [show, setShow] = useState(false);
-
-    // Get list of loan account from state
-    const { loanList } = useSelector((state) => state.loan);
-    const loan_DisplayArray = loanList.accountInformation;
-
     const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
         height: 20,
         borderRadius: 5,
@@ -81,17 +75,48 @@ function LoanSummary() {
         },
     }));
 
-    // console.log(loan_DisplayArray[0])
-    // const { loan_transactionHistoryList } = useSelector((state) => state.loan);
-    // console.log(loan_transactionHistoryList)
+    // Change State of page
+    const [show, setShow] = useState(false);
+
+    // Get list of loan account from state
+    const { loanList } = useSelector((state) => state.loan);
+    const loan_DisplayArray = loanList.accountInformation;
+   
+    const outstanding_Loan = loanList.totalOutstandLoan
+    const total_repayment = loanList.totalMonthlyRepayment
+
     const [isEmpty, setIsEmpty] = useState(false);
+    const [totalLoanAmt, setTotalLoanAmt] = useState(false);
+    const [repaymentDate, setRepaymentDate] = useState(false);
 
-    // if(loan_DisplayArray.length === 0){
-    //     setIsEmpty(true)
-    // }
+    if(loan_DisplayArray.length === 0){
+         setIsEmpty(true)
+    }
 
-    // !!! fake data used to test the progress bar
-    const progress = 50;
+    useEffect(() => {
+        const currentMonth = moment().month() +1 // jan=0, dec=11
+        const currentYear = moment().year() 
+        var r_date = currentMonth + "/1/" + currentYear //fixed repayment date to be first of the month
+        var next_repayment = (moment(r_date).add(1, 'M')).format("DD MMM YYYY")
+        setRepaymentDate(next_repayment)
+    
+        var temp_loan = 0
+        loan_DisplayArray.forEach(element => {
+            temp_loan += element.LoanAmount
+
+            const monthDifference =  Math.ceil(moment(new Date(r_date)).diff(new Date(element.LoanStartDate), 'months', true));
+            const schedule_for_payment = element.Detail.schedule_for_payment
+            const end_balance = schedule_for_payment[monthDifference].end_balance
+            element["end_balance"] = end_balance  
+
+            const total_paid = (element.LoanAmount - end_balance).toFixed(2)    
+            element["progress"]= (total_paid/ element.LoanAmount) * 100     
+            
+        });
+        setTotalLoanAmt(temp_loan)
+
+    }, []);
+
 
     return (
         <React.Fragment>
@@ -113,16 +138,16 @@ function LoanSummary() {
                             {/* Loan Summary left side */}
                             <CardContent style={styles.cardContent}>
                                 <Typography sx={{ fontSize: 12 }} color="grey">OUTSTANDING LOANS</Typography>
-                                <Typography sx={{ fontSize: 18 }} color="#E60000" fontWeight="bold">S$800,000.50</Typography>
-                                <Typography sx={{ fontSize: 12 }} color="grey" fontWeight="light">Next Repayment:</Typography>
+                                <Typography sx={{ fontSize: 18 }} color="#E60000" fontWeight="bold">{ `SGD $${ outstanding_Loan.toLocaleString("en-US") }` }</Typography>
+                                <Typography sx={{ fontSize: 12 }} color="grey" fontWeight="light">Next Repayment: {repaymentDate}</Typography>
                             </CardContent>
 
                             {/* Loan Summary right side */}
                             <CardContent style={styles.cardContent}>
                                 <Typography sx={{ fontSize: 12 }} color="grey">TOTAL LOAN AMOUNT</Typography>
-                                <Typography sx={{ fontSize: 16 }} color="#E60000" marginBottom="12px">S$200,000.10</Typography>
-                                <Typography sx={{ fontSize: 12 }} color="grey">MONTHLY REPAYMENT</Typography>
-                                <Typography sx={{ fontSize: 16 }} color="#E60000">S$2,000.10</Typography>
+                                <Typography sx={{ fontSize: 16 }} color="#E60000" marginBottom="12px">{ `SGD $${ totalLoanAmt.toLocaleString("en-US") }` }</Typography>
+                                <Typography sx={{ fontSize: 12 }} color="grey">Total Repayment</Typography>
+                                <Typography sx={{ fontSize: 16 }} color="#E60000">{ `SGD $${ total_repayment.toLocaleString("en-US") }` }</Typography>
                             </CardContent>
                         </Box>
                     </Card>
@@ -134,7 +159,7 @@ function LoanSummary() {
                             sx={{
                                 p: 2,
                                 display: 'grid',
-                                gridTemplateColumns: { xs: '1fr 1fr 1fr' },
+                                gridTemplateColumns: { xs: '1fr 1fr' },
                                 gap: 2,
                             }}
                         >
@@ -142,15 +167,7 @@ function LoanSummary() {
                                 <CardContent sx={{ pt: "24px", textAlign: "center" }}>
                                     <Calculator className="small-icon" />
                                     <Typography sx={{ fontSize: 10, fontWeight: "bold" }} color="text.secondary" gutterBottom>
-                                        Loan Calculator
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-                            <Card style={styles.card2}>
-                                <CardContent sx={{ pt: "24px", textAlign: "center" }}>
-                                    <Bell className="small-icon" />
-                                    <Typography sx={{ fontSize: 10, fontWeight: "bold" }} color="text.secondary" gutterBottom>
-                                        Payment Reminders
+                                        Net Worth
                                     </Typography>
                                 </CardContent>
                             </Card>
@@ -158,7 +175,7 @@ function LoanSummary() {
                                 <CardContent sx={{ pt: "24px", textAlign: "center" }}>
                                     <Repayment className="small-icon" />
                                     <Typography sx={{ fontSize: 10, fontWeight: "bold" }} color="text.secondary" gutterBottom>
-                                        Repayment History
+                                        All Repayments
                                     </Typography>
                                 </CardContent>
                             </Card>
@@ -166,33 +183,40 @@ function LoanSummary() {
                     </Grid>
 
                     {/* Cards of every loan account */}
-                    {/* !!! need to use map to auto populate according to number of loan the customer has */}
-                    <Card style={styles.card}>
-                        <CardContent style={styles.cardContent}>
-                            <Typography sx={{ fontSize: 12 }} color="white">
-                                UBS Mortgage First Home
-                            </Typography>
-                            <Typography sx={{ fontSize: 16, fontWeight: "bold" }} color="white">
-                                Mortgage Loan <Chip style={styles.chip} size="small" label={`50 %`} />
-                            </Typography>
-                            <Typography sx={{ fontSize: 12 }} color="white">
-                                S$2,000 due on 21 Apr 2021 {/* !!! here need to connect the repayment value and date */}
-                            </Typography>
-                            <Grid container direction="row" justifyContent="space-between" alignItems="center" sx={{mt:1, mb: 2}}>
-                                    <Grid xs={12}>
-                                        <BorderLinearProgress variant="determinate" value={progress} />
-                                        <Typography sx={{ fontSize: 14, fontWeight:"light", textAlign: "center" }} color="#E60000">                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                            <Typography sx={{ fontSize: 12 }} textAlign="end" color="white">
-                                Outstanding Amount
-                            </Typography>
-                            <Typography sx={{ fontSize: 16, fontWeight: "thin" }} textAlign="end" color="white">
-                                SGD $1,200,000
-                            </Typography>
-                        </CardContent>
-                    </Card>
-
+                    { !isEmpty && loan_DisplayArray.map((item,index)=>{
+                            return (
+                                <>
+                                <Link to={`/loan-account-details/${item.LoanAccountID}`} key={item.LoanAccountID}> 
+                                    <Card style={styles.card}>
+                                        <CardContent style={styles.cardContent}>
+                                            <Typography sx={{ fontSize: 12 }} color="white">
+                                                { item.ProductName }
+                                            </Typography>
+                                            <Typography sx={{ fontSize: 16, fontWeight: "bold" }} color="white">
+                                                { item.AccountName } <Chip style={styles.chip} size="small" label={`${item.InterestRate}%`} />
+                                            </Typography>
+                                            <Typography sx={{ fontSize: 12 }} color="white">
+                                                { `SGD $${ item.Detail.monthly_payment.toLocaleString("en-US") }` } due on {repaymentDate} {/* !!! here need to connect the repayment value and date */}
+                                            </Typography>
+                                            <Grid container direction="row" justifyContent="space-between" alignItems="center" sx={{mt:1, mb: 2}}>
+                                                    <Grid xs={12}>
+                                                        <BorderLinearProgress variant="determinate" value={item.progress} />
+                                                        <Typography sx={{ fontSize: 14, fontWeight:"light", textAlign: "center" }} color="#E60000">                                        </Typography>
+                                                    </Grid>
+                                                </Grid>
+                                            <Typography sx={{ fontSize: 12 }} textAlign="end" color="white">
+                                                Outstanding Amount
+                                            </Typography>
+                                            <Typography sx={{ fontSize: 16, fontWeight: "thin" }} textAlign="end" color="white">
+                                                { `SGD $${ item.end_balance.toLocaleString("en-US") }` }
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </Link>
+                                </>
+                            )
+                        })
+                    }
                     {/* to beautify */}
                     {isEmpty && <p>You do not have any loan account</p>}
                 </Box>
