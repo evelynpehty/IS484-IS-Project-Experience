@@ -98,7 +98,6 @@ function LoanSummary() {
             <MainAppBar />
             <Container maxWidth="lg">
                 <Box sx={{ pt: 10, pb: 10 }}>
-
                     {/* Loan Summary */}
                     <Grid container style={styles.grid} direction="row" justifyContent="space-between" alignItems="center">
                         <Typography style={styles.label} variant="h6">Loan Accounts</Typography>
@@ -165,6 +164,64 @@ function LoanSummary() {
                             </Card>
                         </Box>
                     </Grid>
+                    <Card style={styles.card}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                            <CardContent style={styles.cardContent}>
+                                <Typography sx={{ fontSize: 12 }} color="grey">OUTSTANDING LOANS</Typography>
+                                <Typography sx={{ fontSize: 18 }} color="#E60000" fontWeight="bold">S$123,456.01</Typography>
+                                <Typography sx={{ fontSize: 12 }} color="grey" fontWeight="light">Next Repayment:</Typography>
+
+                            </CardContent>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
+                            <CardContent style={styles.cardContent}>
+                                <Typography sx={{ fontSize: 12 }} color="grey">TOTAL LOAN AMOUNT</Typography>
+                                <Typography sx={{ fontSize: 16 }} color="#E60000" marginBottom="12px">S$200,000.18</Typography>
+                                <Typography sx={{ fontSize: 12 }} color="grey">MONTHLY REPAYMENT</Typography>
+                                <Typography sx={{ fontSize: 16 }} color="#E60000">S$2,000.18</Typography>
+                            </CardContent>
+                        </Box>
+                    </Card>
+
+                    {/* Quick Tools */}
+                    <Grid container style={styles.grid} direction="row" justifyContent="space-between" alignItems="center">
+                        <Typography style={styles.label} variant="h6">Quick Tools</Typography>
+                    </Grid>
+                    <Grid container spacing={2}>
+                        <Grid item xs={4}>
+                            <Button variant="outlined">xs=4</Button>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Button variant="outlined">xs=4</Button>
+                        </Grid>
+                        <Grid item xs={8}>
+                            <Button variant="outlined">xs=8</Button>
+                        </Grid>
+                    </Grid>
+                    <Box>
+                        <Button variant="outlined">Loan Calculator</Button>
+                        <Button variant="outlined">Payment Reminder</Button>
+                        <Button variant="outlined">Repayment History</Button>
+                    </Box>
+
+                    {/* Cards of every loan account */}
+                    <Card style={styles.card}>
+                        <CardContent style={styles.cardContent}>
+                            <Box
+                                sx={{
+                                    display: 'grid',
+                                    gridTemplateColumns: { xs: '1fr 1fr' },
+                                    gap: 2,
+                                }}
+                            >
+                                <Typography sx={{ fontSize: 12 }} color="white">UBS</Typography>
+                            </Box>
+                            <Typography sx={{ fontSize: 16, fontWeight: "bold" }} color="white">111</Typography>
+                            <Typography sx={{ fontSize: 12 }} color="white">111</Typography>
+                            <Typography sx={{ fontSize: 12 }} textAlign="end" color="white">Available Balance</Typography>
+                            <Typography sx={{ fontSize: 16, fontWeight: "bold" }} textAlign="end" color="white">SGD $111</Typography>
+                        </CardContent>
+                    </Card>
 
                     {/* Cards of every loan account */}
                     {/* !!! need to use map to auto populate according to number of loan the customer has */}
