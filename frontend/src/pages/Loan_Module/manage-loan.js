@@ -104,13 +104,10 @@ function ManageLoan() {
         }
 
         console.log(input)
-        
+
         dispatch(updateLoanAccount(input)).then((response)=>{
             console.log(response)
-        }).then(()=>{
-            dispatch(loan(UserID)).then(()=>{
-                setStatus("success")
-            })
+            setStatus("success")
         }).catch((error)=>{
             setStatus("error")
         })

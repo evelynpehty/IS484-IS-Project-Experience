@@ -110,13 +110,20 @@ function ManageDeposit() {
         
         dispatch(updateDepositAccount(input)).then((response)=>{
             console.log(response)
+            setStatus("success")
+        }).catch((error)=>{
+            setStatus("error")
+        })
+
+        /*dispatch(updateDepositAccount(input)).then((response)=>{
+            console.log(response)
         }).then(()=>{
             dispatch(deposit(UserID)).then(()=>{
                 setStatus("success")
             })
         }).catch((error)=>{
             setStatus("error")
-        })
+        })*/
     }
 
     return (

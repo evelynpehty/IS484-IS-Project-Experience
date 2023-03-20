@@ -1,7 +1,6 @@
 const initialState = {
     loanList: [],
-    loan_transactionHistoryList: [],
-    loan_reminder: []
+    loan_transactionHistoryList: []
 }
 
 const loanReducer = (state = initialState, action) => {
@@ -28,6 +27,22 @@ switch (type) {
         ...state,
         loan_transactionHistoryList: []
     };
+    case "UPDATE_LOAN_SUCCESS":
+      const { loanList } = state
+
+      const arr = loanList.accountInformation
+
+      for(let index = 0; index < arr.length; index++){
+        if(arr[index].LoanAccountID === payload.loanAccountID){
+          loanList.accountInformation[index].ChosenColor =payload.newColor;
+          loanList.accountInformation[index].AccountName =payload.newName;
+        }
+      }
+
+      return {
+          ...state,
+          loanList: loanList
+      };      
     default:
     return state;
   }
