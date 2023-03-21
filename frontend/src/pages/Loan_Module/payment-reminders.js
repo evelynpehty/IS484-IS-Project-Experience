@@ -17,6 +17,7 @@ import { ReactComponent as DeleteIcon } from "../../assets/icons/delete.svg";
 import { ReactComponent as AddIcon } from "../../assets/icons/add.svg";
 import PrimaryButton from "../../components/PrimaryButton";
 import {loan, updateLoanReminder,removeLoanReminder } from "../../actions/loan";
+import Loading from '../../components/loading.js'
 
 function PaymentReminders() {
     // Styling for Loan Account Details Page
@@ -73,6 +74,8 @@ function PaymentReminders() {
     const [days, setDays] = useState(1)
     const [period, setPeriod] = useState("day")
     const [status, setStatus] = useState("")
+    const [loading, setLoading] = useState(false);
+
     const dispatch = useDispatch()
 
     const handleAdd = () => {
@@ -114,25 +117,28 @@ function PaymentReminders() {
 
     const handleSave = () => {
         setStatus("")
-       const promiseArray = [] 
+        setLoading(true)
+        const promiseArray = [] 
 
-       if(toAdd.length !== 0){
+        if(toAdd.length !== 0){
             toAdd.forEach(input => {
                 promiseArray.push(dispatch(updateLoanReminder(input)))
             });
-       }
+        }
 
-       if(toDelete.length !== 0){
+        if(toDelete.length !== 0){
             toDelete.forEach(r_id =>{
                 promiseArray.push(dispatch(removeLoanReminder(r_id)))
             })
-       }
+        }
         
         promiseArray.push(dispatch(loan(UserID)))
         Promise.all(promiseArray).then(()=>{
             setStatus("success")
+            setLoading(false)
         }).catch((error)=>{
             setStatus("error")
+            setLoading(false)
         })
     }
 
@@ -144,6 +150,7 @@ function PaymentReminders() {
 
     return (
         <React.Fragment>
+             { loading && <Loading></Loading> } 
             <SecondaryAppBar link={ `/loan-account-details/${id}` } text="Loan Details" />
             <Container maxWidth="lg">
                 <Box sx={{ pt: 10, pb: 10 }}>

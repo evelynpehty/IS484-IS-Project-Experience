@@ -106,8 +106,8 @@ function LoanSummary() {
             temp_loan += element.LoanAmount
             const monthDifference =  Math.ceil(moment(new Date(r_date)).diff(new Date(element.LoanStartDate), 'months', true));
             const schedule_for_payment = element.Detail.schedule_for_payment
-            const end_balance = schedule_for_payment[monthDifference].end_balance
-            element["end_balance"] = end_balance.toLocaleString("en-US")  
+            const end_balance = (schedule_for_payment[monthDifference].end_balance)
+            element["end_balance"] = end_balance.toFixed(2).toLocaleString("en-US")  
             const total_paid = (element.LoanAmount - end_balance).toFixed(2)    
             element["progress"]= (total_paid/ element.LoanAmount) * 100     
             
@@ -137,17 +137,17 @@ function LoanSummary() {
 
                             {/* Loan Summary left side */}
                             <CardContent style={styles.cardContent}>
-                                <Typography sx={{ fontSize: 12 }} color="grey">OUTSTANDING LOANS</Typography>
-                                <Typography sx={{ fontSize: 18 }} color="#E60000" fontWeight="bold">{ `SGD $${ outstanding_Loan.toLocaleString("en-US") }` }</Typography>
-                                <Typography sx={{ fontSize: 12 }} color="grey" fontWeight="light">Next Repayment: {repaymentDate}</Typography>
+                                <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">OUTSTANDING LOANS</Typography>
+                                <Typography sx={{ fontSize: 18, fontWeight:"bold"}} >{ `SGD $${ outstanding_Loan.toLocaleString("en-US") }` }</Typography>
+                                <Typography sx={{ fontSize: 10 }} color="grey" fontWeight="light">Next repayment: {repaymentDate}</Typography>
                             </CardContent>
 
                             {/* Loan Summary right side */}
                             <CardContent style={styles.cardContent}>
-                                <Typography sx={{ fontSize: 12 }} color="grey">TOTAL LOAN AMOUNT</Typography>
-                                <Typography sx={{ fontSize: 16 }} color="#E60000" marginBottom="12px">{ `SGD $${ totalLoanAmt.toLocaleString("en-US") }` }</Typography>
-                                <Typography sx={{ fontSize: 12 }} color="grey">Total Repayment</Typography>
-                                <Typography sx={{ fontSize: 16 }} color="#E60000">{ `SGD $${ total_repayment.toLocaleString("en-US") }` }</Typography>
+                                <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">TOTAL LOAN AMOUNT</Typography>
+                                <Typography sx={{ fontSize: 14 }} color="#E60000" marginBottom="12px">{ `SGD $${ totalLoanAmt.toLocaleString("en-US") }` }</Typography>
+                                <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">TOTAL REPAYMENTS</Typography>
+                                <Typography sx={{ fontSize: 14 }} color="#E60000">{ `SGD $${ total_repayment.toFixed(2).toLocaleString("en-US") }` }</Typography>
                             </CardContent>
                         </Box>
                     </Card>
@@ -199,7 +199,7 @@ function LoanSummary() {
                                                         { item.AccountName } <Chip style={styles.chip} size="small" label={`${item.InterestRate}%`} />
                                                     </Typography>
                                                     <Typography sx={{ fontSize: 12 }} color="white">
-                                                        { `SGD $${ (item.Detail.monthly_payment).toLocaleString("en-US")}` } due on {repaymentDate} {/* !!! here need to connect the repayment value and date */}
+                                                        { `SGD $${ (item.Detail.monthly_payment).toFixed(2).toLocaleString("en-US")}` } due on {repaymentDate} {/* !!! here need to connect the repayment value and date */}
                                                     </Typography>
                                                 </Grid>
                                                     <Grid xs={ 4 }>
@@ -220,7 +220,7 @@ function LoanSummary() {
                                                         { item.AccountName } <Chip style={styles.chip} size="small" label={`${item.InterestRate}%`} />
                                                     </Typography>
                                                     <Typography sx={{ fontSize: 12 }} color="white">
-                                                        { `SGD $${ (item.Detail.monthly_payment).toLocaleString("en-US")}` } due on {repaymentDate} {/* !!! here need to connect the repayment value and date */}
+                                                        { `SGD $${ (item.Detail.monthly_payment.toFixed(2)).toLocaleString("en-US")}` } due on {repaymentDate} {/* !!! here need to connect the repayment value and date */}
                                                     </Typography>
                                                 </>
                                             }

@@ -19,6 +19,7 @@ import DepositCard from "../../components/DepositCard";
 import EditDepositCard from "../../components/EditDepositCard";
 import FabButton from "../../components/FabButton";
 import InputBox from "../../components/InputBox"
+import Loading from '../../components/loading.js'
 
 function ManageDeposit() {
     // Styling for Manage Deposit Page
@@ -76,6 +77,7 @@ function ManageDeposit() {
 
     const [accoutName, setAccountName] = useState(deposit_item[0].AccountName);
     const [chosenColor, setChosenColor] = useState(deposit_item[0].ChosenColor);
+    const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState("")
     const dispatch = useDispatch()
     const colorChoiceArray = [
@@ -96,9 +98,10 @@ function ManageDeposit() {
     }
 
     const { user } = useSelector((state) => state.auth);
-    const UserID = user.data.UserID
+    // const UserID = user.data.UserID
 
     const handleSave = () => {
+        setLoading(true)
         setStatus("")
         const input = {
             "depositAccountID": id,
@@ -110,8 +113,10 @@ function ManageDeposit() {
         
         dispatch(updateDepositAccount(input)).then((response)=>{
             console.log(response)
+            setLoading(false)
             setStatus("success")
         }).catch((error)=>{
+            setLoading(false)
             setStatus("error")
         })
 
@@ -128,6 +133,7 @@ function ManageDeposit() {
 
     return (
         <React.Fragment>
+            { loading && <Loading></Loading> } 
             <SecondaryAppBar link={ "/deposit" } text="All Accounts" />
             <Container maxWidth="lg">
                 <Box sx={{ pt: 10, pb: 10 }}>

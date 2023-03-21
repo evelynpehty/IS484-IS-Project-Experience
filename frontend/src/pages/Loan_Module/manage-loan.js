@@ -16,6 +16,8 @@ import PrimaryButton from "../../components/PrimaryButton";
 import WhiteReusableButton from "../../components/WhiteButton";
 import OutlinedReusableButton from "../../components/OutlinedButton";
 import InputBox from "../../components/InputBox"
+import Loading from '../../components/loading.js'
+
 
 function ManageLoan() {
     // Styling for Manage Deposit Page
@@ -73,7 +75,9 @@ function ManageLoan() {
 
     const [accoutName, setAccountName] = useState(loan_item[0].AccountName);
     const [chosenColor, setChosenColor] = useState(loan_item[0].ChosenColor);
+    const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState("")
+    
     const dispatch = useDispatch()
     const colorChoiceArray = [
         "linear-gradient(to top right, #E69F9F, #E60000)",
@@ -96,6 +100,7 @@ function ManageLoan() {
     const UserID = user.data.UserID
 
     const handleSave = () => {
+        setLoading(true)
         setStatus("")
         const input = {
             "loanAccountID": id,
@@ -108,13 +113,16 @@ function ManageLoan() {
         dispatch(updateLoanAccount(input)).then((response)=>{
             console.log(response)
             setStatus("success")
+            setLoading(false)
         }).catch((error)=>{
             setStatus("error")
+            setLoading(false)
         })
     }
 
     return (
         <React.Fragment>
+             { loading && <Loading></Loading> } 
             <SecondaryAppBar link={ "/loan" } text="All Accounts" />
             <Container maxWidth="lg">
                 <Box sx={{ pt: 10, pb: 10 }}>

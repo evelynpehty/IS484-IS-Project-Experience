@@ -57,10 +57,10 @@ function SignIn() {
     const handleLogin = (e) => {
         
         e.preventDefault()
-        setLoading(true);
+        setLoading(true)
         setError(false)
-        
         dispatch(login(username, password)).then(() => {
+            setLoading(false)
             navigate("/dashboard")
         }).catch(() => {
             setLoading(false)
@@ -79,8 +79,10 @@ function SignIn() {
     };
 
     return (
+        <>
+        { loading && <Loading></Loading> } 
+        
         <Container maxWidth="lg">
-            {/* { loading && <Loading></Loading> } */} 
             <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
                 <Grid container style={ styles.grid }>
                     <Grid xs={12} lg={6}>
@@ -209,6 +211,7 @@ function SignIn() {
                 </Grid>
             </Box>
         </Container>
+        </>
     );
 }
 
