@@ -54,10 +54,23 @@ function PeekBalance() {
             marginTop: "20px",
             color: theme.palette.neutral.gray,
             fontSize: "14px"
+        },
+
+        peekBox: {
+            boxShadow: "0 0 2em rgba(230, 0, 0, 0.1)",
+            padding: "20px 80px",
+            textAlign: "center"
         }
     }
 
-    // const [show, setShow] = useState(false);
+    const [show, setShow] = useState(false);
+    const [type, setType] = useState("");
+    const date = new Date();
+    const formattedDate = date.toDateString() + date.toLocaleString("en-US", { hour: "numeric", minute: "numeric", hour12: true })
+    function handlePeek( selected ) {
+        setType(selected)
+        setShow(prev => !prev)
+    }
 
     return (
         <React.Fragment>
@@ -75,9 +88,40 @@ function PeekBalance() {
                                     alt="logo"
                                     src={ logo }
                                 />
-                                <Button component={ Link } to="/login" style={ styles.loginButton } startIcon={<LoginIcon />} variant="contained">LOGIN</Button>
-                                {/* <button sx={{ cursor:"pointer" }} onMouseDown={() => setShow(prev => !prev)}>Click</button>
-                                {show && <Box>This is your component</Box>} */}
+
+                                { show === false && 
+                                    <Button component={ Link } to="/login" style={ styles.loginButton } startIcon={<LoginIcon />} variant="contained">
+                                        LOGIN
+                                    </Button> 
+                                }
+
+                                { show && type==="networth" &&
+                                    <Box style={ styles.peekBox }>
+                                        <Typography sx={{ fontSize: 16 }} color={ theme.palette.secondary.main } gutterBottom>
+                                            Your Net Worth
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 24, fontWeight: "bold" }} color={ theme.palette.secondary.main } gutterBottom>
+                                            $15,296.50
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 10 }} color={ theme.palette.neutral.gray } gutterBottom>
+                                            { `Last Updated: ${ formattedDate }` }
+                                        </Typography>
+                                    </Box>
+                                }
+
+                                { show && type==="savings" &&
+                                    <Box style={ styles.peekBox }>
+                                        <Typography sx={{ fontSize: 16 }} color={ theme.palette.secondary.main } gutterBottom>
+                                            Your Savings
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 24, fontWeight: "bold" }} color={ theme.palette.secondary.main } gutterBottom>
+                                            $4,508.90
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 10 }} color={ theme.palette.neutral.gray } gutterBottom>
+                                            { `Last Updated: ${ formattedDate }` }
+                                        </Typography>
+                                    </Box>
+                                }
                             </Stack>
                         </Grid>
                         
@@ -90,19 +134,19 @@ function PeekBalance() {
                                     gap: 2,
                                 }}
                             >
-                                <Card style={ styles.card }>
+                                <Card style={ styles.card } onMouseDown={ () => handlePeek("networth") }>
                                     <CardContent sx={{  pt: "24px", textAlign: "center" }}>
                                         <PeekBalanceIcon className="small-icon"/>
-                                        <Typography sx={{ fontSize: 12, fontWeight: "bold" }} color="text.secondary" gutterBottom>
-                                        Peek Net Worth
+                                        <Typography sx={{ fontSize: 12, fontWeight: "bold" }} color="text.secondary" gutterBottom >
+                                            Peek Net Worth
                                         </Typography>
                                     </CardContent>
                                 </Card>
-                                <Card style={ styles.card }>
+                                <Card style={ styles.card } onMouseDown={ () => handlePeek("savings") }> 
                                     <CardContent sx={{  pt: "24px", textAlign: "center" }}>
                                         <PeekBalanceIcon className="small-icon"/>
                                         <Typography sx={{ fontSize: 12, fontWeight: "bold" }} color="text.secondary" gutterBottom>
-                                        Peek Savings
+                                            Peek Savings
                                         </Typography>
                                     </CardContent>
                                 </Card>
