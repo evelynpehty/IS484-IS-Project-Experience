@@ -62,6 +62,12 @@ function PeekBalance() {
     const navigate = useNavigate();
     const dispatch = useDispatch()
 
+    function handleLogin(route){
+        console.log(route)
+        dispatch(QuickAction(route))
+        navigate("/login")
+    }
+
     function handleClick(route){
         console.log(route)
         dispatch(QuickAction(route))
@@ -86,7 +92,7 @@ function PeekBalance() {
                                     alt="logo"
                                     src={ logo }
                                 />
-                                <Button component={ Link } to="/login" style={ styles.loginButton } startIcon={<LoginIcon />} variant="contained">LOGIN</Button>
+                                <Button onClick={()=>handleLogin("dashboard")} style={ styles.loginButton } startIcon={<LoginIcon />} variant="contained">LOGIN</Button>
                                 {/* <button sx={{ cursor:"pointer" }} onMouseDown={() => setShow(prev => !prev)}>Click</button>
                                 {show && <Box>This is your component</Box>} */}
                             </Stack>
@@ -139,7 +145,7 @@ function PeekBalance() {
                                     </CardContent>
                                 </Card>
                                 <Card style={ styles.card2 }>
-                                    <CardContent sx={{  pt: "24px", textAlign: "center" }}>
+                                    <CardContent sx={{  pt: "24px", textAlign: "center" }} onClick={()=>handleClick("loan")}>
                                         <Loans className="small-icon"/>
                                         <Typography sx={{ fontSize: 12, fontWeight: "bold" }} color="text.secondary" gutterBottom>
                                         Loans
@@ -147,15 +153,15 @@ function PeekBalance() {
                                     </CardContent>
                                 </Card>
                                 <Card style={ styles.card2 }>
-                                    <CardContent sx={{  pt: "24px", textAlign: "center" }}>
+                                    <CardContent sx={{  pt: "24px", textAlign: "center" }} onClick={()=>handleClick("securities")}>
                                         <Investments className="small-icon"/>
                                         <Typography sx={{ fontSize: 12, fontWeight: "bold" }} color="text.secondary" gutterBottom>
-                                        Investments
+                                        Securities
                                         </Typography>
                                     </CardContent>
                                 </Card>
                                 <Card style={ styles.card2 }>
-                                    <CardContent sx={{  pt: "24px", textAlign: "center" }}>
+                                    <CardContent sx={{  pt: "24px", textAlign: "center" }} onClick={()=>handleClick("dashboard")}>
                                         <Personalise className="small-icon"/>
                                         <Typography sx={{ fontSize: 12, fontWeight: "bold" }} color="text.secondary" gutterBottom>
                                         Personalise
