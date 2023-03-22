@@ -7,17 +7,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { ThemeProvider, CssBaseline, Box } from "@mui/material";
 
 // Pages
+// Account Module
 import PeekBalance from "./pages/Account_Module/peekBalance.js";
 import Login from "./pages/Account_Module/login.js";
+
+// Dashboard Module
 import DashBoard from './pages/Dashboard_Module/dashboard.js'
+
+
+// Deposit Module
 import DepositSummary from './pages/Deposit_Module/deposit-summary.js'
 import AccountDetails from './pages/Deposit_Module/account-details.js'
 import TransactionHistory from './pages/Deposit_Module/view-transaction-history.js'
 import CashFlow from './pages/Deposit_Module/cashflow.js'
+import ManageDeposit from "./pages/Deposit_Module/manage-deposit.js"
+
+// Loan Module
 import LoanSummary from './pages/Loan_Module/loan-summary.js'
 import LoanTransactionHistory from './pages/Loan_Module/view-loan-transaction-history.js'
 import LoanAccountDetails from './pages/Loan_Module/loan-account-details.js'
-import ManageDeposit from "./pages/Deposit_Module/manage-deposit.js"
+import PaymentReminders from "./pages/Loan_Module/payment-reminders.js"
+import ManageLoan from "./pages/Loan_Module/manage-loan.js"
 
 // Customised Components
 import MainBottomNavigation from "./components/MainBottomNavigation";
@@ -78,6 +88,8 @@ useEffect(() => {
               <Route exact path={"/loan"} element={<LoanSummary />} />
               <Route exact path={"/loan-account-details/:id"} element={<LoanAccountDetails />} />
               <Route exact path={"/view-loan-transaction-history"} element={<LoanTransactionHistory />} />
+              <Route exact path={"/payment-reminders"} element={<PaymentReminders />} />
+              <Route exact path={"/manage-loan/:id"} element={<ManageLoan />} />
               
             </Routes>
             {(showBottomNavigation) && <MainBottomNavigation></MainBottomNavigation>}

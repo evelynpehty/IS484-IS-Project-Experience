@@ -37,7 +37,6 @@ function AccountDetails() {
         },
 
         card: {
-            background: "linear-gradient(to top right, #E69F9F, #E60000)",
             marginBottom: "24px",
             borderRadius: "15px",
             padding: 10
@@ -204,7 +203,7 @@ function AccountDetails() {
             <SecondaryAppBar link="/deposit" text="All Accounts" />
             <Container maxWidth="lg">
                 <Box sx={{ pt: 10, pb: 10 }}>
-                    <Card style={ styles.card }>
+                    <Card style={ styles.card } sx={{background: `${deposit_item[0].ChosenColor}`}}>
                         <CardContent style={ styles.cardContent }>
                             <Typography sx={{ fontSize: 12 }} color="white">
                                 UBS

@@ -60,7 +60,7 @@ function SignIn() {
     const handleLogin = (e) => {
         
         e.preventDefault()
-        setLoading(true);
+        setLoading(true)
         setError(false)
         
         dispatch(login(username, password)).then((response) => {
@@ -74,19 +74,14 @@ function SignIn() {
             // const p6 = dispatch(peekDetail(UserID))
             Promise.all([p1,p2,p3]).then(()=>{
                 dispatch(DataLoaded())
-
                 if(route){
+                    setLoading(false)
                     navigate(`/${route}`)
                 }else{
+                    setLoading(false)
                     navigate("/dashboard")
                 }
-                
-                
             })
-            
-        }).catch(() => {
-            setLoading(false)
-            setError(true)
         });
     }
 
@@ -101,8 +96,10 @@ function SignIn() {
     };
 
     return (
+        <>
+        { loading && <Loading></Loading> } 
+        
         <Container maxWidth="lg">
-            {/* { loading && <Loading></Loading> } */} 
             <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
                 <Grid container style={ styles.grid }>
                     <Grid xs={12} lg={6}>
@@ -231,6 +228,7 @@ function SignIn() {
                 </Grid>
             </Box>
         </Container>
+        </>
     );
 }
 

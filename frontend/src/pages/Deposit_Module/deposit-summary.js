@@ -63,8 +63,8 @@ function DepositSummary() {
                             <Link to={`/account-details/${value.DepositAccountID}`} key={value.DepositAccountID}> 
                                 {/* <DepositCard index={ index } accountName={ value.AccountName } accountID={ value.DepositAccountID } availableBalance={ value.AvailBalance } /> */}
                                 { show === false ? 
-                                    <DepositCard index={ index } accountName={ value.AccountName } accountID={ value.DepositAccountID } availableBalance={ value.AvailBalance } /> :
-                                    <EditDepositCard index={ index } accountName={ value.AccountName } accountID={ value.DepositAccountID } availableBalance={ value.AvailBalance } link={ `/manage-deposit/${value.DepositAccountID}` } />
+                                    <DepositCard index={ index } accountName={ value.AccountName } accountID={ value.DepositAccountID } availableBalance={ value.AvailBalance } chosenColor={value.ChosenColor}/> :
+                                    <EditDepositCard index={ index } accountName={ value.AccountName } accountID={ value.DepositAccountID } availableBalance={ value.AvailBalance } chosenColor={value.ChosenColor} link={ `/manage-deposit/${value.DepositAccountID}` } />
                                 }
                             </Link>
                         );
