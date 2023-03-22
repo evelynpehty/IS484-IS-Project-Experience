@@ -9,7 +9,9 @@ const initialState = user
 const initialState = {
     isLoggedIn: false,
     isFirstLoad: false,
+    isDataLoaded: false,
     user: undefined,
+    route: undefined,
 }
 
 const authReducer = (state = initialState, action) => {
@@ -35,9 +37,22 @@ switch (type) {
       return {
         ...state,
         isLoggedIn: false,
+        isDataLoaded: false,
         isFirstLoad: false,
+        route: undefined,
         user: null,
     };
+    case "QUICK_ACTION":
+      return {
+          ...state,
+          route: payload,
+      };
+
+      case "DATA_LOADED":
+        return {
+            ...state,
+            isDataLoaded: true,
+        };
     case "REMOVE_FIRST_LOAD":
       return {
           ...state,

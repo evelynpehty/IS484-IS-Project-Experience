@@ -14,7 +14,6 @@ import Login from "./pages/Account_Module/login.js";
 // Dashboard Module
 import DashBoard from './pages/Dashboard_Module/dashboard.js'
 
-
 // Deposit Module
 import DepositSummary from './pages/Deposit_Module/deposit-summary.js'
 import AccountDetails from './pages/Deposit_Module/account-details.js'
@@ -29,6 +28,9 @@ import LoanAccountDetails from './pages/Loan_Module/loan-account-details.js'
 import PaymentReminders from "./pages/Loan_Module/payment-reminders.js"
 import ManageLoan from "./pages/Loan_Module/manage-loan.js"
 
+// Securities Module
+import SecuritiesSummary from './pages/Securities_Module/securities-summary.js'
+
 // Customised Components
 import MainBottomNavigation from "./components/MainBottomNavigation";
 import theme from "./paletteTheme"
@@ -41,7 +43,7 @@ function App() {
 const [showAppBar, setAppBar] = useState(false);
 const [showBottomNavigation, setBottomNavigation] = useState(false);
 
-const { user: currentUser } = useSelector((state) => state.auth);
+const { isDataLoaded: currentUser } = useSelector((state) => state.auth);
 const dispatch = useDispatch();
 
 let location = useLocation();
@@ -52,10 +54,8 @@ useEffect(() => {
   }
 }, [dispatch, location]);
 
-
 useEffect(() => {
   if (currentUser) {
-    console.log(currentUser)
     setBottomNavigation(true);
     setAppBar(true);
     }
@@ -91,6 +91,9 @@ useEffect(() => {
               <Route exact path={"/view-loan-transaction-history"} element={<LoanTransactionHistory />} />
               <Route exact path={"/payment-reminders"} element={<PaymentReminders />} />
               <Route exact path={"/manage-loan/:id"} element={<ManageLoan />} />
+
+               {/* Loan Module */}
+               <Route exact path={"/securities"} element={<SecuritiesSummary />} />
               
             </Routes>
             {(showBottomNavigation) && <MainBottomNavigation></MainBottomNavigation>}

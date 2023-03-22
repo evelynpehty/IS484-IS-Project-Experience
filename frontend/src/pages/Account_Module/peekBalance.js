@@ -1,11 +1,11 @@
 // Packages
 import React from "react";
-import { useState } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useParams } from 'react-router-dom';
 import { Link } from "react-router-dom";
-import moment from "moment";
+import { useDispatch, useSelector } from "react-redux";
+import { QuickAction } from "../../actions/auth";
+
+
 
 // MUI Components
 import Grid from '@mui/material/Unstable_Grid2';
@@ -58,6 +58,23 @@ function PeekBalance() {
     }
 
     // const [show, setShow] = useState(false);
+    const { user: currentUser } = useSelector((state) => state.auth);
+    const navigate = useNavigate();
+    const dispatch = useDispatch()
+
+    function handleLogin(route){
+        console.log(route)
+        dispatch(QuickAction(route))
+        navigate("/login")
+    }
+
+    function handleClick(route){
+        console.log(route)
+        dispatch(QuickAction(route))
+        if(!currentUser){
+            navigate("/login")
+        }        
+    }
 
     return (
         <React.Fragment>
@@ -75,7 +92,7 @@ function PeekBalance() {
                                     alt="logo"
                                     src={ logo }
                                 />
-                                <Button component={ Link } to="/login" style={ styles.loginButton } startIcon={<LoginIcon />} variant="contained">LOGIN</Button>
+                                <Button onClick={()=>handleLogin("dashboard")} style={ styles.loginButton } startIcon={<LoginIcon />} variant="contained">LOGIN</Button>
                                 {/* <button sx={{ cursor:"pointer" }} onMouseDown={() => setShow(prev => !prev)}>Click</button>
                                 {show && <Box>This is your component</Box>} */}
                             </Stack>
@@ -119,7 +136,7 @@ function PeekBalance() {
                                     gap: 2,
                                 }}
                             >
-                                <Card style={ styles.card2 }>
+                                <Card style={ styles.card2 }  onClick={()=>handleClick("deposit")}>
                                     <CardContent sx={{ pt: "24px", textAlign: "center" }}>
                                         <Savings className="small-icon"/>
                                         <Typography sx={{ fontSize: 12, fontWeight: "bold" }} color="text.secondary" gutterBottom>
@@ -128,7 +145,7 @@ function PeekBalance() {
                                     </CardContent>
                                 </Card>
                                 <Card style={ styles.card2 }>
-                                    <CardContent sx={{  pt: "24px", textAlign: "center" }}>
+                                    <CardContent sx={{  pt: "24px", textAlign: "center" }} onClick={()=>handleClick("loan")}>
                                         <Loans className="small-icon"/>
                                         <Typography sx={{ fontSize: 12, fontWeight: "bold" }} color="text.secondary" gutterBottom>
                                         Loans
@@ -136,15 +153,15 @@ function PeekBalance() {
                                     </CardContent>
                                 </Card>
                                 <Card style={ styles.card2 }>
-                                    <CardContent sx={{  pt: "24px", textAlign: "center" }}>
+                                    <CardContent sx={{  pt: "24px", textAlign: "center" }} onClick={()=>handleClick("securities")}>
                                         <Investments className="small-icon"/>
                                         <Typography sx={{ fontSize: 12, fontWeight: "bold" }} color="text.secondary" gutterBottom>
-                                        Investments
+                                        Securities
                                         </Typography>
                                     </CardContent>
                                 </Card>
                                 <Card style={ styles.card2 }>
-                                    <CardContent sx={{  pt: "24px", textAlign: "center" }}>
+                                    <CardContent sx={{  pt: "24px", textAlign: "center" }} onClick={()=>handleClick("dashboard")}>
                                         <Personalise className="small-icon"/>
                                         <Typography sx={{ fontSize: 12, fontWeight: "bold" }} color="text.secondary" gutterBottom>
                                         Personalise
