@@ -137,27 +137,24 @@ function LoanSummary() {
                         {show === false ? <WhiteReusableButton function={() => setShow(prev => !prev)} buttonText="MANAGE ACCOUNTS" /> : <OutlinedReusableButton function={() => setShow(prev => !prev)} buttonText="DONE" />}
                     </Grid>
                     <Card sx={{borderRadius: "15px", mb: 3}}> {/* mb: loan summary card and the word "Quick Actions" too close, add marginBottom 3 */}
-                        <Box sx={{
-                            p: 2,
-                            display: 'grid',
-                            gridTemplateColumns: { xs: '1fr 1fr' },
-                        }}>
+                        
+                            <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                {/* Loan Summary left side */}
+                                <CardContent style={styles.cardContent}>
+                                    <Typography sx={{ fontSize: 10, fontWeight:"light" }} color={ theme.palette.secondary.main }>OUTSTANDING LOANS</Typography>
+                                    <Typography sx={{ fontSize: 22, fontWeight:"bold"}} color={ theme.palette.secondary.main }>{ `S$${ outstanding_Loan.toLocaleString("en-US") }` }</Typography>
+                                    <Typography sx={{ fontSize: 10 }} color="grey" fontWeight="light">Next repayment: {repaymentDate}</Typography>
+                                </CardContent>
 
-                            {/* Loan Summary left side */}
-                            <CardContent style={styles.cardContent}>
-                                <Typography sx={{ fontSize: 10, fontWeight:"light" }} color="#4B4948">OUTSTANDING LOANS</Typography>
-                                <Typography sx={{ fontSize: 22, fontWeight:"bold"}} >{ `S$${ outstanding_Loan.toLocaleString("en-US") }` }</Typography>
-                                <Typography sx={{ fontSize: 10 }} color="grey" fontWeight="light">Next repayment: {repaymentDate}</Typography>
-                            </CardContent>
-
-                            {/* Loan Summary right side */}
-                            <CardContent style={styles.cardContent}>
-                                <Typography sx={{ fontSize: 10, fontWeight:"light" }} color="#4B4948">TOTAL LOAN AMOUNT</Typography>
-                                <Typography sx={styles.gradientText} color="#E60000" marginBottom="12px">{ `S$${ totalLoanAmt.toLocaleString("en-US") }` }</Typography>
-                                <Typography sx={{ fontSize: 10, fontWeight:"light" }} color="#4B4948">TOTAL REPAYMENTS</Typography>
-                                <Typography sx={styles.gradientText} color="#E60000">{ `S$${ total_repayment.toFixed(2).toLocaleString("en-US") }` }</Typography>
-                            </CardContent>
-                        </Box>
+                                {/* Loan Summary right side */}
+                                <CardContent style={styles.cardContent}>
+                                    <Typography sx={{ fontSize: 10, fontWeight:"light" }} color={ theme.palette.secondary.main }>TOTAL LOAN AMOUNT</Typography>
+                                    <Typography sx={styles.gradientText} marginBottom="12px">{ `S$${ totalLoanAmt.toLocaleString("en-US") }` }</Typography>
+                                    <Typography sx={{ fontSize: 10, fontWeight:"light" }} color={ theme.palette.secondary.main }>TOTAL REPAYMENTS</Typography>
+                                    <Typography sx={styles.gradientText}>{ `S$${ total_repayment.toFixed(2).toLocaleString("en-US") }` }</Typography>
+                                </CardContent>
+                            </Grid>
+                        
                     </Card>
 
                     {/* Quick Tools */}
