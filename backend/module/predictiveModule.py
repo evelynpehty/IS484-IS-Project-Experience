@@ -14,6 +14,7 @@ def get_predict_stock_valuation():
     }
 
 # FUNCTION BEFORE MIDTERM 
+#BASIC FUNCTION 
 
 
 
