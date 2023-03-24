@@ -78,7 +78,7 @@ useEffect(() => {
               <Route exact path={"/login"} element= {<Login />} />
               <Route exact path={"/dashboard"} element={<DashBoard />} />
 
-              {/* Loan */}
+              {/* Deposit Module */}
               <Route exact path={"/deposit"} element={<DepositSummary />} />
               <Route exact path={"/view-transaction-history"} element={<TransactionHistory />} />
               <Route exact path={"/account-details/:id"} element={<AccountDetails />} />
@@ -92,7 +92,7 @@ useEffect(() => {
               <Route exact path={"/payment-reminders"} element={<PaymentReminders />} />
               <Route exact path={"/manage-loan/:id"} element={<ManageLoan />} />
 
-               {/* Loan Module */}
+               {/* Securities Module */}
                <Route exact path={"/securities"} element={<SecuritiesSummary />} />
               
             </Routes>
