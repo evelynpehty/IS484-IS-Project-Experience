@@ -1205,3 +1205,91 @@ def update_reminder_request():
       "message": str(e),
       "data": None
     }), 500
+  
+
+
+""""
+Securities Module 
+
+"""
+
+# required attribute(default): userID
+@api.route('/get_info_for_all_securities',methods = ['POST', 'GET'])
+def get_info_for_all_securities_requests():
+  try: 
+    userID = None
+    if request.method == 'POST':
+      userID = request.form['userID']
+    else:
+      userID = request.args.get('userID')
+    result = get_info_for_all_securities(userID)
+    return jsonify(result), result["code"]
+  except Exception as e:
+
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+
+
+# required attribute(default): holdingsID, ticker
+@api.route('/view_security',methods = ['POST', 'GET'])
+def view_security_requests():
+  #holdingsID is in the get_info_for_all_securities_requests["detail"]
+  try: 
+    holdingsID = None
+    ticker = None
+    if request.method == 'POST':
+      holdingsID = request.form['holdingsID']
+      ticker = request.form['ticker']
+    else:
+      holdingsID = request.args.get('holdingsID')
+      ticker = request.args.get('ticker')
+    # print(get_market_data_by_ticker(ticker))
+    result = view_security(holdingsID, ticker)
+    return jsonify(result), result["code"]
+  except Exception as e:
+
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+  
+
+# required attribute(default): ticker
+@api.route('/view_stock_detail',methods = ['POST', 'GET'])
+def view_stock_detail_requests():
+  try: 
+    ticker = None
+    if request.method == 'POST':
+      ticker = request.form['ticker']
+    else:
+      ticker = request.args.get('ticker')
+    result = view_stock_detail(ticker)
+    return jsonify(result), result["code"]
+  except Exception as e:
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+  
+# required attribute(default): ticker
+@api.route('/get_market_data_by_ticker',methods = ['POST', 'GET'])
+def get_market_data_by_ticker_requests():
+  try: 
+    ticker = None
+    if request.method == 'POST':
+      ticker = request.form['ticker']
+    else:
+      ticker = request.args.get('ticker')
+    result = get_market_data_by_ticker(ticker)
+    return jsonify(result), result["code"]
+  except Exception as e:
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500

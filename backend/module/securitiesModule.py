@@ -8,6 +8,22 @@ from module.classes.market_data import Market_Data
 from module.classes.securities import Securities
 from module.classes.watchlist import Watchlist
 from module.classes.watchlist_securities import Watchlist_Securities
+from module.classes.all_holdings import All_Holdings
+from module.classes.securities_holdings import Securities_Holdings
+
+"""
+CONVERT RATE: {1 SGD = 0.75 USD; 1 USD = 1.33 SGD}
+USD = SGD * 0.75
+SGD = USD / 0.75 
+"""
+def convert_SGD_to_USD(SGDamount):
+    if SGDamount == 0: 
+        return 0.0
+    return SGDamount*0.75
+def convert_USD_to_SGD(USDamount):
+    if USDamount == 0: 
+        return 0.0
+    return USDamount/0.75
 
 def get_all_stocks():
     all_stock_info = {
@@ -116,17 +132,26 @@ def get_watchlist_securities_by_watchlist_id(watchlistID):
 def get_market_data_by_ticker(ticker):
     engine = create_engine()
     sql = f"SELECT * FROM market_data WHERE ticker='{ticker}'"
+    # print(sql)
     result = engine.execute(sql)
+    # print(result.rowcount)
+    data = []
+    # print(result.rowcount > 0)
     if result.rowcount>0:
-        info = result.fetchone()
-        marketdata = Market_Data(info[0], info[1], info[2],info[3], info[4], info[5],info[6], info[7], info[8])
+        
+        n = 1
+        for info in result.fetchall():
+            n += 1
+            # print("CURRENT ", n)
+            marketdata = Market_Data(info[0], info[1], info[2],info[3], info[4], info[5],info[6], info[7], info[8])
+            data.append(marketdata.to_dict())
         return {
             "code": 200,
-            "data": marketdata.to_dict()
+            "data": data
         }
     return{
         "code": 404,
-        "data": None 
+        "data": data 
     }
 def get_all_ticker():
     engine = create_engine()
@@ -154,7 +179,7 @@ def update_market_data_for_recent_90_days_data():
         for ticker in tickers:
             try: 
                 ticker_info = yf.Ticker(ticker)
-                print(ticker)
+                # print(ticker)
                 data = ticker_info.history(period="3mo").reset_index()
                 for index, row in data.iterrows():
                     date = row["Date"].date()
@@ -194,11 +219,163 @@ def update_market_data_for_recent_90_days_data():
             "message": str(e)
         }
 
+def get_all_securities_holdings_by_userID(userID):
+    engine = create_engine()
+    sql = f"SELECT * FROM securities_holdings WHERE userID='{userID}'"
+    result = engine.execute(sql)
+    if result.rowcount>0:
+        securities_holdings = []
+        for info in result.fetchall():
+            securities_holding = Securities_Holdings(info[0], info[1])
+            securities_holdings.append(securities_holding.to_dict())
+        return {
+            "code": 200,
+            "data": securities_holdings
+        }
+    return{
+        "code": 404,
+        "data": [] 
+    }
+def get_all_holdings_by_holdingsID(holdingsID):
+    engine = create_engine()
+    sql = f"SELECT * FROM all_holdings WHERE holdingsID='{holdingsID}'"
+    result = engine.execute(sql)
+    if result.rowcount>0:
+        all_holdings = []
+        for info in result.fetchall():
+            holding = All_Holdings(info[0], info[1], info[2], info[3])
+            all_holdings.append(holding.to_dict())
+        return {
+            "code": 200,
+            "data": all_holdings
+        }
+    return{
+        "code": 404,
+        "data": [] 
+    }
+def get_today_ticker_info(ticker):
+    msft = yf.Ticker(ticker)
+    data = msft.history(period="1d").reset_index()
+    return float(data["Close"])
+def get_holding_detail(holding):
+    info = {}
+    ticker = holding['ticker']
+ 
+    info['ticker'] = ticker
+    qty = holding['qty']
+    info['qty'] = qty
+    buy_price_USD = holding['buy_price']
+    info['buy_price_USD'] = buy_price_USD
+    buy_price_SGD = convert_USD_to_SGD(buy_price_USD)
+    info['buy_price_SGD'] = buy_price_SGD
+    current_price_USD = get_today_ticker_info(ticker)
+    info['current_price_USD'] = current_price_USD
+    current_price_SGD = convert_USD_to_SGD(current_price_USD)
+    info['current_price_SGD'] = current_price_SGD
+    if buy_price_USD == 0.0:
+        change_rate = 0.0
+    else:
+        change_rate = (buy_price_USD-current_price_USD)/buy_price_USD
+    info['change_rate'] = change_rate
+    current_total_price_USD = current_price_USD*float(qty)
+    info['current_total_price_USD'] = current_total_price_USD
+    current_total_price_SGD = current_price_SGD*float(qty)
+    info['current_total_price_SGD'] = current_total_price_SGD
+    
+    return info 
+"""
+    Functions for the APIs 
+"""
+
+# MAIN PAGE
 
 
+def get_info_for_all_securities(userID):
+    crr_holding_USD = 0.0
+    total_invest_USD = 0.0
+    overall_return_USD = 0.0 
+    result = {"detail": [], "userID":userID}
+    securities_holdings = get_all_securities_holdings_by_userID(userID)["data"]
+    for holding in securities_holdings:
+        holdingsID = holding["holdingsID"]
+        crr_holding = []
+        all_holdings = get_all_holdings_by_holdingsID(holdingsID)
+        for holding in all_holdings["data"]:
+            
+            info = get_holding_detail(holding)
+            info['holdingsID'] = holdingsID
+            crr_holding_USD += info["current_total_price_USD"]
+            total_invest_USD += (info["buy_price_USD"]*info["qty"])
+            result["detail"].append(info)
+        
+        overall_return_USD = crr_holding_USD - total_invest_USD
+        crr_holding_SGD = convert_USD_to_SGD(crr_holding_USD)
+        total_invest_SGD = convert_USD_to_SGD(total_invest_USD)
+        overall_return_SGD = convert_USD_to_SGD(overall_return_USD)
+        if total_invest_SGD == 0:
+            overall_change_rate = 0.0 
+        else:
+            overall_change_rate = overall_return_SGD/total_invest_SGD
+        
+        result["crr_holding_USD"] = crr_holding_USD
+        result["total_invest_USD"] = total_invest_USD
+        result["overall_return_USD"] = overall_return_USD
+        result["crr_holding_SGD"] = crr_holding_SGD
+        result["total_invest_SGD"] = total_invest_SGD
+        result["overall_return_SGD"] = overall_return_SGD
+        result["overall_change_rate"] = overall_change_rate
 
+        result["code"] = 200
+        
+    return result
 
+def get_holding_by_userID_and_ticker(holdingsID, ticker):
+    engine = create_engine()
+    sql = f"SELECT * FROM all_holdings WHERE holdingsID='{holdingsID}' AND ticker='{ticker}'"
+    result = engine.execute(sql)
+    if result.rowcount>0:
+        for info in result.fetchall():
+            holding = All_Holdings(info[0], info[1], info[2], info[3])
+            return {
+                "code": 200,
+                "data": holding.to_dict()
+            }
+    return{
+        "code": 404,
+        "data": [] 
+    }
 
+#View security page 
+def view_security(holdingsID, ticker):
+    
+    result = {}
+    holding_data = get_holding_by_userID_and_ticker(holdingsID, ticker)["data"]
+    # print(len(holding_data) )
+    if len(holding_data) == 0:
+        return {
+            "code": 404, 
+            "data":result
+        }
+    market_data = get_market_data_by_ticker(ticker)
+    # print(market_data)
+    get_holding_data_detail = get_holding_detail(holding_data)
+    result["market_data"] = market_data
+    result["get_holding_data_detail"] = get_holding_data_detail
+    return {
+        "code": 200,
+        "data": result
+    }
 
-
-
+#View Stock Detail 
+def view_stock_detail(ticker):
+    market_data = get_market_data_by_ticker(ticker)["data"]
+    if market_data:
+        return {
+            "code": 200,
+            "data": market_data
+        }
+    else:
+        return {
+            "code": 404,
+            "data": market_data
+    }
