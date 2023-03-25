@@ -1250,6 +1250,7 @@ def view_security_requests():
       holdingsID = request.args.get('holdingsID')
       ticker = request.args.get('ticker')
     # print(get_market_data_by_ticker(ticker))
+    print(0)
     result = view_security(userID, holdingsID, ticker)
     return jsonify(result), result["code"]
   except Exception as e:

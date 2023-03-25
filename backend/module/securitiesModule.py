@@ -160,7 +160,7 @@ def get_all_ticker():
     if result.rowcount>0:
         tickers = []
         for info in result.fetchall():
-            securities = Securities(info[0])
+            securities = Securities(info[0], info[1])
             tickers.append(securities.get_ticker())
         return {
             "code": 200,
@@ -263,9 +263,12 @@ def get_holding_detail(holding, userID):
     ticker = holding['ticker']
  
     info['ticker'] = ticker
-    watchlist_name = get_watchlist_name(userID, ticker)
-    info['watchlist_name'] = watchlist_name
+    # watchlist_name = get_watchlist_name(userID, ticker)
+
+    # info['watchlist_name'] = watchlist_name
+    securities_name = get_securities_name(ticker)
     qty = holding['qty']
+    info['securities_name'] = securities_name
     info['qty'] = qty
     buy_price_USD = holding['buy_price']
     info['buy_price_USD'] = buy_price_USD
@@ -362,16 +365,20 @@ def get_holding_by_userID_and_ticker(holdingsID, ticker):
 def view_security(userID, holdingsID, ticker):
     
     result = {}
+    print(3, 3)
     holding_data = get_holding_by_userID_and_ticker(holdingsID, ticker)["data"]
+    print(3)
     # print(len(holding_data) )
     if len(holding_data) == 0:
         return {
             "code": 404, 
             "data":result
         }
+    print(4)
     market_data = get_market_data_by_ticker(ticker)
     # print(market_data)
     get_holding_data_detail = get_holding_detail(holding_data, userID)
+    print()
     result["market_data"] = market_data
     result["get_holding_data_detail"] = get_holding_data_detail
     return {
@@ -417,7 +424,7 @@ def get_1_day_change(ticker):
         }
     return{
         "code": 404,
-        "data": None
+        "data": 0.0
     }
 
 def get_watchlist_name(userID, ticker):
@@ -433,7 +440,20 @@ def get_watchlist_name(userID, ticker):
     result = engine.execute(sql)
     print(sql, result.rowcount)
     if result.rowcount>0:
+        print(1)
         info = result.fetchone()
+        print(1)
         watchlist_securities = Watchlist_Securities(info[0], info[1], info[2])
+        print(2)
         return watchlist_securities.get_watchlistName()
+    return ""
+
+def get_securities_name(ticker):
+    engine = create_engine()
+    sql = f"SELECT * FROM securities WHERE ticker='{ticker}'"
+    result = engine.execute(sql)
+    if result.rowcount>0:
+        info = result.fetchone()
+        securities = Securities(info[0], info[1])
+        return securities.get_tickerName()
     return ""
