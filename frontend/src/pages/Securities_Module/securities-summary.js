@@ -176,8 +176,7 @@ function SecuritiesSummary() {
                                         <Typography variant="p" sx={{ fontSize: 16, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
                                             {item.ticker}
                                             <Typography variant="p" sx={{ fontSize: 12, fontWeight:"regular", ml: 2 }}>
-                                                Apple Inc.
-                                                {/*item.ticker_name*/}
+                                                {item.stock_name}
                                             </Typography>
                                         </Typography>
                                         
