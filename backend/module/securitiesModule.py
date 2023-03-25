@@ -131,7 +131,7 @@ def get_watchlist_securities_by_watchlist_id(watchlistID):
 
 def get_market_data_by_ticker(ticker):
     engine = create_engine()
-    sql = f"SELECT * FROM market_data WHERE ticker='{ticker}'"
+    sql = f"SELECT * FROM market_data WHERE ticker='{ticker}' ORDER BY date DESC "
     # print(sql)
     result = engine.execute(sql)
     # print(result.rowcount)
@@ -262,6 +262,7 @@ def get_holding_detail(holding):
     ticker = holding['ticker']
  
     info['ticker'] = ticker
+    
     qty = holding['qty']
     info['qty'] = qty
     buy_price_USD = holding['buy_price']
@@ -281,7 +282,7 @@ def get_holding_detail(holding):
     info['current_total_price_USD'] = current_total_price_USD
     current_total_price_SGD = current_price_SGD*float(qty)
     info['current_total_price_SGD'] = current_total_price_SGD
-    
+    info['1_day_change_per_each'] = get_1_day_change(ticker)["data"] * float(qty)
     return info 
 """
     Functions for the APIs 
@@ -294,6 +295,7 @@ def get_info_for_all_securities(userID):
     crr_holding_USD = 0.0
     total_invest_USD = 0.0
     overall_return_USD = 0.0 
+    total_in_one_day_change = 0.0
     result = {"detail": [], "userID":userID}
     securities_holdings = get_all_securities_holdings_by_userID(userID)["data"]
     for holding in securities_holdings:
@@ -307,6 +309,7 @@ def get_info_for_all_securities(userID):
             crr_holding_USD += info["current_total_price_USD"]
             total_invest_USD += (info["buy_price_USD"]*info["qty"])
             result["detail"].append(info)
+            total_in_one_day_change+=info['1_day_change_per_each']
         
         overall_return_USD = crr_holding_USD - total_invest_USD
         crr_holding_SGD = convert_USD_to_SGD(crr_holding_USD)
@@ -324,7 +327,7 @@ def get_info_for_all_securities(userID):
         result["total_invest_SGD"] = total_invest_SGD
         result["overall_return_SGD"] = overall_return_SGD
         result["overall_change_rate"] = overall_change_rate
-
+        result["1_day_change"] = total_in_one_day_change
         result["code"] = 200
         
     return result
@@ -378,4 +381,31 @@ def view_stock_detail(ticker):
         return {
             "code": 404,
             "data": market_data
+    }
+def get_1_day_change(ticker):
+    engine = create_engine()
+    sql = f"SELECT * FROM market_data WHERE ticker='{ticker}' ORDER BY date DESC LIMIT 2"
+    # print(sql)
+    result = engine.execute(sql)
+    # print(result.rowcount)
+    data = []
+    # print(result.rowcount > 0)
+    if result.rowcount>0:
+        
+        n = 1
+        for info in result.fetchall():
+            n += 1
+            # print("CURRENT ", n)
+            marketdata = Market_Data(info[0], info[1], info[2],info[3], info[4], info[5],info[6], info[7], info[8])
+            data.append(marketdata)
+        yesterday_closing_price = data[1].get_closing_price()
+        today_closing_price = data[0].get_closing_price()
+        price_change_within_1_day = today_closing_price - yesterday_closing_price
+        return {
+            "code": 200,
+            "data": price_change_within_1_day
+        }
+    return{
+        "code": 404,
+        "data": None
     }
