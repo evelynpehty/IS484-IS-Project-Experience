@@ -1233,21 +1233,24 @@ def get_info_for_all_securities_requests():
     }), 500
 
 
-# required attribute(default): holdingsID, ticker
+# required attribute(default): userID, holdingsID, ticker
 @api.route('/view_security',methods = ['POST', 'GET'])
 def view_security_requests():
   #holdingsID is in the get_info_for_all_securities_requests["detail"]
   try: 
+    userID = None 
     holdingsID = None
     ticker = None
     if request.method == 'POST':
+      userID = request.form['userID']
       holdingsID = request.form['holdingsID']
       ticker = request.form['ticker']
     else:
+      userID = request.args.get('userID')
       holdingsID = request.args.get('holdingsID')
       ticker = request.args.get('ticker')
     # print(get_market_data_by_ticker(ticker))
-    result = view_security(holdingsID, ticker)
+    result = view_security(userID, holdingsID, ticker)
     return jsonify(result), result["code"]
   except Exception as e:
 

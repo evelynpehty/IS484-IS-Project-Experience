@@ -257,12 +257,14 @@ def get_today_ticker_info(ticker):
     msft = yf.Ticker(ticker)
     data = msft.history(period="1d").reset_index()
     return float(data["Close"])
-def get_holding_detail(holding):
+
+def get_holding_detail(holding, userID):
     info = {}
     ticker = holding['ticker']
  
     info['ticker'] = ticker
-    
+    watchlist_name = get_watchlist_name(userID, ticker)
+    info['watchlist_name'] = watchlist_name
     qty = holding['qty']
     info['qty'] = qty
     buy_price_USD = holding['buy_price']
@@ -283,6 +285,8 @@ def get_holding_detail(holding):
     current_total_price_SGD = current_price_SGD*float(qty)
     info['current_total_price_SGD'] = current_total_price_SGD
     info['1_day_change_per_each'] = get_1_day_change(ticker)["data"] * float(qty)
+    market_data = get_market_data_by_ticker(ticker)
+    info["market_data"] = market_data
     return info 
 """
     Functions for the APIs 
@@ -300,17 +304,22 @@ def get_info_for_all_securities(userID):
     securities_holdings = get_all_securities_holdings_by_userID(userID)["data"]
     for holding in securities_holdings:
         holdingsID = holding["holdingsID"]
-        crr_holding = []
+        # crr_holding = []
+        # ticker = holding['ticker']
+        print(holding)
+        # watchlist_name = get_watchlist_name(userID, ticker)
         all_holdings = get_all_holdings_by_holdingsID(holdingsID)
         for holding in all_holdings["data"]:
-            
-            info = get_holding_detail(holding)
+            ticker = holding['ticker']
+            # watchlist_name = get_watchlist_name(userID, ticker)
+            info = get_holding_detail(holding, userID)
             info['holdingsID'] = holdingsID
+            # info["watchlist_name"] = watchlist_name
             crr_holding_USD += info["current_total_price_USD"]
             total_invest_USD += (info["buy_price_USD"]*info["qty"])
             result["detail"].append(info)
             total_in_one_day_change+=info['1_day_change_per_each']
-        
+
         overall_return_USD = crr_holding_USD - total_invest_USD
         crr_holding_SGD = convert_USD_to_SGD(crr_holding_USD)
         total_invest_SGD = convert_USD_to_SGD(total_invest_USD)
@@ -328,6 +337,7 @@ def get_info_for_all_securities(userID):
         result["overall_return_SGD"] = overall_return_SGD
         result["overall_change_rate"] = overall_change_rate
         result["1_day_change"] = total_in_one_day_change
+        
         result["code"] = 200
         
     return result
@@ -349,7 +359,7 @@ def get_holding_by_userID_and_ticker(holdingsID, ticker):
     }
 
 #View security page 
-def view_security(holdingsID, ticker):
+def view_security(userID, holdingsID, ticker):
     
     result = {}
     holding_data = get_holding_by_userID_and_ticker(holdingsID, ticker)["data"]
@@ -361,7 +371,7 @@ def view_security(holdingsID, ticker):
         }
     market_data = get_market_data_by_ticker(ticker)
     # print(market_data)
-    get_holding_data_detail = get_holding_detail(holding_data)
+    get_holding_data_detail = get_holding_detail(holding_data, userID)
     result["market_data"] = market_data
     result["get_holding_data_detail"] = get_holding_data_detail
     return {
@@ -409,3 +419,21 @@ def get_1_day_change(ticker):
         "code": 404,
         "data": None
     }
+
+def get_watchlist_name(userID, ticker):
+    engine = create_engine()
+    sql = f"""
+    SELECT * FROM watchlist_securities 
+    WHERE ticker='{ticker}'
+    AND watchlistID IN(
+    SELECT watchlistID from watchlist
+    WHERE userID='{userID}')
+    """
+    
+    result = engine.execute(sql)
+    print(sql, result.rowcount)
+    if result.rowcount>0:
+        info = result.fetchone()
+        watchlist_securities = Watchlist_Securities(info[0], info[1], info[2])
+        return watchlist_securities.get_watchlistName()
+    return ""
