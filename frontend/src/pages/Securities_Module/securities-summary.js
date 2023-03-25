@@ -1,6 +1,7 @@
 // Packages
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 // MUI Components
 import Grid from '@mui/material/Unstable_Grid2';
@@ -86,15 +87,17 @@ function SecuritiesSummary() {
                                     CURRENT HOLDINGS
                                 </Typography>
                                 <Typography sx={{ fontSize: 20, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
-                                    S$18,727.25
+                                    { `S$${ securitiesList.crr_holding_SGD.toFixed(2).toLocaleString("en-US") }` }
                                 </Typography>
                                 <Grid xs={12}>
                                     <Typography variant="p" sx={{ fontSize: 12, mr: 1 }} color="#9197A4">
                                         1D Change
                                     </Typography>
-                                    <Typography variant="p" sx={{ fontSize: 12 }} color="#109878">
-                                        <ArrowUpIcon style={ styles.arrowIcon } />
-                                        S$17.28
+                                    <Typography variant="p" sx={{ fontSize: 12 }} style={ securitiesList["1_day_change"] < 0 ? styles.negative : styles.positive } >
+                                        { securitiesList["1_day_change"] < 0 && <ArrowDownIcon style={ styles.arrowIcon } />}
+                                        { securitiesList["1_day_change"] >= 0 && <ArrowUpIcon style={ styles.arrowIcon } />}
+                                        
+                                        { `S$${ securitiesList["1_day_change"].toFixed(2).toLocaleString("en-US") }` }
                                     </Typography>
                                 </Grid>       
                             </Grid>
@@ -103,14 +106,16 @@ function SecuritiesSummary() {
                                     TOTAL INVESTED
                                 </Typography>
                                 <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }}>
-                                    S$18,500.00 
+                                    { `S$${ securitiesList["total_invest_SGD"].toFixed(2).toLocaleString("en-US") }` }
                                 </Typography>
                                 <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">
                                     OVERALL RETURNS
                                 </Typography>
-                                <Typography sx={{ fontSize: 14, fontWeight:"bold" }} color="#109878">
-                                    <ArrowUpIcon style={ styles.arrowIcon } />
-                                    S$227.35
+                                <Typography sx={{ fontSize: 14, fontWeight:"bold" }} color="#109878" style={ securitiesList["overall_return_SGD"] < 0 ? styles.negative : styles.positive }>
+                                    { securitiesList["overall_return_SGD"] < 0 && <ArrowDownIcon style={ styles.arrowIcon } />}
+                                    { securitiesList["overall_return_SGD"] >= 0 && <ArrowUpIcon style={ styles.arrowIcon } />}
+                                    
+                                    { `S$${ securitiesList["overall_return_SGD"].toFixed(2).toLocaleString("en-US") }` }
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -159,72 +164,52 @@ function SecuritiesSummary() {
                 <Grid container style={styles.grid} direction="row" justifyContent="space-between" alignItems="center">
                     <Typography style={styles.label} variant="h6">Holdings</Typography>
                 </Grid>
-                
-                <Card style={ styles.card2 }>
-                    <CardContent>
-                        <Grid container direction="row" justifyContent="space-between" alignItems="center">
-                            <Typography variant="p" sx={{ fontSize: 16, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
-                                AAPL
-                                <Typography variant="p" sx={{ fontSize: 12, fontWeight:"regular", ml: 2 }}>
-                                    Apple Inc.
-                                </Typography>
-                            </Typography>
-                            
-                            <Typography variant="p" sx={{ fontSize: 12 }} textAlign="end" color="#9197A4">
-                                Qty 30
-                                <Typography variant="p" sx={{ fontSize: 12, fontWeight:"regular", ml: 2 }} color={ styles.positive }>
-                                    <ArrowUpIcon />
-                                    175.18
-                                </Typography>
-                            </Typography>
-                            
-                        </Grid>
-                        <Grid container direction="row" justifyContent="space-between" alignItems="center">
-                            <Typography variant="p" sx={{ fontSize: 14 }} color={ theme.palette.secondary.main }>
-                                US$155.09
-                                <Typography variant="p" sx={{ fontSize: 12, fontWeight:"regular", ml: 2 }} color={ styles.negative } >
-                                    -0.13%
-                                </Typography>
-                            </Typography>
-                            <Typography sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="#4B4948">
-                                SGD $6,234.62
-                            </Typography>
-                        </Grid>
-                    </CardContent>
-                </Card>
 
-                <Card style={ styles.card2 }>
-                    <CardContent>
-                        <Grid container direction="row" justifyContent="space-between" alignItems="center">
-                            <Typography variant="p" sx={{ fontSize: 16, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
-                                TSLA
-                                <Typography variant="p" sx={{ fontSize: 12, fontWeight:"regular", ml: 2 }}>
-                                    Tesla Inc.
-                                </Typography>
-                            </Typography>
-                            
-                            <Typography variant="p" sx={{ fontSize: 12 }} textAlign="end" color="#9197A4">
-                                Qty 20
-                                <Typography variant="p" sx={{ fontSize: 12, fontWeight:"regular", ml: 2 }} color={ styles.negative }>
-                                    <ArrowDownIcon />
-                                    91.36
-                                </Typography>
-                            </Typography>
-                            
-                        </Grid>
-                        <Grid container direction="row" justifyContent="space-between" alignItems="center">
-                            <Typography variant="p" sx={{ fontSize: 14 }} color={ theme.palette.secondary.main }>
-                                US$180.83
-                                <Typography variant="p" sx={{ fontSize: 12, fontWeight:"regular", ml: 2 }} color={ styles.negative } >
-                                    -2.68%
-                                </Typography>
-                            </Typography>
-                            <Typography sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="#4B4948">
-                                SGD $4,191.45
-                            </Typography>
-                        </Grid>
-                    </CardContent>
-                </Card>
+
+                {securitiesList.detail.map((item, index)=>{
+                    return  (
+                        <>
+                        <Link to={`/securities-details/${item.ticker}`} key={item.ticker}> 
+                             <Card style={ styles.card2 }>
+                                <CardContent>
+                                    <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                        <Typography variant="p" sx={{ fontSize: 16, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
+                                            {item.ticker}
+                                            <Typography variant="p" sx={{ fontSize: 12, fontWeight:"regular", ml: 2 }}>
+                                                Apple Inc.
+                                                {/*item.ticker_name*/}
+                                            </Typography>
+                                        </Typography>
+                                        
+                                        <Typography variant="p" sx={{ fontSize: 12 }} textAlign="end" color="#9197A4">
+                                            Qty {item.qty}
+                                            <Typography variant="p" sx={{ fontSize: 12, fontWeight:"regular", ml: 2 }} style={ item["1_day_change_per_each"] < 0 ? styles.negative : styles.positive }>
+                                                { item["1_day_change_per_each"] < 0 && <ArrowDownIcon style={ styles.arrowIcon } />}
+                                                { item["1_day_change_per_each"] >= 0 && <ArrowUpIcon style={ styles.arrowIcon } />}
+                                                
+                                                { `S$${ item["1_day_change_per_each"].toFixed(2).toLocaleString("en-US") }` }
+                                            </Typography>
+                                        </Typography>
+                                        
+                                    </Grid>
+                                    <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                        <Typography variant="p" sx={{ fontSize: 14 }} color={ theme.palette.secondary.main }>
+                                            
+                                            { `US$${ item["current_price_USD"].toFixed(2).toLocaleString("en-US") }` }
+                                            <Typography variant="p" sx={{ fontSize: 12, fontWeight:"regular", ml: 2 }} style={ item["change_rate"] < 0 ? styles.negative : styles.positive } >
+                                               {item.change_rate.toFixed(2)}%
+                                            </Typography>
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="#4B4948">
+                                            { `SGD $${ item["current_price_SGD"].toFixed(2).toLocaleString("en-US") }` }
+                                        </Typography>
+                                    </Grid>
+                                </CardContent>
+                            </Card>   
+                        </Link>
+                        </>
+                    )
+                })}
             </Box>
         </Container>
         </React.Fragment>
