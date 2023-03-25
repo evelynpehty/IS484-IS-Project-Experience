@@ -268,7 +268,7 @@ def get_holding_detail(holding, userID):
     # info['watchlist_name'] = watchlist_name
     securities_name = get_securities_name(ticker)
     qty = holding['qty']
-    info['securities_name'] = securities_name
+    info['stock_name'] = securities_name
     info['qty'] = qty
     buy_price_USD = holding['buy_price']
     info['buy_price_USD'] = buy_price_USD
@@ -299,6 +299,7 @@ def get_holding_detail(holding, userID):
 
 
 def get_info_for_all_securities(userID):
+    update_market_data_for_recent_90_days_data()
     crr_holding_USD = 0.0
     total_invest_USD = 0.0
     overall_return_USD = 0.0 
