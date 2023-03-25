@@ -1,5 +1,6 @@
 // Packages
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 // MUI Components
 import Grid from '@mui/material/Unstable_Grid2';
@@ -60,6 +61,10 @@ function SecuritiesSummary() {
             color: "#E60000"
         }
     }
+
+   
+    const { securitiesList } = useSelector((state) => state.securities);
+    console.log(securitiesList)
 
     return (
         <React.Fragment>
