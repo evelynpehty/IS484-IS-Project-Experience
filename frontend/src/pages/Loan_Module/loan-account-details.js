@@ -3,10 +3,14 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom"
 import { Link, useParams } from "react-router-dom";
+import moment from 'moment';
 
 // MUI Components
 import Grid from '@mui/material/Unstable_Grid2';
+import { styled } from '@mui/material/styles';
 import { Container, Box, Card, CardContent, Typography, Chip, useTheme } from "@mui/material";
+import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
+
 
 // Customised Components
 import SecondaryAppBar from "../../components/SecondaryAppBar";
@@ -80,6 +84,18 @@ function LoanAccountDetails() {
         }
     }
 
+    const BorderLinearProgress = styled(LinearProgress) (({ theme }) => ({
+        height: 20,
+        borderRadius: 5,
+        [`&.${linearProgressClasses.colorPrimary}`]: {
+          backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
+        },
+        [`& .${linearProgressClasses.bar}`]: {
+          borderRadius: 5,
+          backgroundColor: theme.palette.mode === 'light' ? 'linear-gradient(to top right, #E69F9F, #E60000)' : 'linear-gradient(to top right, #E69F9F, #E60000)',
+        },
+    }));
+
     // Fetch Loan Account
     const navigate = useNavigate();
     const { id } = useParams()
@@ -89,52 +105,88 @@ function LoanAccountDetails() {
     {
         return el.LoanAccountID === id
     })
-    console.log(loanList)
 
-    // Fetch Loan Transaction Repayment History
-    const { loan_transactionHistoryList } = useSelector((state) => state.loan);
-    const transaction_item = loan_transactionHistoryList.filter(function (el)
-    {
-      return el.accountFrom === id || el.accountTo === id
-    })
+    const monthly_payment = loan_item[0].Detail.monthly_payment
+    const LoanAmount = loan_item[0].LoanAmount
+    const LoanStartDate = loan_item[0].LoanStartDate
+    const LoanMaturity = loan_item[0].LoanMaturityDate
+    const schedule_for_payment = loan_item[0].Detail.schedule_for_payment
 
-    // Get 3 recent transactions
-    var recent_transactions = transaction_item.slice(0, 3)
-    console.log(recent_transactions)
+    const [selectedMonth, setSelectedMonth] = useState("")
+    const [totalPaid, setTotalPaid] = useState("");
+    const [outstanding, setOutstanding] = useState("");
+    const [monthlyRepayment, setMonthlyRepayment] = useState("");
+    const [paymentDue, setPaymentDue] = useState("");
+    const [totalLoanAmount, setTotalLoanAmount] = useState("");
+    const [timeToCompletion, setTimeToCompletion] = useState("");
+    const [progress, setProgress] = useState("");
+
+    // Navigation to Payment Reminders Page
+    const handlePaymentReminders = () => {
+        navigate("/payment-reminders", { replace: true, state: {loan_item: loan_item, id: id} })
+    }
 
     // Navigation to View All Loan Repayment Transaction
     const handleViewAll = () => {
-        navigate('/view-loan-transaction-history', {replace: true , state: { transaction_item: transaction_item, id: id } })  
+        navigate('/view-loan-transaction-history', {replace: true , state: { loan_item: loan_item[0], id: id } })  
     }
 
-    // Testing Data
-    const data = [
-        {
-          "name": "Page A",
-          "uv": 4000,
-          "amt": 2400
-        },
-        {
-          "name": "Page B",
-          "uv": 3000,
-          "amt": 2210
-        },
-        {
-          "name": "Page C",
-          "uv": 2000,
-          "amt": 2290
-        },
-        {
-          "name": "Page D",
-          "uv": 1000,
-          "amt": 2000
-        },
-        {
-          "name": "Page E",
-          "uv": 0,
-          "amt": 2181
+    var data = []
+    var curr = moment(LoanStartDate).year()
+    var yearRange = []
+    for(let x = curr; x <= moment(LoanMaturity).year(); x++) {
+        yearRange.push(curr.toString())
+        curr += 1
+    }
+
+    const currentMonth = moment().month() +1 // jan=0, dec=11
+    const currentYear = moment().year() 
+    var r_date =  (currentMonth) + "/1/" + currentYear // Fixed repayment date to be first of the month
+    const monthDifference =  Math.ceil(moment(new Date(r_date)).diff(new Date(LoanStartDate), 'months', true));
+    // const display = []
+
+    for(var i=monthDifference; i>0; i--){
+        var obj = {"month": "", "outstanding": ""}
+
+        obj["month"] = moment(r_date).format('MMM YYYY')
+        obj["outstanding"] = (Object.assign({}, schedule_for_payment[i]).end_balance).toFixed(2);
+        obj["Monthly_Repayment"] = monthly_payment.toFixed(2)
+        obj["payment_due"] = moment(r_date).format('MMM 01, YYYY')
+        obj["total_paid"]= (LoanAmount - obj["outstanding"]).toFixed(2)
+
+        const completion = moment.duration((moment(LoanMaturity)).diff((moment(r_date))));
+
+        var year_str = "years"
+        var month_str = "months"
+        if (completion.years() <= 1){
+            year_str = "year"
         }
-      ]
+        if (completion.months() <= 1){
+            month_str = "month"
+        }
+
+        obj["time_to_completion"] = completion.years() + ` ${year_str} ` + completion.months() + ` ${month_str}`
+        obj["total_loan_amount"] = LoanAmount.toFixed(2)
+        obj["progress"]= (obj["total_paid"] / obj["total_loan_amount"]) * 100
+
+        data.push(obj)
+        r_date = moment(r_date).subtract(1, 'months')
+    }
+    var recent_transactions = data.slice(0, 3)
+    data = data.reverse()
+    console.log(data)
+
+    const handleChart = (event, payload) => {
+        const datapoint = payload.payload
+        setSelectedMonth(datapoint["month"])
+        setTotalPaid(datapoint["total_paid"])
+        setOutstanding(datapoint["outstanding"])
+        setMonthlyRepayment(datapoint["Monthly_Repayment"])
+        setPaymentDue(datapoint["payment_due"])
+        setTimeToCompletion(datapoint["time_to_completion"])
+        setTotalLoanAmount(datapoint["total_loan_amount"])
+        setProgress(datapoint["progress"])
+    }
 
     return (
         <React.Fragment>
@@ -161,7 +213,7 @@ function LoanAccountDetails() {
 
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
                         <Typography style={ styles.label } variant="h6">Debt Paydown</Typography>
-                        <WhiteReusableButton icon={ <BellIcon /> } buttonText="REMINDERS" />
+                        <WhiteReusableButton function={ handlePaymentReminders } icon={ <BellIcon /> } buttonText="REMINDERS" />
                     </Grid>
 
                     <Card style={ styles.card2 } elevation={ 4 }>
@@ -170,22 +222,92 @@ function LoanAccountDetails() {
                             margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                             <defs>
                                 <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
-                                <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
-                                </linearGradient>
-                                <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>
-                                <stop offset="95%" stopColor="#82ca9d" stopOpacity={0}/>
+                                <stop offset="5%" stopColor="#E60000" stopOpacity={0.8}/>
+                                <stop offset="95%" stopColor="#E60000" stopOpacity={0}/>
                                 </linearGradient>
                             </defs>
-                            <XAxis dataKey="name" />
+                            <XAxis dataKey="month" />
                             <YAxis />
                             <CartesianGrid strokeDasharray="3 3" />
                             <Tooltip />
-                            <Area type="step" dataKey="uv" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" />
+                            <Area type="step" dataKey="outstanding" stroke="#E60000" fillOpacity={1} fill="url(#colorUv)" activeDot={{ r:8, onClick: handleChart }}/>
                         </AreaChart>
                         </ResponsiveContainer>
+                        {selectedMonth!=="" && 
+                       <CardContent style={ styles.cardContent }>
+                            
+                                <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                    <Grid xs={6}>
+                                        <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#9197A4">
+                                            TOTAL LOAN AMOUNT
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} >
+                                            SGD ${totalLoanAmount.toLocaleString("en-US")}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid xs={6}>
+                                        <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#9197A4">
+                                            TIME TO COMPLETION
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }}>
+                                            {timeToCompletion}
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+
+                                <Grid container direction="row" justifyContent="space-between" alignItems="center" sx={{mt:1, mb: 2}}>
+                                    <Grid xs={12}>
+                                        <BorderLinearProgress variant="determinate" value={progress} />
+                                        <Typography sx={{ fontSize: 14, fontWeight:"bold", textAlign: "center" }} color="#E60000">
+                                            {progress.toFixed(2)}%
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                                
+
+                                <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                    <Grid xs={6}>
+                                        <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#9197A4">
+                                            TOTAL PAID
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} >
+                                            SGD ${totalPaid.toLocaleString("en-US")}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid xs={6}>
+                                        <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#9197A4">
+                                            OUTSTANDING
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }}>
+                                            SGD ${outstanding.toLocaleString("en-US")}
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+
+                                <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                    <Grid xs={6}>
+                                        <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#9197A4">
+                                           MONTHLY REPAYMENT
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} >
+                                            SGD ${monthlyRepayment.toLocaleString("en-US")}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid xs={6}>
+                                        <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#9197A4">
+                                            PAYMENT DUE
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }}>
+                                            {paymentDue}
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                            
+
+                        </CardContent>} 
                     </Card>
+
+                    
 
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
                         <Typography style={ styles.label } variant="h6">Repayment History</Typography>
@@ -198,20 +320,21 @@ function LoanAccountDetails() {
                                 <CardContent style={ (index === recent_transactions.length - 1) ? styles.cardContent : styles.cardContent2 } key={ index }>
                                     <Grid container direction="row" justifyContent="space-between" alignItems="center">
                                         <Typography sx={{ fontSize: 16, fontWeight:"bold" }} color="#4B4948">
-                                            {value.transactionID}
+                                            UBS - {index+1}
                                         </Typography>
-                                        <Typography style={ (value.accountTo === id) ? styles.negative : styles.positive } sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="#4B4948">
-                                            {(value.accountTo === id) ? `- SGD $${ value.transactionAmount.toLocaleString("en-US") }` : `SGD $${ value.transactionAmount.toLocaleString("en-US") }` }
+                                        <Typography style={ styles.negative } sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="#4B4948">
+                                            { `- SGD $${ monthly_payment.toLocaleString("en-US") }` }
                                         </Typography>
                                     </Grid>
+
                                     <Grid container direction="row" justifyContent="space-between" alignItems="center">
                                         <Typography sx={{ fontSize: 12 }} color="#9197A4">
-                                            Bills Payment: BIR
+                                            Monthly Repayment
                                         </Typography>
                                         <Typography sx={{ fontSize: 12 }} textAlign="end" color="#9197A4">
-                                            { value.transactionDate.replace(" GMT", "") }
+                                            { `01 ${value.payment_due}, 10:30 PM` }
                                         </Typography>
-                                    </Grid>
+                                        </Grid>
                                 </CardContent>
                             )
                         })}

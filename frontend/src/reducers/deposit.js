@@ -27,6 +27,20 @@ switch (type) {
         ...state,
         transactionHistoryList: []
     };
+    case "UPDATE_DEPOSIT_SUCCESS":
+      const {depositList} = state
+
+      depositList.forEach(el => {
+        if(el.DepositAccountID === payload.depositAccountID){
+          el.ChosenColor =payload.newColor;
+          el.AccountName = payload.newName
+        }
+      });
+  
+      return {
+          ...state,
+          depositList: depositList
+      };
     
     default:
     return state;

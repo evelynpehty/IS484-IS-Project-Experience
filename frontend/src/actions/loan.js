@@ -83,8 +83,14 @@ export const loanTransactionHistory = (UserID) => (dispatch) => {
 export const updateLoanAccount = (input) => (dispatch) => {
   return loan_service.updateLoanAccount(input).then(
     (data) => {
-        return Promise.resolve(data);
-    },
+      if(data.code === 200){
+        dispatch({
+          type: "UPDATE_LOAN_SUCCESS",
+          payload: input
+        });
+      }
+      return Promise.resolve(data);
+  },
     (error) => {
       console.log(error)
       return Promise.reject(error);

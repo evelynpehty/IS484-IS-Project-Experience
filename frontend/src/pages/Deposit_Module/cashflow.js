@@ -380,7 +380,7 @@ function CashFlow() {
                         </ResponsiveContainer>
 
                         {selectedMonth!=="" && 
-                       <CardContent style={ styles.cardContent }>     
+                        <CardContent style={ styles.cardContent }>     
                             {type==="Income" &&  
                                 <Grid container direction="row" justifyContent="space-between" alignItems="center">
                                     <Grid xs={8}>
