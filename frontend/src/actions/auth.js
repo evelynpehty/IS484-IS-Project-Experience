@@ -21,7 +21,7 @@ export const login = (username, password) => (dispatch) => {
           return Promise.reject();
         }
 
-        return Promise.resolve();
+        return Promise.resolve(data);
       },
       (error) => {
         console.log(error)
@@ -45,6 +45,20 @@ export const logout = () => (dispatch) => {
     type: "LOGOUT",
   });
 };
+
+export const QuickAction = (route) => (dispatch) => { 
+  dispatch({
+    type: "QUICK_ACTION",
+    payload: route,
+  });
+};
+
+export const DataLoaded = (route) => (dispatch) => { 
+  dispatch({
+    type: "DATA_LOADED",
+  });
+};
+
 
 export const RemoveFirstLoad = () => (dispatch) => { 
   dispatch({

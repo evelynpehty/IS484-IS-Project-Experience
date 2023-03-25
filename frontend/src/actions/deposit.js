@@ -4,6 +4,7 @@ export const deposit = (UserID) => (dispatch) => {
     return deposit_service.getalldepositaccounts(UserID).then(
       (data) => {
         if(data.code === 200){
+          console.log(data.data)
           dispatch({
             type: "DEPOSIT_SUCCESS",
             payload: { depositList: data.data },
@@ -84,19 +85,16 @@ export const deposit = (UserID) => (dispatch) => {
   export const updateDepositAccount = (input) => (dispatch) => {
     return deposit_service.updateDepositAccount(input).then(
       (data) => {
+          if(data.code === 200){
+            dispatch({
+              type: "UPDATE_DEPOSIT_SUCCESS",
+              payload: input
+            });
+          }
           return Promise.resolve(data);
       },
       (error) => {
         console.log(error)
-        /*const message = error.message
-        dispatch({
-          type: "UPDATE_LOAN_REMINDER_FAIL",
-        });
-  
-        dispatch({
-          type: "SET_MESSAGE",
-          payload: message,
-        });*/
         return Promise.reject(error);
       }
     );
