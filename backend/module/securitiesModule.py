@@ -299,7 +299,7 @@ def get_holding_detail(holding, userID):
 
 
 def get_info_for_all_securities(userID):
-    update_market_data_for_recent_90_days_data()
+    
     crr_holding_USD = 0.0
     total_invest_USD = 0.0
     overall_return_USD = 0.0 
