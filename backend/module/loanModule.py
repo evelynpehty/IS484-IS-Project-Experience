@@ -474,9 +474,11 @@ def update_new_reminder(loanAccountID, ReminderType):
     engine = create_engine()
     sql = "INSERT INTO loan_reminder (loanAccountID, ReminderType) VALUES ('%s', '%s');" % (loanAccountID, ReminderType)
     engine.execute(sql)
+    lastestReminder = get_lastest_reminder_id(loanAccountID)
     return {
         "code": 200,
-        "message": "new loan reminder has updated/add successfully"
+        "message": "new loan reminder has updated/add successfully",
+        "data": lastestReminder["data"]
     }
 
 
@@ -524,4 +526,19 @@ def get_credit_card_net_worth(userID):
     return{
         "code": 404,
         "data": net_worth
+    }
+def get_lastest_reminder_id(loanAccountID):
+    engine = create_engine()
+    sql = f"SELECT * FROM loan_reminder WHERE loanAccountID='{loanAccountID}' ORDER BY loanReminderID DESC LIMIT 1;"
+    result = engine.execute(sql)
+    if result.rowcount>0:
+        info = result.fetchone()
+        loanReminder = Loan_Reminder(info[0], info[1], info[2])
+        return {
+            "code": 200,
+            "data": loanReminder.to_dict()
+        }
+    return{
+        "code": 404,
+        "data": None 
     }

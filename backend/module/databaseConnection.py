@@ -6,9 +6,11 @@ import json
 def create_engine():
     #local database
     # return db.create_engine()
-    # return db.create_engine(BaseConfig.SQLALCHEMY_DATABASE_URI)
     return db.create_engine(BaseConfig.SQLALCHEMY_DATABASE_URI)
+    # return db.create_engine(BaseConfig.SQLALCHEMY_DATABASE_URI_LOCAL)
 
+
+# for the custom quick function/button based on the user demand (personalized function)
 def get_SELF_CUSTOMIZATION():
     with open('.\\module\\DataStore\\SELF_CUSTOMIZATION.json', 'r') as openfile:
         json_object = json.load(openfile)

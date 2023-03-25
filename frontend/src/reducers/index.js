@@ -4,12 +4,14 @@ import creditCardReducer from "./creditcard";
 import loanReducer from "./loan.js";
 import peekDetailReducer from "./peekdetail";
 import messageReducer from "./message.js";
+import securitiesReducer from "./securities.js";
 import {combineReducers} from "redux"
 
 const allReducers = combineReducers({
     auth: authReducer,
     deposit: depositReducer,
     loan: loanReducer,
+    securities: securitiesReducer,
     peekDetail: peekDetailReducer,
     creditcard: creditCardReducer,
     message: messageReducer
