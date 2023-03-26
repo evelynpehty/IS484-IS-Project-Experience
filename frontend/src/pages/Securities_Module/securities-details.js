@@ -12,7 +12,6 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { Container, Box, Typography, Card, CardContent, useTheme, Paper, Chip, Button, Stack } from "@mui/material";
 
 // Customised Components
-import MainAppBar from "../../components/MainAppBar";
 import SecondaryAppBar from "../../components/SecondaryAppBar";
 import WhiteReusableButton from "../../components/WhiteButton";
 
@@ -87,7 +86,12 @@ function SecuritiesDetails() {
 
         chipUnSelected: {
             backgroundColor: theme.palette.neutral.main,
-        }
+        },
+        stackChip: {
+            overflow: "auto",
+            paddingLeft: "16px",
+            paddingRight: "16px"
+        },
     }
       
     const { ticker } = useParams()
@@ -123,6 +127,19 @@ function SecuritiesDetails() {
         setSelectedChip(item)
         var result = []
         if(item === "1D"){
+            const oneD_data = securitiesArray[0].record_for_past_24_hrs
+            console.log(oneD_data)
+
+            oneD_data.forEach(market_item => {
+             
+                var temp = {
+                    "Date": moment.utc(market_item.Datetime).local().format('HH:mm a'),
+                    "ClosingPrice": market_item.Close
+                }
+                result.push(temp)
+                
+            });
+            setGraphData(result)
 
         }
         if(item === "1W"){
@@ -190,11 +207,14 @@ function SecuritiesDetails() {
         }
         if(item === "YTD"){
             marketData.forEach(market_item => {
-                var temp = {
-                    "Date": moment(market_item.Date).format('DD MMM YY'),
-                    "ClosingPrice": market_item.ClosingPrice,
-                }
-                result.unshift(temp)
+                const d = moment(market_item.Date)
+                if(d.year()===moment().year()){
+                    var temp = {
+                        "Date": moment(market_item.Date).format('DD MMM YY'),
+                        "ClosingPrice": market_item.ClosingPrice,
+                    }
+                    result.unshift(temp)
+                }       
             });
             setGraphData(result)
         }
@@ -202,7 +222,7 @@ function SecuritiesDetails() {
 
     return (
         <React.Fragment>
-            <MainAppBar />
+            <SecondaryAppBar link={ `/securities` } text="Securities" /> 
             <Container maxWidth="lg">
                 <Box sx={{ pt: 10, pb: 10 }}>
                 <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
@@ -226,14 +246,16 @@ function SecuritiesDetails() {
                             <Area dataKey="ClosingPrice" stroke="#E60000" fillOpacity={1} fill="url(#colorUv)" />
                             </AreaChart>
                         </ResponsiveContainer>
-                        <cardContent>
-                            <Stack direction="row" spacing={1} style={ styles.stackChip }>
-                                {
-                                    chipValue.map((item, index) => {
-                                        return <Chip label={item} id={index} key={index} sx={(item === selectedChip) ? styles.chipSelected : styles.chipUnSelected } variant="outlined" onClick={() => handleChip(item)} />
-                                    })
-                                }
-                            </Stack>
+                        <cardContent>                     
+                            <Grid container justifyContent="center" sx={{mt:2, mb: 2}}> 
+                                <Stack direction="row" spacing={1} style={ styles.stackChip }>
+                                        {
+                                            chipValue.map((item, index) => {
+                                                return <Chip label={item} id={index} key={index} sx={(item === selectedChip) ? styles.chipSelected : styles.chipUnSelected } variant="outlined" onClick={() => handleChip(item)} />
+                                            })
+                                        }
+                                </Stack>
+                            </Grid>
                         </cardContent>
                     </Card>
                 
