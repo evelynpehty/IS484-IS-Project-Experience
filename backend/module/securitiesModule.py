@@ -261,7 +261,7 @@ def get_today_ticker_info(ticker):
 def get_holding_detail(holding, userID):
     info = {}
     ticker = holding['ticker']
- 
+    
     info['ticker'] = ticker
     # watchlist_name = get_watchlist_name(userID, ticker)
 
@@ -278,6 +278,7 @@ def get_holding_detail(holding, userID):
     info['current_price_USD'] = current_price_USD
     current_price_SGD = convert_USD_to_SGD(current_price_USD)
     info['current_price_SGD'] = current_price_SGD
+    
     if buy_price_USD == 0.0:
         change_rate = 0.0
     else:
@@ -290,7 +291,19 @@ def get_holding_detail(holding, userID):
     info['1_day_change_per_each'] = get_1_day_change(ticker)["data"] * float(qty)
     market_data = get_market_data_by_ticker(ticker)
     info["market_data"] = market_data
+    record_for_past_24_hrs = past_24_hours_record(ticker)
+    info["record_for_past_24_hrs"] = record_for_past_24_hrs
     return info 
+def past_24_hours_record(ticker, interval='1h'):
+    result = []
+    data = yf.download(tickers=ticker, period='1d', interval=interval)
+    data = data.reset_index()
+    for index, row in data.iterrows():
+        ts = pd.Timestamp(row['Datetime'])
+        time_only = ts.strftime('%H:%M:%S')
+        row["time_only"] = time_only
+        result.append(row.to_dict())
+    return result
 """
     Functions for the APIs 
 """
