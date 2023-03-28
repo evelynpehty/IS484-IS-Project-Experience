@@ -1319,7 +1319,7 @@ def view_all_watchList_requests():
     }), 500 
   
 
-# required attribute(default): userID
+# required attribute(default): ticker
 @api.route('/view_ticker_for_graph',methods = ['POST', 'GET'])
 def view_ticker_for_graph_requests():
   try: 
@@ -1336,3 +1336,21 @@ def view_ticker_for_graph_requests():
       "message": str(e),
       "data": None
     }), 500 
+  
+# required attribute(default): userID
+@api.route('/browse_securities_holding_by_watchlist',methods = ['POST', 'GET'])
+def browse_securities_holding_by_watchlist_requests():
+  try: 
+    userID = None
+    if request.method == 'POST':
+      userID = request.form['userID']
+    else:
+      userID = request.args.get('userID')
+    result = browse_securities_holding_by_watchlist(userID)
+    return jsonify(result), result["code"]
+  except Exception as e:
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500

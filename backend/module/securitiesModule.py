@@ -567,3 +567,28 @@ def view_ticker_for_graph(ticker):
             "past_1_year_record": get_recent_1_year_record_info(ticker)["recent_1_year_data"]
         }
     }
+def browse_securities_holding_by_watchlist(userID):
+    engine = create_engine()
+    sql = f"SELECT * FROM all_holdings WHERE holdingsID IN (SELECT holdingsID FROM securities_holdings WHERE userID = '{userID}')"
+    result = engine.execute(sql)
+    holding_list = []
+    if result.rowcount>0:
+        for info in result.fetchall():
+            row_dict = {}
+            holding = All_Holdings(info[0], info[1], info[2], info[3])
+            recent_1_day_record = get_last_day_exit_enter_price(holding.get_ticker())
+            row_dict = holding.to_dict()
+            row_dict["entry"] = recent_1_day_record["_channel_lower"]
+            row_dict["exit"] = recent_1_day_record["_channel_upper"]
+            row_dict["get_securities_name"] = get_securities_name(holding.get_ticker())
+            row_dict["1_day_change_in_percent"] = get_1_day_change_in_percent(holding.get_ticker())["data"]
+            holding_list.append(row_dict)
+        return {
+            "code": 200,
+            "data": holding_list
+        }
+    return {
+            "code": 404,
+            "data": holding_list
+    }
+
