@@ -1,5 +1,6 @@
 // Packages
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -63,9 +64,13 @@ function SecuritiesSummary() {
         }
     }
 
-   
+    
     const { securitiesList } = useSelector((state) => state.securities);
-    console.log(securitiesList)
+    const navigate = useNavigate();
+
+    const handleViewWatchList = () => {
+        navigate('/view-watchlist')  
+    }
 
     return (
         <React.Fragment>
@@ -75,7 +80,7 @@ function SecuritiesSummary() {
                 {/* Securities Summary */}
                 <Grid container style={styles.grid} direction="row" justifyContent="space-between" alignItems="center">
                     <Typography style={styles.label} variant="h6">Securities</Typography>
-                    <WhiteReusableButton buttonText="WATCHLIST" />
+                    <WhiteReusableButton function={ handleViewWatchList } buttonText="WATCHLIST" />
                 </Grid>
 
                 {/* Consolidated Securities Card */}
