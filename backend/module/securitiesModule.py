@@ -100,36 +100,41 @@ def view_dollar_cost_average(ticker, period, investment, interval="1mo"):
 """
 Code based on the database 
 """
-def get_watchlist_by_user_id(userID):
-    engine = create_engine()
-    sql = f"SELECT * FROM watchlist WHERE userID='{userID}'"
-    result = engine.execute(sql)
-    if result.rowcount>0:
-        info = result.fetchone()
-        watchlist = Watchlist(info[0], info[1])
-        return {
-            "code": 200,
-            "data": watchlist.to_dict()
-        }
-    return{
-        "code": 404,
-        "data": None 
-    }
+# def get_watchlist_by_user_id(userID):
+#     engine = create_engine()
+#     sql = f"SELECT * FROM watchlist WHERE userID='{userID}'"
+#     result = engine.execute(sql)
+#     if result.rowcount>0:
+#         info = result.fetchone()
+#         watchlist = Watchlist(info[0], info[1], info[2])
+#         return {
+#             "code": 200,
+#             "data": watchlist.to_dict()
+#         }
+#     return{
+#         "code": 404,
+#         "data": None 
+#     }
 
 def get_watchlist_securities_by_watchlist_id(watchlistID):
     engine = create_engine()
     sql = f"SELECT * FROM watchlist_securities WHERE watchlistID='{watchlistID}'"
     result = engine.execute(sql)
+    watchlistSecurities_list = []
     if result.rowcount>0:
-        info = result.fetchone()
-        watchlistSecurities = Watchlist_Securities(info[0], info[1], info[2])
+        
+        for info in result.fetchall():
+            watchlistSecurities = Watchlist_Securities(info[0], info[1], info[2])
+            watchlistSecurities_list.append(watchlistSecurities.to_dict())
+        # info = result.fetchone()
+            
         return {
             "code": 200,
-            "data": watchlistSecurities.to_dict()
+            "data": watchlistSecurities_list
         }
     return{
         "code": 404,
-        "data": None 
+        "data": watchlistSecurities_list 
     }
 
 def get_market_data_by_ticker(ticker):
@@ -592,3 +597,151 @@ def browse_securities_holding_by_watchlist(userID):
             "data": holding_list
     }
 
+
+
+def insert_new_watchlist(userID, watchlistID, watchlistName):
+    engine = create_engine()
+    sql = f"INSERT INTO watchlist (watchlistID, userID, watchlistGroupName) VALUES ('{watchlistID}', '{userID}', '{watchlistName}')"
+    print(sql)
+    engine.execute(sql)
+    return {
+        "code": 200,
+        "message": "New watchlist insert successfully!"
+    }
+
+def get_auto_watchlistID():
+    engine = create_engine()
+    sql = "SELECT watchlistID FROM watchlist ORDER BY watchlistID DESC"
+    result = engine.execute(sql)
+    return result.fetchone()[0]+ 1
+
+
+def create_watchlist(watchlistID, userID, watchlistName):
+    engine = create_engine()
+    sql = "SELECT * FROM watchlist WHERE watchlistID='{watchlistID}' AND userID='{userID}'"
+    result = engine.execute(sql)
+    print(result.rowcount)
+    if result.rowcount == 0:
+        watchlistID = get_auto_watchlistID()
+        insert_new_watchlist(userID, watchlistID)
+    sql = f"INSERT INTO watchlist (watchlistID, userID, watchlistGroupName) VALUES ('{watchlistID}', '{userID}', '{watchlistName}')"
+    print(sql)
+    engine.execute(sql)
+    return {
+        "code": 200,
+        "message": "New watchlist name insert successfully!"
+    }
+
+def get_all_watchlist_names_by_userID(userID):
+    engine = create_engine()
+    sql = f"SELECT DISTINCT(watchlistName) FROM watchlist_securities WHERE watchlistID IN (SELECT watchlistID FROM watchlist WHERE userID='{userID}')"
+    result = engine.execute(sql)
+    groupName = []
+    if result.rowcount > 0:
+        for info in result.fetchall():
+            groupName.append(info[0])
+        return {
+            'code': 200,
+            'data': groupName
+        }
+    return {
+        'code': 404,
+        'data': groupName
+    }
+
+def get_watchlist_by_userID(userID):
+    engine = create_engine()
+    sql = f"SELECT * FROM watchlist WHERE userID='{userID}'"
+    data = []
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        
+        for info in result.fetchall():
+            number_of_stock = 0
+            each_watchlist_info = {}
+            print(info)
+            watchlist = Watchlist(info[0], info[1], info[2])
+            each_watchlist_info = watchlist.to_dict()
+            watchlistSecurities = get_watchlist_securities_by_watchlist_id(watchlist.get_watchlistID())
+            if watchlistSecurities["code"] == 200:
+                ws_list = []
+                for ws in watchlistSecurities["data"]:
+                    row_dict = {}
+                    ticker = ws["Ticker"]
+                    WatchlistName = ws["WatchlistName"]
+                    tickerName = get_securities_name(ticker)
+                    row_dict["ticker"] = ticker
+                    row_dict["WatchlistName"] = WatchlistName
+                    row_dict["tickerName"] = tickerName
+                    row_dict["dataForEachPeriod"] = view_ticker_for_graph(ticker)
+                    ws_list.append(row_dict)
+                    number_of_stock += 1
+                each_watchlist_info["watchlist_list"] = ws_list
+
+            else:
+                each_watchlist_info["watchlist_list"] = None
+            each_watchlist_info["number_of_stock"] = number_of_stock
+            data.append(each_watchlist_info)
+        return {
+            "code": 200,
+            "data": data
+        }
+    return {
+        "code": 404,
+        "data": data
+    }
+def create_watchlist(userID, watchlistName):
+    engine = create_engine()
+    watchlistID = get_auto_watchlistID()
+    sql = f"INSERT INTO watchlist (watchlistID, userID, watchlistGroupName) VALUES ('{watchlistID}', '{userID}', '{watchlistName}')"
+#     print(sql)
+    engine.execute(sql)
+    return {
+        "code": 200,
+        "message": "New watchlist name insert successfully!"
+    }
+def update_watchlist_name(watchlistID, newWatchlistGroupName):
+    engine = create_engine()
+    sql = f"UPDATE watchlist SET `watchlistGroupName` = '{newWatchlistGroupName}' WHERE `watchlistID` = '{watchlistID}';"
+    engine.execute(sql)
+    return {
+        "code": 200,
+        "message": "New watchlist name update successfully!"
+    }
+
+def delete_watchlist_securities(watchlistID):
+    
+    engine = create_engine()
+    sql = f"DELETE FROM watchlist_securities WHERE watchlistID IN (SELECT watchlistID FROM watchlist WHERE watchlistID = '{watchlistID}')"
+    engine.execute(sql)
+    return {
+        "code": 200,
+        "message": "watchlist securities delete successfully!"
+    }
+def delete_watchlist(watchlistID):
+    engine = create_engine()
+    delete_watchlist_securities(watchlistID)
+    sql = f"DELETE FROM watchlist WHERE watchlistID = '{watchlistID}'"
+    engine.execute(sql)
+    return {
+        "code": 200,
+        "message": "watchlist delete successfully!"
+    }
+
+def insert_new_securities_into_watchlist(watchlistID, ticker, watchlistName):
+    engine = create_engine()
+    sql = f"INSERT INTO watchlist_securities (watchlistID, ticker, watchlistName) VALUES ('{watchlistID}', '{ticker}', '{watchlistName}');"
+    engine.execute(sql)
+    return {
+        "code": 200,
+        "message": "insert new securities into watchlist successfully!"
+    }
+
+def remove_securities_from_watchlist(watchlistID, ticker):
+    engine = create_engine()
+    sql = f"DELETE FROM watchlist_securities WHERE watchlistID='{watchlistID}' AND ticker='{ticker}';"
+    engine.execute(sql)
+    return {
+        "code": 200,
+        "message": "remove security from watchlist successfully!"
+    }

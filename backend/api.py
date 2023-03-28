@@ -1317,7 +1317,8 @@ def view_all_watchList_requests():
       "message": str(e),
       "data": None
     }), 500 
-  
+
+
 
 # required attribute(default): ticker
 @api.route('/view_ticker_for_graph',methods = ['POST', 'GET'])
@@ -1347,6 +1348,131 @@ def browse_securities_holding_by_watchlist_requests():
     else:
       userID = request.args.get('userID')
     result = browse_securities_holding_by_watchlist(userID)
+    return jsonify(result), result["code"]
+  except Exception as e:
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+  
+# required attribute(default): userID
+@api.route('/get_watchlist_by_userID',methods = ['POST', 'GET'])
+def get_watchlist_by_userID_requests():
+  try: 
+    userID = None
+    if request.method == 'POST':
+      userID = request.form['userID']
+    else:
+      userID = request.args.get('userID')
+    result = get_watchlist_by_userID(userID)
+    return jsonify(result), result["code"]
+  except Exception as e:
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+
+# required attribute(default): userID, watchlistName
+@api.route('/create_watchlist',methods = ['POST', 'GET'])
+def create_watchlist_requests():
+  try: 
+    userID = None
+    watchlistName = None 
+    if request.method == 'POST':
+      userID = request.form['userID']
+      watchlistName = request.form['watchlistName']
+    else:
+      userID = request.args.get('userID')
+      watchlistName = request.args.get('watchlistName')
+    result = create_watchlist(userID, watchlistName)
+    return jsonify(result), result["code"]
+  except Exception as e:
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+
+# required attribute(default): watchlistID, newWatchlistGroupName
+@api.route('/update_watchlist_name',methods = ['POST', 'GET'])
+def update_watchlist_name_requests():
+  try: 
+    watchlistID = None
+    newWatchlistGroupName = None 
+    if request.method == 'POST':
+      watchlistID = request.form['watchlistID']
+      newWatchlistGroupName = request.form['newWatchlistGroupName']
+    else:
+      watchlistID = request.args.get('watchlistID')
+      newWatchlistGroupName = request.args.get('newWatchlistGroupName')
+    result = update_watchlist_name(watchlistID, newWatchlistGroupName)
+    return jsonify(result), result["code"]
+  except Exception as e:
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+  
+# required attribute(default): watchlistID
+@api.route('/delete_watchlist',methods = ['POST', 'GET'])
+def delete_watchlistrequests():
+  try: 
+    watchlistID = None
+    if request.method == 'POST':
+      watchlistID = request.form['watchlistID']
+    else:
+      watchlistID = request.args.get('watchlistID')
+    result = delete_watchlist(watchlistID)
+    return jsonify(result), result["code"]
+  except Exception as e:
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+
+
+
+# required attribute(default): watchlistID, ticker, watchlistName
+@api.route('/insert_new_securities_into_watchlist',methods = ['POST', 'GET'])
+def insert_new_securities_into_watchlist_requests():
+  try: 
+    watchlistID = None
+    ticker = None 
+    watchlistName = None 
+    if request.method == 'POST':
+      watchlistID = request.form['watchlistID']
+      ticker = request.form['ticker']
+      watchlistName = request.form['watchlistName']
+    else:
+      watchlistID = request.args.get('watchlistID')
+      ticker = request.args.get('ticker')
+      watchlistName = request.args.get('watchlistName')
+    result = insert_new_securities_into_watchlist(watchlistID, ticker, watchlistName)
+    return jsonify(result), result["code"]
+  except Exception as e:
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+  
+# required attribute(default): watchlistID, ticker
+@api.route('/remove_securities_from_watchlist',methods = ['POST', 'GET'])
+def remove_securities_from_watchlist_requests():
+  try: 
+    watchlistID = None
+    ticker = None 
+    if request.method == 'POST':
+      watchlistID = request.form['watchlistID']
+      ticker = request.form['ticker']
+    else:
+      watchlistID = request.args.get('watchlistID')
+      ticker = request.args.get('ticker')
+    result = remove_securities_from_watchlist(watchlistID, ticker)
     return jsonify(result), result["code"]
   except Exception as e:
     return jsonify({
