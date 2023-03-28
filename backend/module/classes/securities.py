@@ -37,3 +37,4 @@ class Securities:
             "ticker": self.ticker,
             "tickerName": self.tickerName
         }
+ 

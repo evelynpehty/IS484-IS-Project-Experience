@@ -175,6 +175,10 @@ class StockData:
     def get_recent_1_year_data_info(self):
         return_data = self.stock_data
         return_data.reset_index(inplace=True)
+        return_data["_channel_upper"] = self._channel_upper
+        return_data["_channel_lower"] = self._channel_lower
+        return_data["_outer_upper"] = self._outer_upper
+        return_data["_outer_lower"] = self._outer_lower
         # Filter the DataFrame for the recent 1 year data
         one_year_ago = datetime.now() - timedelta(days=365)
         recent_data = return_data.loc[return_data["Date"] >= one_year_ago]

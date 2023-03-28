@@ -170,7 +170,7 @@ def get_all_ticker():
         "code": 404,
         "data": [] 
     }
-def update_market_data_for_recent_90_days_data():
+def update_market_data_for_recent_1_year_data():
     engine = create_engine()
     try: 
         tickers = get_all_ticker()["data"]
@@ -180,7 +180,7 @@ def update_market_data_for_recent_90_days_data():
             try: 
                 ticker_info = yf.Ticker(ticker)
                 # print(ticker)
-                data = ticker_info.history(period="3mo").reset_index()
+                data = ticker_info.history(period="1y").reset_index()
                 for index, row in data.iterrows():
                     date = row["Date"].date()
                     openPrice = row["Open"]
@@ -211,7 +211,7 @@ def update_market_data_for_recent_90_days_data():
                 print("{ticker} does not generate successfully")
         return {
             "code": 200,
-            "message": "Updata market data for recent 30 days data successfully"
+            "message": "Updata market data for recent 1 year data successfully"
         }
     except Exception as e:
         return {
