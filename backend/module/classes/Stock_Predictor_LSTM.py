@@ -9,13 +9,17 @@ from sklearn.metrics import mean_squared_error
 from keras.models import Sequential
 from keras.layers import Dense, LSTM
 from scipy.stats import norm
+from datetime import datetime
 
 
-class StockPredictor:
-    def __init__(self, ticker, start_date, end_date, look_back=7, train_ratio=0.8):
+class StockPredictorLSTM:
+    def __init__(self, ticker, start_date, end_date=None, look_back=7, train_ratio=0.8):
         self.ticker = ticker
         self.start_date = start_date
-        self.end_date = end_date
+        if end_date is None:
+            self._end_date = datetime.now().strftime("%Y-%m-%d")
+        else:
+            self._end_date = end_date
         self.look_back = look_back
         self.train_ratio = train_ratio
         self.scaler = MinMaxScaler()
@@ -108,7 +112,7 @@ class StockPredictor:
 
     def reshape_data(self, data):
         return np.reshape(data, (data.shape[0], data.shape[1], 1))
-
+    
     def build_model(self):
         model = Sequential()
         model.add(
@@ -131,7 +135,7 @@ class StockPredictor:
         predictions = self.model.predict(X)
         padding = np.zeros((self.look_back, 1))
         return np.concatenate((padding, predictions))
-
+    
     def predict_future(self, days, confidence=0.95):
         future_data = self.test_data[-self.look_back :].reshape(1, self.look_back, 1)
         future_predictions = []

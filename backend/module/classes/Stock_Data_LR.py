@@ -5,11 +5,14 @@ import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 
 
-class StockData:
-    def __init__(self, ticker, start_date, end_date):
+class StockData_LR:
+    def __init__(self, ticker, start_date, end_date=None):
         self._ticker = ticker
         self._start_date = start_date
-        self._end_date = end_date
+        if end_date is None:
+            self._end_date = datetime.now().strftime("%Y-%m-%d")
+        else:
+            self._end_date = end_date
         self._stock_data = self.fetch_stock_data()
         self._m = None
         self._c = None
@@ -48,6 +51,10 @@ class StockData:
         self._outer_lower = regression_line - self._std * 2
 
     def plot_data_and_regression_lines(self):
+        self.linear_regression()
+        self.calculate_std()
+        self.calculate_channels()
+
         plt.figure(figsize=(12, 6))
         x = np.arange(len(self.stock_data))
         regression_line = self._m * x + self._c
@@ -95,7 +102,7 @@ class StockData:
         plt.legend()
         plt.show()
 
-    # Getter and setter methods for the ticker
+    # Getter
     @property
     def ticker(self):
         return self._ticker
@@ -115,7 +122,6 @@ class StockData:
         self._start_date = value
         self._stock_data = self.fetch_stock_data()
 
-    # Getter and
     # Getter and setter methods for the end date
     @property
     def end_date(self):
@@ -162,6 +168,7 @@ class StockData:
     def to_dict(self):
 
         return_data = self.stock_data
+        self.calculate_channels()
         return_data.reset_index(inplace=True)
         return_data["_channel_upper"] = self._channel_upper
         return_data["_channel_lower"] = self._channel_lower
@@ -174,15 +181,58 @@ class StockData:
 
     def get_recent_1_year_data_info(self):
         return_data = self.stock_data
+        self.calculate_channels()
         return_data.reset_index(inplace=True)
         return_data["_channel_upper"] = self._channel_upper
         return_data["_channel_lower"] = self._channel_lower
         return_data["_outer_upper"] = self._outer_upper
         return_data["_outer_lower"] = self._outer_lower
-        # Filter the DataFrame for the recent 1 year data
         one_year_ago = datetime.now() - timedelta(days=365)
         recent_data = return_data.loc[return_data["Date"] >= one_year_ago]
         result = {"recent_1_year_data": []}
         for _, row in recent_data.iterrows():
             result["recent_1_year_data"].append(row.to_dict())
+        return result
+
+    def get_last_day_record(self):
+        return_data = self.stock_data
+        self.calculate_channels()
+        return_data.reset_index(inplace=True)
+#         return_data.sort_values(by="Date")
+        return_data["_channel_upper"] = self._channel_upper
+        return_data["_channel_lower"] = self._channel_lower
+        return_data["_outer_upper"] = self._outer_upper
+        return_data["_outer_lower"] = self._outer_lower
+        result = {}
+        for _, row in return_data.iterrows():
+            result = row.to_dict()
+        return result
+    
+    def get_recent_7_days_data_info(self):
+        return_data = self.stock_data
+        self.calculate_channels()
+        return_data.reset_index(inplace=True)
+        return_data["_channel_upper"] = self._channel_upper
+        return_data["_channel_lower"] = self._channel_lower
+        return_data["_outer_upper"] = self._outer_upper
+        return_data["_outer_lower"] = self._outer_lower
+        one_year_ago = datetime.now() - timedelta(days=7)
+        recent_data = return_data.loc[return_data["Date"] >= one_year_ago]
+        result = {"past_1_week_data": []}
+        for _, row in recent_data.iterrows():
+            result["past_1_week_data"].append(row.to_dict())
+        return result
+    def get_recent_1_month_data_info(self):
+        return_data = self.stock_data
+        self.calculate_channels()
+        return_data.reset_index(inplace=True)
+        return_data["_channel_upper"] = self._channel_upper
+        return_data["_channel_lower"] = self._channel_lower
+        return_data["_outer_upper"] = self._outer_upper
+        return_data["_outer_lower"] = self._outer_lower
+        one_year_ago = datetime.now() - timedelta(days=30)
+        recent_data = return_data.loc[return_data["Date"] >= one_year_ago]
+        result = {"past_1_month_data": []}
+        for _, row in recent_data.iterrows():
+            result["past_1_month_data"].append(row.to_dict())
         return result

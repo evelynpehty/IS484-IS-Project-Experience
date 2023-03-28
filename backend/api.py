@@ -1297,3 +1297,42 @@ def get_market_data_by_ticker_requests():
       "message": str(e),
       "data": None
     }), 500
+
+
+
+# required attribute(default): userID
+@api.route('/view_all_watchList',methods = ['POST', 'GET'])
+def view_all_watchList_requests():
+  try: 
+    userID = None
+    if request.method == 'POST':
+      userID = request.form['userID']
+    else:
+      userID = request.args.get('userID')
+    result = view_all_watchList(userID)
+    return jsonify(result), result["code"]
+  except Exception as e:
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500 
+  
+
+# required attribute(default): userID
+@api.route('/view_ticker_for_graph',methods = ['POST', 'GET'])
+def view_ticker_for_graph_requests():
+  try: 
+    ticker = None
+    if request.method == 'POST':
+      ticker = request.form['ticker']
+    else:
+      ticker = request.args.get('ticker')
+    result = view_ticker_for_graph(ticker)
+    return jsonify(result), result["code"]
+  except Exception as e:
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500 
