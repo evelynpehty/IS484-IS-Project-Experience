@@ -32,10 +32,10 @@ const getSecurities = (userID) => {
       });
   };
 
-  const createWatchListName = (userID, watchlistName) => {
+  const createWatchListName = (input) => {
     var bodyFormData = new FormData();
-    bodyFormData.append("userID", userID)
-    bodyFormData.append("watchlistName", watchlistName)
+    bodyFormData.append("userID", input.userID)
+    bodyFormData.append("watchlistName", input.watchlistName)
 
     return axios
     ({
@@ -49,10 +49,10 @@ const getSecurities = (userID) => {
   };
 
 
-  const updateWatchListName = (watchlistID, newWatchlistGroupName) => {
+  const updateWatchListName = (input) => {
     var bodyFormData = new FormData();
-    bodyFormData.append("watchlistID", watchlistID)
-    bodyFormData.append("newWatchlistGroupName", newWatchlistGroupName)
+    bodyFormData.append("watchlistID", input.watchlistID)
+    bodyFormData.append("newWatchlistGroupName", input.newWatchlistGroupName)
 
     return axios
     ({

@@ -27,7 +27,6 @@ switch (type) {
         ...state,
         watchList: []
     };
-  
     default:
     return state;
 }
