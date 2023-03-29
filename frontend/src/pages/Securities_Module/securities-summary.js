@@ -62,10 +62,9 @@ function SecuritiesSummary() {
         negative: {
             color: "#E60000"
         }
-    }
-
+    }  
     
-    const { securitiesList } = useSelector((state) => state.securities);
+    const { securitiesList, watchList } = useSelector((state) => state.securities);
     const navigate = useNavigate();
 
     const handleViewWatchList = () => {

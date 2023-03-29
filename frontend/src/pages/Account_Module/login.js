@@ -24,7 +24,7 @@ import Loading from '../../components/loading.js'
 
 import { deposit, depositTransactionHistory } from "../../actions/deposit";
 import { loan } from "../../actions/loan";
-import { securities } from "../../actions/securities";
+import { securities, watchlist } from "../../actions/securities";
 
 
 //import account_service from "../services/account.js";
@@ -72,10 +72,11 @@ function SignIn() {
             const p2 = dispatch(deposit(UserID))
             const p3 = dispatch(depositTransactionHistory(UserID))
             const p4 = dispatch(securities(UserID))
+            const p5 = dispatch(watchlist(UserID))
             // const p4 = dispatch(loanTransactionHistory(UserID))
             // const p5 = dispatch(creditcard(UserID))
             // const p6 = dispatch(peekDetail(UserID))
-            Promise.all([p1,p2,p3,p4]).then(()=>{
+            Promise.all([p1,p2,p3,p4,p5]).then(()=>{
                 dispatch(DataLoaded())
                 if(route){
                     setLoading(false)

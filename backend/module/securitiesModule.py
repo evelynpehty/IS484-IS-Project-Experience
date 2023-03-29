@@ -10,6 +10,9 @@ from module.classes.watchlist import Watchlist
 from module.classes.watchlist_securities import Watchlist_Securities
 from module.classes.all_holdings import All_Holdings
 from module.classes.securities_holdings import Securities_Holdings
+from module.classes.Stock_Data_LR import StockData_LR
+#from module.classes.Stock_Predictor_LSTM import StockPredictorLSTM
+import datetime
 
 """
 CONVERT RATE: {1 SGD = 0.75 USD; 1 USD = 1.33 SGD}
@@ -97,36 +100,41 @@ def view_dollar_cost_average(ticker, period, investment, interval="1mo"):
 """
 Code based on the database 
 """
-def get_watchlist_by_user_id(userID):
-    engine = create_engine()
-    sql = f"SELECT * FROM watchlist WHERE userID='{userID}'"
-    result = engine.execute(sql)
-    if result.rowcount>0:
-        info = result.fetchone()
-        watchlist = Watchlist(info[0], info[1])
-        return {
-            "code": 200,
-            "data": watchlist.to_dict()
-        }
-    return{
-        "code": 404,
-        "data": None 
-    }
+# def get_watchlist_by_user_id(userID):
+#     engine = create_engine()
+#     sql = f"SELECT * FROM watchlist WHERE userID='{userID}'"
+#     result = engine.execute(sql)
+#     if result.rowcount>0:
+#         info = result.fetchone()
+#         watchlist = Watchlist(info[0], info[1], info[2])
+#         return {
+#             "code": 200,
+#             "data": watchlist.to_dict()
+#         }
+#     return{
+#         "code": 404,
+#         "data": None 
+#     }
 
 def get_watchlist_securities_by_watchlist_id(watchlistID):
     engine = create_engine()
     sql = f"SELECT * FROM watchlist_securities WHERE watchlistID='{watchlistID}'"
     result = engine.execute(sql)
+    watchlistSecurities_list = []
     if result.rowcount>0:
-        info = result.fetchone()
-        watchlistSecurities = Watchlist_Securities(info[0], info[1], info[2])
+        
+        for info in result.fetchall():
+            watchlistSecurities = Watchlist_Securities(info[0], info[1], info[2])
+            watchlistSecurities_list.append(watchlistSecurities.to_dict())
+        # info = result.fetchone()
+            
         return {
             "code": 200,
-            "data": watchlistSecurities.to_dict()
+            "data": watchlistSecurities_list
         }
     return{
         "code": 404,
-        "data": None 
+        "data": watchlistSecurities_list 
     }
 
 def get_market_data_by_ticker(ticker):
@@ -170,7 +178,7 @@ def get_all_ticker():
         "code": 404,
         "data": [] 
     }
-def update_market_data_for_recent_90_days_data():
+def update_market_data_for_recent_1_year_data():
     engine = create_engine()
     try: 
         tickers = get_all_ticker()["data"]
@@ -180,7 +188,7 @@ def update_market_data_for_recent_90_days_data():
             try: 
                 ticker_info = yf.Ticker(ticker)
                 # print(ticker)
-                data = ticker_info.history(period="3mo").reset_index()
+                data = ticker_info.history(period="1y").reset_index()
                 for index, row in data.iterrows():
                     date = row["Date"].date()
                     openPrice = row["Open"]
@@ -211,7 +219,7 @@ def update_market_data_for_recent_90_days_data():
                 print("{ticker} does not generate successfully")
         return {
             "code": 200,
-            "message": "Updata market data for recent 30 days data successfully"
+            "message": "Updata market data for recent 1 year data successfully"
         }
     except Exception as e:
         return {
@@ -294,6 +302,7 @@ def get_holding_detail(holding, userID):
     record_for_past_24_hrs = past_24_hours_record(ticker)
     info["record_for_past_24_hrs"] = record_for_past_24_hrs
     return info 
+
 def past_24_hours_record(ticker, interval='1h'):
     result = []
     data = yf.download(tickers=ticker, period='1d', interval=interval)
@@ -440,7 +449,33 @@ def get_1_day_change(ticker):
         "code": 404,
         "data": 0.0
     }
-
+def get_1_day_change_in_percent(ticker):
+    engine = create_engine()
+    sql = f"SELECT * FROM market_data WHERE ticker='{ticker}' ORDER BY date DESC LIMIT 2"
+    # print(sql)
+    result = engine.execute(sql)
+    # print(result.rowcount)
+    data = []
+    # print(result.rowcount > 0)
+    if result.rowcount>0:
+        
+        n = 1
+        for info in result.fetchall():
+            n += 1
+            # print("CURRENT ", n)
+            marketdata = Market_Data(info[0], info[1], info[2],info[3], info[4], info[5],info[6], info[7], info[8])
+            data.append(marketdata)
+        yesterday_closing_price = data[1].get_closing_price()
+        today_closing_price = data[0].get_closing_price()
+        price_change_within_1_day = (today_closing_price - yesterday_closing_price)/today_closing_price*100
+        return {
+            "code": 200,
+            "data": price_change_within_1_day
+        }
+    return{
+        "code": 404,
+        "data": 0.0
+    }
 def get_watchlist_name(userID, ticker):
     engine = create_engine()
     sql = f"""
@@ -452,13 +487,13 @@ def get_watchlist_name(userID, ticker):
     """
     
     result = engine.execute(sql)
-    print(sql, result.rowcount)
+    # print(sql, result.rowcount)
     if result.rowcount>0:
-        print(1)
+        # print(1)
         info = result.fetchone()
-        print(1)
+        # print(1)
         watchlist_securities = Watchlist_Securities(info[0], info[1], info[2])
-        print(2)
+        # print(2)
         return watchlist_securities.get_watchlistName()
     return ""
 
@@ -471,3 +506,243 @@ def get_securities_name(ticker):
         securities = Securities(info[0], info[1])
         return securities.get_tickerName()
     return ""
+
+def get_data_model_LR(ticker):
+    from datetime import timedelta
+    today = datetime.date.today().strftime('%Y-%m-%d')
+    five_years_ago = (datetime.date.today() - timedelta(days=365*5)).strftime('%Y-%m-%d')
+    stockdata_LR = StockData_LR(ticker, five_years_ago, today)
+    stockdata_LR.linear_regression()
+    stockdata_LR.calculate_std()
+    stockdata_LR.calculate_channels()
+    return stockdata_LR
+
+#also use this function to get the yesterday recent information 
+def get_last_day_exit_enter_price(ticker):
+    stockdata_LR = get_data_model_LR(ticker)
+    last_day_record = stockdata_LR.get_last_day_record()
+    # print(last_day_record.keys())
+    # ['Date', 'Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume', '_channel_upper', '_channel_lower', '_outer_upper', '_outer_lower']
+    # will suggest to use _channel_upper to exit price, and _channel_lower for enter price 
+    return last_day_record
+def get_recent_1_year_record_info(ticker):
+    stockdata_LR = get_data_model_LR(ticker)
+    return stockdata_LR.get_recent_1_year_data_info()
+def get_recent_7_days_record_info(ticker):
+    stockdata_LR = get_data_model_LR(ticker)
+    return stockdata_LR.get_recent_7_days_data_info()
+def get_recent_1_month_record_info(ticker):
+    stockdata_LR = get_data_model_LR(ticker)
+    return stockdata_LR.get_recent_1_month_data_info()
+
+
+def view_all_watchList(userID):
+    engine = create_engine()
+    sql = f"SELECT * FROM watchlist_securities WHERE watchlistID in (SELECT watchlistID FROM watchlist WHERE userID = '{userID}')"
+    result = engine.execute(sql)
+    watchlist_securities_list = []
+    if result.rowcount>0:
+        for info in result.fetchall():
+            row_dict = {}
+            watchlist_securities = Watchlist_Securities(info[0], info[1], info[2])
+            recent_1_day_record = get_last_day_exit_enter_price(watchlist_securities.get_ticker())
+            print(recent_1_day_record)
+            row_dict = watchlist_securities.to_dict()
+            row_dict["entry"] = recent_1_day_record["_channel_lower"]
+            row_dict["exit"] = recent_1_day_record["_channel_upper"]
+            row_dict["securities_name"] = get_securities_name(watchlist_securities.get_ticker())
+            row_dict["1_day_change_in_percent"] = get_1_day_change_in_percent(watchlist_securities.get_ticker())["data"]
+            watchlist_securities_list.append(row_dict)
+            print(row_dict)
+        return {
+            "code": 200,
+            "data": watchlist_securities_list
+        }
+    return {
+        "code": 404,
+        "data": watchlist_securities_list
+    }
+
+def view_ticker_for_graph(ticker):
+    return{
+        "code": 200,
+        "data":{
+            "past_24_hours_record": past_24_hours_record(ticker),
+            "past_1_week_record": get_recent_7_days_record_info(ticker)["past_1_week_data"],
+            "past_1_month_record": get_recent_1_month_record_info(ticker)["past_1_month_data"],
+            "past_1_year_record": get_recent_1_year_record_info(ticker)["recent_1_year_data"]
+        }
+    }
+def browse_securities_holding_by_watchlist(userID):
+    engine = create_engine()
+    sql = f"SELECT * FROM all_holdings WHERE holdingsID IN (SELECT holdingsID FROM securities_holdings WHERE userID = '{userID}')"
+    result = engine.execute(sql)
+    holding_list = []
+    if result.rowcount>0:
+        for info in result.fetchall():
+            row_dict = {}
+            holding = All_Holdings(info[0], info[1], info[2], info[3])
+            recent_1_day_record = get_last_day_exit_enter_price(holding.get_ticker())
+            row_dict = holding.to_dict()
+            row_dict["entry"] = recent_1_day_record["_channel_lower"]
+            row_dict["exit"] = recent_1_day_record["_channel_upper"]
+            row_dict["get_securities_name"] = get_securities_name(holding.get_ticker())
+            row_dict["1_day_change_in_percent"] = get_1_day_change_in_percent(holding.get_ticker())["data"]
+            holding_list.append(row_dict)
+        return {
+            "code": 200,
+            "data": holding_list
+        }
+    return {
+            "code": 404,
+            "data": holding_list
+    }
+
+
+
+def insert_new_watchlist(userID, watchlistID, watchlistName):
+    engine = create_engine()
+    sql = f"INSERT INTO watchlist (watchlistID, userID, watchlistGroupName) VALUES ('{watchlistID}', '{userID}', '{watchlistName}')"
+    print(sql)
+    engine.execute(sql)
+    return {
+        "code": 200,
+        "message": "New watchlist insert successfully!"
+    }
+
+def get_auto_watchlistID():
+    engine = create_engine()
+    sql = "SELECT watchlistID FROM watchlist ORDER BY watchlistID DESC"
+    result = engine.execute(sql)
+    return result.fetchone()[0]+ 1
+
+
+def create_watchlist(watchlistID, userID, watchlistName):
+    engine = create_engine()
+    sql = "SELECT * FROM watchlist WHERE watchlistID='{watchlistID}' AND userID='{userID}'"
+    result = engine.execute(sql)
+    print(result.rowcount)
+    if result.rowcount == 0:
+        watchlistID = get_auto_watchlistID()
+        insert_new_watchlist(userID, watchlistID)
+    sql = f"INSERT INTO watchlist (watchlistID, userID, watchlistGroupName) VALUES ('{watchlistID}', '{userID}', '{watchlistName}')"
+    print(sql)
+    engine.execute(sql)
+    return {
+        "code": 200,
+        "message": "New watchlist name insert successfully!"
+    }
+
+def get_all_watchlist_names_by_userID(userID):
+    engine = create_engine()
+    sql = f"SELECT DISTINCT(watchlistName) FROM watchlist_securities WHERE watchlistID IN (SELECT watchlistID FROM watchlist WHERE userID='{userID}')"
+    result = engine.execute(sql)
+    groupName = []
+    if result.rowcount > 0:
+        for info in result.fetchall():
+            groupName.append(info[0])
+        return {
+            'code': 200,
+            'data': groupName
+        }
+    return {
+        'code': 404,
+        'data': groupName
+    }
+
+def get_watchlist_by_userID(userID):
+    engine = create_engine()
+    sql = f"SELECT * FROM watchlist WHERE userID='{userID}'"
+    data = []
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        
+        for info in result.fetchall():
+            number_of_stock = 0
+            each_watchlist_info = {}
+            print(info)
+            watchlist = Watchlist(info[0], info[1], info[2])
+            each_watchlist_info = watchlist.to_dict()
+            watchlistSecurities = get_watchlist_securities_by_watchlist_id(watchlist.get_watchlistID())
+            if watchlistSecurities["code"] == 200:
+                ws_list = []
+                for ws in watchlistSecurities["data"]:
+                    row_dict = {}
+                    ticker = ws["Ticker"]
+                    WatchlistName = ws["WatchlistName"]
+                    tickerName = get_securities_name(ticker)
+                    row_dict["ticker"] = ticker
+                    row_dict["WatchlistName"] = WatchlistName
+                    row_dict["tickerName"] = tickerName
+                    row_dict["dataForEachPeriod"] = view_ticker_for_graph(ticker)
+                    ws_list.append(row_dict)
+                    number_of_stock += 1
+                each_watchlist_info["watchlist_list"] = ws_list
+
+            else:
+                each_watchlist_info["watchlist_list"] = None
+            each_watchlist_info["number_of_stock"] = number_of_stock
+            data.append(each_watchlist_info)
+        return {
+            "code": 200,
+            "data": data
+        }
+    return {
+        "code": 404,
+        "data": data
+    }
+def create_watchlist(userID, watchlistName):
+    engine = create_engine()
+    watchlistID = get_auto_watchlistID()
+    sql = f"INSERT INTO watchlist (watchlistID, userID, watchlistGroupName) VALUES ('{watchlistID}', '{userID}', '{watchlistName}')"
+#     print(sql)
+    engine.execute(sql)
+    return {
+        "code": 200,
+        "message": "New watchlist name insert successfully!"
+    }
+def update_watchlist_name(watchlistID, newWatchlistGroupName):
+    engine = create_engine()
+    sql = f"UPDATE watchlist SET `watchlistGroupName` = '{newWatchlistGroupName}' WHERE `watchlistID` = '{watchlistID}';"
+    engine.execute(sql)
+    return {
+        "code": 200,
+        "message": "New watchlist name update successfully!"
+    }
+
+def delete_watchlist_securities(watchlistID):
+    
+    engine = create_engine()
+    sql = f"DELETE FROM watchlist_securities WHERE watchlistID IN (SELECT watchlistID FROM watchlist WHERE watchlistID = '{watchlistID}')"
+    engine.execute(sql)
+    return {
+        "code": 200,
+        "message": "watchlist securities delete successfully!"
+    }
+def delete_watchlist(watchlistID):
+    engine = create_engine()
+    delete_watchlist_securities(watchlistID)
+    sql = f"DELETE FROM watchlist WHERE watchlistID = '{watchlistID}'"
+    engine.execute(sql)
+    return {
+        "code": 200,
+        "message": "watchlist delete successfully!"
+    }
+
+def insert_new_securities_into_watchlist(watchlistID, ticker, watchlistName):
+    engine = create_engine()
+    sql = f"INSERT INTO watchlist_securities (watchlistID, ticker, watchlistName) VALUES ('{watchlistID}', '{ticker}', '{watchlistName}');"
+    engine.execute(sql)
+    return {
+        "code": 200,
+        "message": "insert new securities into watchlist successfully!"
+    }
+
+def remove_securities_from_watchlist(watchlistID, ticker):
+    engine = create_engine()
+    sql = f"DELETE FROM watchlist_securities WHERE watchlistID='{watchlistID}' AND ticker='{ticker}';"
+    engine.execute(sql)
+    return {
+        "code": 200,
+        "message": "remove security from watchlist successfully!"
+    }
