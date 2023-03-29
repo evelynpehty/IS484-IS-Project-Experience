@@ -187,11 +187,11 @@ export default function LoanTransactionHistory() {
         
                                                 <Grid container direction="row" justifyContent="space-between" alignItems="center" sx={{mt:3}}>
                                                     <Grid>
-                                                    <Typography sx={{ fontSize: 12 }}>
-                                                        PRINCIPAL
-                                                    </Typography>
-                                                        <Typography sx={{ fontSize: 12, fontWeight:"bold" }}>
-                                                            { `SGD $${ el.item.principal.toLocaleString("en-US") }` }
+                                                        <Typography sx={{ fontSize: 12 }}>
+                                                            PRINCIPAL
+                                                        </Typography>
+                                                            <Typography sx={{ fontSize: 12, fontWeight:"bold" }}>
+                                                                { `SGD $${ el.item.principal.toLocaleString("en-US") }` }
                                                         </Typography>
                                                     </Grid>
 

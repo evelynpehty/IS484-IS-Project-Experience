@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useLocation, useNavigate, Link } from "react-router-dom";
+import moment from 'moment';
 
 // MUI Components
 import Grid from '@mui/material/Unstable_Grid2';
@@ -34,7 +35,8 @@ function PaymentReminders() {
         },
 
         label: {
-            fontSize: 12
+            fontSize: 12,
+            fontWeight: "bold"
         },
 
         boldLabel: {
@@ -75,8 +77,19 @@ function PaymentReminders() {
     const [period, setPeriod] = useState("day")
     const [status, setStatus] = useState("")
     const [loading, setLoading] = useState(false);
-
+    const [repaymentDate, setRepaymentDate] = useState("");
+    
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        const currentMonth = moment().month() +1 // jan=0, dec=11
+        const currentYear = moment().year() 
+        var r_date = currentMonth + "/1/" + currentYear //fixed repayment date to be first of the month
+        var next_repayment = (moment(r_date).add(1, 'M')).format("DD MMM YYYY")
+        setRepaymentDate(next_repayment)
+    
+
+    }, []);
 
     const handleAdd = () => {
         setStatus("")
@@ -170,100 +183,106 @@ function PaymentReminders() {
 
                     { loan_item.map((value, index) => {
                         return (
-                        <Card style={ styles.card } elevation={ 4 }>
-                            <CardContent style={ styles.cardContent }>
-                                <Grid container direction="row" alignItems="center">
-                                    <Grid xs={6}>
-                                        <Typography style={ styles.label } color={ theme.palette.primary.main }>
-                                            { value.AccountName.toUpperCase() }
-                                        </Typography>
-                                        <Typography style={ styles.boldLabel }>
-                                            ${value.LoanAmount.toLocaleString("en-US")}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid xs={6}>
-                                        <Typography style={ styles.label } color={ theme.palette.primary.main }>
-                                            MONTHLY REPAYMENT
-                                        </Typography>
-                                        <Typography style={ styles.boldLabel } color="#black">
-                                            ${ value.Detail.monthly_payment.toLocaleString("en-US") }
-                                        </Typography>
-                                    </Grid>
-                                    <Grid xs={12}>
-                                        {
-                                            tempReminderArray.map((reminder, index) => {
-                                                return (
-                                                    <>
-                                                        <Paper elevation={ 5 } sx={{ p: 1, borderRadius: 10, mt: 3 }}>
-                                                            <Grid key={index} container direction="row" justifyContent="space-between" alignItems="center">
-                                                                {reminder.ReminderType}
-                                                                <DeleteIcon onClick={()=>handleDelete(reminder)}/>
-                                                            </Grid>
-                                                        </Paper>
-                                                    </>
-                                                )
-                                            })
-                                        }
-                                    </Grid>
-                                    <Grid xs={12} sx={{ mt: 3 }}>
-                                        <Box onClick={ handleOpen }>
-                                            <AddIcon />
-                                        </Box>
-                                        <Modal
-                                            open={open}
-                                            onClose={handleClose}
-                                            aria-labelledby="modal-modal-title"
-                                            aria-describedby="modal-modal-description"
-                                        >
-                                            <Box sx={styles.modal}>
-                                                <Typography style={ styles.modalHeader }>
-                                                    Add Recurring Reminder
-                                                </Typography>
-                                                <Grid container direction="row" justifyContent="space-between" alignItems="center">
-                                                    <Grid xs={7}>
-                                                        <FormControl variant="standard" sx={{ m: 1, width: "80%" }}>
-                                                            <InputLabel id="demo-simple-select-standard-label">Before Deduction</InputLabel>
-                                                            <Select
-                                                            required
-                                                            labelId="demo-simple-select-standard-label"
-                                                            id="demo-simple-select-standard"
-                                                            value={days}
-                                                            onChange={e => setDays(e.target.value)}
-                                                            label="Before Deduction"
-                                                            >
-                                                                { num_array.map(index => <MenuItem value={ index+1 }>{ index+1 }</MenuItem>) }
-                                                            </Select>
-                                                        </FormControl>
-                                                    </Grid>
-                                                    <Grid xs={5}>
-                                                        <FormControl variant="standard" sx={{ m: 1, width: "80%" }}>
-                                                            <InputLabel id="demo-simple-select-standard-label">Period</InputLabel>
-                                                            <Select
-                                                            required
-                                                            labelId="demo-simple-select-standard-label"
-                                                            id="demo-simple-select-standard"
-                                                            value={period}
-                                                            onChange={e => setPeriod(e.target.value)}
-                                                            label="Period"
-                                                            >
-                                                                <MenuItem value="day">Day</MenuItem>
-                                                                <MenuItem value="week">Week</MenuItem>
-                                                                <MenuItem value="month">Month</MenuItem>
-                                                            </Select>
-                                                        </FormControl>
-                                                    </Grid>
-                                                </Grid>
-                                            
-                                                <Grid container direction="row" justifyContent="end" alignItems="center">
-                                                    <NeutralButton function={ handleClose } text="CANCEL" />
-                                                    <NeutralButton text="SAVE" function={ handleAdd }/>
-                                                </Grid>
+                            <>
+                            <Typography sx={{ fontWeight: "bold", color: "#4B4948", fontSize: "16px", mb:2}} variant="h6"> { value.AccountName.toUpperCase() }</Typography>
+                            
+                            <Card style={ styles.card } elevation={ 4 }>
+                                 
+                                <CardContent style={ styles.cardContent }>
+                                    <Grid container direction="row" alignItems="center">
+                                        <Grid xs={6}>
+                                            <Typography style={ styles.label } color={ theme.palette.primary.main }>
+                                                NEXT REPAYMENT
+                                            </Typography>
+                                            <Typography style={ styles.boldLabel }>
+                                                 { repaymentDate }
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={6}>
+                                            <Typography style={ styles.label } color={ theme.palette.primary.main }>
+                                                MONTHLY REPAYMENT
+                                            </Typography>
+                                            <Typography style={ styles.boldLabel } color="#black">
+                                                ${ value.Detail.monthly_payment.toLocaleString("en-US") }
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={12}>
+                                            {
+                                                tempReminderArray.map((reminder, index) => {
+                                                    return (
+                                                        <>
+                                                            <Paper elevation={ 5 } sx={{ p: 1, borderRadius: 10, mt: 3 }}>
+                                                                <Grid key={index} container direction="row" justifyContent="space-between" alignItems="center" sx={{ fontWeight: "bold" }}>
+                                                                    {reminder.ReminderType}
+                                                                    <DeleteIcon onClick={()=>handleDelete(reminder)}/>
+                                                                </Grid>
+                                                            </Paper>
+                                                        </>
+                                                    )
+                                                })
+                                            }
+                                        </Grid>
+                                        <Grid xs={12} sx={{ mt: 3 }}>
+                                            <Box onClick={ handleOpen }>
+                                                <AddIcon />
                                             </Box>
-                                        </Modal>
+                                            <Modal
+                                                open={open}
+                                                onClose={handleClose}
+                                                aria-labelledby="modal-modal-title"
+                                                aria-describedby="modal-modal-description"
+                                            >
+                                                <Box sx={styles.modal}>
+                                                    <Typography style={ styles.modalHeader }>
+                                                        Add Recurring Reminder
+                                                    </Typography>
+                                                    <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                                        <Grid xs={7}>
+                                                            <FormControl variant="standard" sx={{ m: 1, width: "80%" }}>
+                                                                <InputLabel id="demo-simple-select-standard-label">Before Deduction</InputLabel>
+                                                                <Select
+                                                                required
+                                                                labelId="demo-simple-select-standard-label"
+                                                                id="demo-simple-select-standard"
+                                                                value={days}
+                                                                onChange={e => setDays(e.target.value)}
+                                                                label="Before Deduction"
+                                                                >
+                                                                    { num_array.map(index => <MenuItem value={ index+1 }>{ index+1 }</MenuItem>) }
+                                                                </Select>
+                                                            </FormControl>
+                                                        </Grid>
+                                                        <Grid xs={5}>
+                                                            <FormControl variant="standard" sx={{ m: 1, width: "80%" }}>
+                                                                <InputLabel id="demo-simple-select-standard-label">Period</InputLabel>
+                                                                <Select
+                                                                required
+                                                                labelId="demo-simple-select-standard-label"
+                                                                id="demo-simple-select-standard"
+                                                                value={period}
+                                                                onChange={e => setPeriod(e.target.value)}
+                                                                label="Period"
+                                                                >
+                                                                    <MenuItem value="day">Day</MenuItem>
+                                                                    <MenuItem value="week">Week</MenuItem>
+                                                                    <MenuItem value="month">Month</MenuItem>
+                                                                </Select>
+                                                            </FormControl>
+                                                        </Grid>
+                                                    </Grid>
+                                                
+                                                    <Grid container direction="row" justifyContent="end" alignItems="center">
+                                                        <NeutralButton function={ handleClose } text="CANCEL" />
+                                                        <NeutralButton text="SAVE" function={ handleAdd }/>
+                                                    </Grid>
+                                                </Box>
+                                            </Modal>
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                            </CardContent>
-                        </Card>
+                                </CardContent>
+                            </Card>
+                            </>
+                        
                         )               
                     })}
                 <   PrimaryButton buttonText="SAVE" function={handleSave}/>  
