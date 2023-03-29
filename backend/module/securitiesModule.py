@@ -10,8 +10,8 @@ from module.classes.watchlist import Watchlist
 from module.classes.watchlist_securities import Watchlist_Securities
 from module.classes.all_holdings import All_Holdings
 from module.classes.securities_holdings import Securities_Holdings
-from module.classes.stock_data_LR import StockData_LR
-from module.classes.stock_predictor_LSTM import StockPredictorLSTM
+from module.classes.Stock_Data_LR import StockData_LR
+#from module.classes.Stock_Predictor_LSTM import StockPredictorLSTM
 import datetime
 
 """
@@ -534,6 +534,7 @@ def get_recent_7_days_record_info(ticker):
 def get_recent_1_month_record_info(ticker):
     stockdata_LR = get_data_model_LR(ticker)
     return stockdata_LR.get_recent_1_month_data_info()
+
 
 def view_all_watchList(userID):
     engine = create_engine()

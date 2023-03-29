@@ -40,3 +40,43 @@ export const securities = (UserID) => (dispatch) => {
   );
 };
 
+export const watchlist = (UserID) => (dispatch) => {
+  return securities_service.getWatchList(UserID).then(
+    (data) => {
+      if(data.code === 200){
+        dispatch({
+          type: "WATCHLIST_SUCCESS",
+          payload: { watchList: data.data },
+        });
+      }
+      else{
+        dispatch({
+          type: "WATCHLIST_FAIL"
+        });
+
+        dispatch({
+          type: "SET_MESSAGE",
+          payload: "No Watch List",
+        });
+        return Promise.reject();
+      }
+
+      return Promise.resolve();
+    },
+    (error) => {
+      console.log(error)
+      const message = error.message
+      dispatch({
+        type: "WATCHLIST_FAIL",
+      });
+
+      dispatch({
+        type: "SET_MESSAGE",
+        payload: message,
+      });
+
+      return Promise.reject();
+    }
+  );
+};
+

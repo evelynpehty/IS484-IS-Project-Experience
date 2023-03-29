@@ -64,9 +64,10 @@ function SecuritiesSummary() {
     }
 
    
-    const { securitiesList } = useSelector((state) => state.securities);
+    const { securitiesList, watchList } = useSelector((state) => state.securities);
     console.log(securitiesList)
-
+    console.log(watchList)
+    
     return (
         <React.Fragment>
         <MainAppBar />

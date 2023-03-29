@@ -1,5 +1,6 @@
 const initialState = {
-    securitiesList: []
+    securitiesList: [],
+    watchList: []
 }
 
 const securitiesReducer = (state = initialState, action) => {
@@ -15,6 +16,16 @@ switch (type) {
     return {
         ...state,
         securitiesList: []
+    };
+    case "WATCHLIST_SUCCESS":
+    return {
+        ...state,
+        watchList: payload.watchList
+    };
+    case "WATCHLIST_FAIL":
+    return {
+        ...state,
+        watchList: []
     };
   
     default:
