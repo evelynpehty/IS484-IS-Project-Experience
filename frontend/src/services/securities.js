@@ -84,7 +84,7 @@ const getSecurities = (userID) => {
     var bodyFormData = new FormData();
     bodyFormData.append("watchlistID", input.watchlistID)
     bodyFormData.append("ticker", input.ticker)
-    bodyFormData.append("watchlistName", input.watchlistName)
+    bodyFormData.append("watchlistName", "xxx")
 
     return axios
     ({
