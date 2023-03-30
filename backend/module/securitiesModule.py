@@ -182,6 +182,7 @@ def update_market_data_for_recent_1_year_data():
     engine = create_engine()
     try: 
         tickers = get_all_ticker()["data"]
+        print(tickers)
         sql = "DELETE FROM market_data;"
         engine.execute(sql)
         for ticker in tickers:
@@ -745,4 +746,40 @@ def remove_securities_from_watchlist(watchlistID, ticker):
     return {
         "code": 200,
         "message": "remove security from watchlist successfully!"
+    }
+
+def get_today_market_data(ticker):
+    engine = create_engine()
+    sql = f"SELECT * FROM market_data WHERE ticker='{ticker}' ORDER BY date DESC LIMIT 1"
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        info = result.fetchone()
+        marketdata = Market_Data(info[0], info[1], info[2],info[3], info[4], info[5],info[6], info[7], info[8])
+        return marketdata.get_closing_price()
+
+
+def get_all_securities():
+    engine = create_engine()
+    sql = f"SELECT * FROM securities;"
+    result = engine.execute(sql)
+    data = []
+    if result.rowcount > 0:
+        for info in result.fetchall():
+            security = Securities(info[0], info[1])
+            change_within_24hrs_in_percent = get_1_day_change_in_percent(security.get_ticker())["data"]
+            crrPrice = get_today_market_data(security.get_ticker())
+            stock_data = {
+                "ticker": security.get_ticker(),
+                "tickerName": security.get_tickerName(),
+                "1_day_change_per_cent": change_within_24hrs_in_percent,
+                "currentPrice": crrPrice 
+            }
+            data.append(stock_data)
+        return {
+            "code": 200,
+            "data": data
+        }
+    return {
+        "code": 404,
+        "data": data
     }
