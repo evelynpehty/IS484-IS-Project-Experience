@@ -75,13 +75,34 @@ function ManageWatchList() {
     console.log(watchList)
 
     // Modal Component Functions
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+
+    //create modal
+    const [createOpen, setCreateOpen] = React.useState(false);
+    const handleCreateOpen = () => setCreateOpen(true);
+    const handleCreateClose = () => setCreateOpen(false);
+
+    //edit modal
+    const [editOpen, setEditOpen] = React.useState(false);
+    const handleEditOpen = () => setEditOpen(true);
+    const handleEditClose = () => setEditOpen(false);
+
+    //delete modal
+    const [deleteOpen, setDeleteOpen] = React.useState(false);
+    const handleDeleteOpen = () => setDeleteOpen(true);
+    const handleDeleteClose = () => setDeleteOpen(false);
 
     const handleAdd = () => {
 
     }
+
+    const handleEdit = () => {
+
+    }
+
+    const handleDelete = () => {
+
+    }
+
 
 
     return (
@@ -110,14 +131,12 @@ function ManageWatchList() {
                                             </Grid>
                                             <Grid xs={ 4 }>
                                                 <Typography textAlign="end" >
-                                                    <Link> 
-                                                        <EditIcon />
-                                                    </Link>
-                                                </Typography>
+                                                    <EditIcon onClick={ handleEditOpen }/>
+                                                </Typography>                                                
                                             </Grid>
                                         </Grid>
                                         <Box display="flex" justifyContent="flex-end" alignItems="flex-end">
-                                            <Button variant="text" sx={{ fontSize: 16, fontWeight:"bold", color:"#E60000" }}> Delete Group</Button>
+                                            <Button variant="text" sx={{ fontSize: 16, fontWeight:"bold", color:"#E60000" }} onClick={ handleDeleteOpen }> Delete Group</Button>
                                         </Box>
                                     </CardContent>
                                 </Card>
@@ -126,16 +145,78 @@ function ManageWatchList() {
                         )
                     })}
 
+                    {/* Edit Modal */}
+                    <Modal
+                        open={editOpen}
+                        onClose={handleEditClose}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={styles.modal}>
+                            <Typography style={ styles.modalHeader }>
+                                Rename Group
+                            </Typography>
+                            <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                <Grid>
+                                <FormControl variant="standard" sx={{ m: 1, width: "80%" }}>           
+                                    <TextField
+                                        required
+                                        id="NewGroupName"
+                                        name='NewGroupName'
+                                        label="New Group Name"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="standard"    
+                                    />
+                                </FormControl>
+                                </Grid>
+                            </Grid>
+                        
+                            <Grid container direction="row" justifyContent="end" alignItems="center">
+                                <NeutralButton function={ handleEditClose } text="CANCEL" />
+                                <NeutralButton text="OK" function={ handleEdit }/>
+                            </Grid>
+                        </Box>
+                    </Modal>
+
+                    {/* Delete Modal */}
+                    <Modal
+                        open={deleteOpen}
+                        onClose={handleDeleteClose}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={styles.modal}>
+                            <Typography style={ styles.modalHeader }>
+                                Delete Group
+                            </Typography>
+                            <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                <Grid>
+                                    <Typography sx={{ fontSize: 14, color:"#4B4948", mt:1}}>
+                                        Are you sure you want to delete this group?
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                        
+                            <Grid container direction="row" justifyContent="end" alignItems="center">
+                                <NeutralButton function={ handleDeleteClose } text="CANCEL" />
+                                <NeutralButton text="OK" function={ handleDelete }/>
+                            </Grid>
+                        </Box>
+                    </Modal>
+
+                    {/* Create Modal */}
                     <Grid xs={12} sx={{ mt: 3 }}>
-                        <Box onClick={ handleOpen }>
+                        <Box onClick={ handleCreateOpen }>
                             
                             <Typography sx={{ fontSize: 14, fontWeight:"bold", color:"#E60000" }}>
                                  <AddIcon /> Create New Group
                             </Typography>
                         </Box>
                         <Modal
-                            open={open}
-                            onClose={handleClose}
+                            open={createOpen}
+                            onClose={handleCreateClose}
                             aria-labelledby="modal-modal-title"
                             aria-describedby="modal-modal-description"
                         >
@@ -163,14 +244,12 @@ function ManageWatchList() {
                                 </Grid>
                             
                                 <Grid container direction="row" justifyContent="end" alignItems="center">
-                                    <NeutralButton function={ handleClose } text="CANCEL" />
+                                    <NeutralButton function={ handleCreateClose } text="CANCEL" />
                                     <NeutralButton text="OK" function={ handleAdd }/>
                                 </Grid>
                             </Box>
                         </Modal>
                     </Grid>
-
-                  
                 </Box>
             </Container>
         </>
