@@ -23,6 +23,7 @@ function StockDetails() {
             <SecondaryAppBar link={ `/securities-details/${ticker}` } text="Securities Details" /> 
             <Container maxWidth="lg">
                 <Box sx={{ pt: 10, pb: 10 }}>
+                    
                 </Box>
             </Container>
         </>
