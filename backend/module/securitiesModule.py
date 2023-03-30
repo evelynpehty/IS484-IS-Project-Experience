@@ -186,9 +186,10 @@ def update_market_data_for_recent_1_year_data():
         sql = "DELETE FROM market_data;"
         engine.execute(sql)
         for ticker in tickers:
+            print(ticker)
             try: 
                 ticker_info = yf.Ticker(ticker)
-                # print(ticker)
+                print(ticker)
                 data = ticker_info.history(period="1y").reset_index()
                 for index, row in data.iterrows():
                     date = row["Date"].date()
@@ -768,11 +769,13 @@ def get_all_securities():
             security = Securities(info[0], info[1])
             change_within_24hrs_in_percent = get_1_day_change_in_percent(security.get_ticker())["data"]
             crrPrice = get_today_market_data(security.get_ticker())
+            market_data = get_market_data_by_ticker(security.get_ticker())["data"]
             stock_data = {
                 "ticker": security.get_ticker(),
                 "tickerName": security.get_tickerName(),
                 "1_day_change_per_cent": change_within_24hrs_in_percent,
-                "currentPrice": crrPrice 
+                "currentPrice": crrPrice,
+                "market_data": market_data
             }
             data.append(stock_data)
         return {
