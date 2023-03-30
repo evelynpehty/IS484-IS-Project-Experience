@@ -84,10 +84,6 @@ export const createWatchListName = (input) => (dispatch) => {
   return securities_service.createWatchListName(input).then(
     (data) => {
         if(data.code === 200){
-          /*dispatch({
-            type: "CREATE_WATCHLIST_SUCCESS",
-            payload: input
-          });*/
           return Promise.resolve(data);
         }
         
@@ -103,12 +99,12 @@ export const updateWatchListName = (input) => (dispatch) => {
   return securities_service.updateWatchListName(input).then(
     (data) => {
         if(data.code === 200){
-          /*dispatch({
-            type: "CREATE_WATCHLIST_SUCCESS",
-            payload: input
-          });*/
-          return Promise.resolve(data);
+          dispatch({
+            type: "UPDATE_WATCHLISTNAME_SUCCESS",
+            payload: input,
+          });
         }
+        return Promise.resolve(data);
         
     },
     (error) => {
@@ -118,16 +114,16 @@ export const updateWatchListName = (input) => (dispatch) => {
   );
 };
 
-export const deleteWatchList = (input) => (dispatch) => {
-  return securities_service.deleteWatchList(input).then(
+export const deleteWatchList = (watchlistID) => (dispatch) => {
+  return securities_service.deleteWatchList(watchlistID).then(
     (data) => {
         if(data.code === 200){
-          /*dispatch({
-            type: "CREATE_WATCHLIST_SUCCESS",
-            payload: input
-          });*/
-          return Promise.resolve(data);
+          dispatch({
+            type: "DELETE_WATCHLIST_SUCCESS",
+            payload: watchlistID,
+          });
         }
+        return Promise.resolve(data);
         
     },
     (error) => {

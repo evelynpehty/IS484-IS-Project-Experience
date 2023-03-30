@@ -16,10 +16,14 @@ import SecondaryAppBar from "../../components/SecondaryAppBar";
 import WhiteReusableButton from "../../components/WhiteButton";
 import NeutralButton from "../../components/NeutralButton";
 import { fontWeight } from "@mui/system";
+import Loading from '../../components/loading.js'
 
 // Assets (Images & Icons)
 import { ReactComponent as EditIcon } from "../../assets/icons/edit-red.svg";
 import { ReactComponent as AddIcon } from "../../assets/icons/add.svg";
+
+// API
+import {watchlist, createWatchListName, updateWatchListName, deleteWatchList } from "../../actions/securities";
 
 function ManageWatchList() {
     const theme = useTheme();
@@ -71,42 +75,123 @@ function ManageWatchList() {
     }
 
 
+    // retrieve data from state
     const { watchList } = useSelector((state) => state.securities);
+    const { user } = useSelector((state) => state.auth);
+
     console.log(watchList)
 
-    // Modal Component Functions
+    const [loading, setLoading] = React.useState(false);
+    const dispatch = useDispatch()
 
-    //create modal
+
+    // ADD
     const [createOpen, setCreateOpen] = React.useState(false);
     const handleCreateOpen = () => setCreateOpen(true);
     const handleCreateClose = () => setCreateOpen(false);
 
-    //edit modal
-    const [editOpen, setEditOpen] = React.useState(false);
-    const handleEditOpen = () => setEditOpen(true);
-    const handleEditClose = () => setEditOpen(false);
-
-    //delete modal
-    const [deleteOpen, setDeleteOpen] = React.useState(false);
-    const handleDeleteOpen = () => setDeleteOpen(true);
-    const handleDeleteClose = () => setDeleteOpen(false);
-
+    const [groupName, setGroupName] = useState("");
+    const onChangeGroupName = (e) =>{
+        setGroupName(e.target.value);
+    }
+    
     const handleAdd = () => {
+        setLoading(true)
+        setCreateOpen(false)
 
+        var input = {
+            "userID": user.data.UserID,
+            "watchlistName": groupName
+        }
+        
+        /*const promiseArray = [] 
+        promiseArray.push(dispatch(createWatchListName(input)))
+        promiseArray.push(dispatch(watchlist(user.data.UserID)))*/
+
+        dispatch(createWatchListName(input)).then(()=>{
+            dispatch(watchlist(user.data.UserID)).then(()=>{
+                setLoading(false)
+            }).catch((error)=>{
+                setLoading(false)
+            })
+        }).catch((error)=>{
+            setLoading(false)
+        })
+
+        /*Promise.all(promiseArray).then(()=>{
+            setLoading(false)
+        }).catch((error)=>{
+            setLoading(false)
+        })*/
+
+        setGroupName("")
     }
 
-    const handleEdit = () => {
 
+    // EDIT
+    const [editWatchListID, setEditWatchListID] = useState("");
+    const [newGroupName, setNewGroupName] = useState("");
+    const onChangeNewGroupName = (e) =>{
+        setNewGroupName(e.target.value);
+    }
+
+    const [editOpen, setEditOpen] = React.useState(false);
+    const handleEditOpen = (id) => {
+        setEditWatchListID(id)
+        setEditOpen(true)
+    };
+    const handleEditClose = () => {
+        setNewGroupName("")
+        setEditOpen(false)
+    };
+
+    const handleEdit = () => {
+        setEditOpen(false)
+        setLoading(true)
+        var input = {
+            "watchlistID": editWatchListID,
+            "newWatchlistGroupName": newGroupName
+        }
+        dispatch(updateWatchListName(input)).then((response)=>{
+            console.log(response)
+            setLoading(false)
+        }).catch((error)=>{
+            console.log(error)
+            setLoading(false)
+        })
+        setNewGroupName("")
+    }
+
+
+    // DELETE
+    const [deleteWatchListID, setDeleteWatchListID] = useState("");
+    const [deleteOpen, setDeleteOpen] = React.useState(false);
+
+    const handleDeleteOpen = (id) => {
+        setDeleteWatchListID(id)
+        setDeleteOpen(true)
+    }
+    const handleDeleteClose = () => {
+        setDeleteOpen(false)
     }
 
     const handleDelete = () => {
-
+        setDeleteOpen(false)
+        setLoading(true)
+    
+        dispatch(deleteWatchList(deleteWatchListID)).then((response)=>{
+            console.log(response)
+            setLoading(false)
+        }).catch((error)=>{
+            console.log(error)
+            setLoading(false)
+        })
+        setNewGroupName("")
     }
-
-
 
     return (
         <>
+            { loading && <Loading></Loading> } 
             <SecondaryAppBar link={`/view-watchlist`} text="Watchlist" />
             <Container maxWidth="lg">
                 <Box sx={{ pt: 10, pb: 10 }}>
@@ -131,12 +216,12 @@ function ManageWatchList() {
                                             </Grid>
                                             <Grid xs={ 4 }>
                                                 <Typography textAlign="end" >
-                                                    <EditIcon onClick={ handleEditOpen }/>
+                                                    <EditIcon onClick={()=>handleEditOpen(item.WatchlistID)} />
                                                 </Typography>                                                
                                             </Grid>
                                         </Grid>
                                         <Box display="flex" justifyContent="flex-end" alignItems="flex-end">
-                                            <Button variant="text" sx={{ fontSize: 16, fontWeight:"bold", color:"#E60000" }} onClick={ handleDeleteOpen }> Delete Group</Button>
+                                            <Button variant="text" sx={{ fontSize: 16, fontWeight:"bold", color:"#E60000" }}  onClick={()=>handleDeleteOpen(item.WatchlistID)}> Delete Group</Button>
                                         </Box>
                                     </CardContent>
                                 </Card>
@@ -164,6 +249,8 @@ function ManageWatchList() {
                                         id="NewGroupName"
                                         name='NewGroupName'
                                         label="New Group Name"
+                                        value={newGroupName}
+                                        onChange={onChangeNewGroupName}
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
@@ -206,10 +293,9 @@ function ManageWatchList() {
                         </Box>
                     </Modal>
 
-                    {/* Create Modal */}
+                    {/* ADD Modal */}
                     <Grid xs={12} sx={{ mt: 3 }}>
-                        <Box onClick={ handleCreateOpen }>
-                            
+                        <Box onClick={ handleCreateOpen }>       
                             <Typography sx={{ fontSize: 14, fontWeight:"bold", color:"#E60000" }}>
                                  <AddIcon /> Create New Group
                             </Typography>
@@ -232,6 +318,8 @@ function ManageWatchList() {
                                             id="GroupName"
                                             name='GroupName'
                                             label="Group Name"
+                                            value={groupName}
+                                            onChange={onChangeGroupName}
                                             InputLabelProps={{
                                                 shrink: true,
                                               }}
