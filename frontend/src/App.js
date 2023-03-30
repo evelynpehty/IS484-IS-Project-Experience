@@ -33,6 +33,8 @@ import SecuritiesSummary from './pages/Securities_Module/securities-summary.js'
 import SecuritiesDetails from './pages/Securities_Module/securities-details.js'
 import StockDetails from './pages/Securities_Module/view-stock-details'
 import ViewWatchList from './pages/Securities_Module/view-watchlist'
+import ManageWatchList from './pages/Securities_Module/manage-watchlist'
+
 
 // Customised Components
 import MainBottomNavigation from "./components/MainBottomNavigation";
@@ -100,7 +102,7 @@ useEffect(() => {
                <Route exact path={"/securities-details/:ticker"} element={<SecuritiesDetails />} />
                <Route exact path={"/view-stock-details/:ticker"} element={<StockDetails />} />
                <Route exact path={"/view-watchlist"} element={<ViewWatchList />} />
-              
+               <Route exact path={"/manage-watchlist"} element={<ManageWatchList />} />
             </Routes>
             {(showBottomNavigation) && <MainBottomNavigation></MainBottomNavigation>}
           </>

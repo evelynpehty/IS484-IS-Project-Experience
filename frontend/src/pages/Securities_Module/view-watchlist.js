@@ -1,6 +1,7 @@
 // Packages
 import React from "react";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from 'react-router-dom';
 import { Link } from "react-router-dom";
@@ -63,6 +64,13 @@ function ViewWatchList() {
         },
     ])
 
+    const navigate = useNavigate();
+
+    const handleManageWatchList = () => {
+        navigate('/manage-watchlist')  
+    }
+
+
     return (
         <>
             <SecondaryAppBar link={`/securities`} text="Securities" />
@@ -72,7 +80,7 @@ function ViewWatchList() {
                     {/* Label for Security and the button for manage groups */}
                     <Grid container style={styles.grid} direction="row" justifyContent="space-between" alignItems="center">
                         <Typography style={styles.label} variant="h6">Securities</Typography>
-                        <WhiteReusableButton buttonText="MANAGE GROUPS" />
+                        <WhiteReusableButton function={ handleManageWatchList }  buttonText="MANAGE GROUPS" />
                     </Grid>
 
                     {/* Name of the group of stocks*/}
