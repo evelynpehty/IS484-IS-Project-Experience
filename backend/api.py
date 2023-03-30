@@ -1480,3 +1480,16 @@ def remove_securities_from_watchlist_requests():
       "message": str(e),
       "data": None
     }), 500
+  
+# required attribute(default): 
+@api.route('/get_all_securities',methods = ['POST', 'GET'])
+def get_all_securities_request():
+  try: 
+    result = get_all_securities()
+    return jsonify(result), result["code"]
+  except Exception as e:
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
