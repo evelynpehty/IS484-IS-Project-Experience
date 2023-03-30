@@ -87,8 +87,6 @@ function PaymentReminders() {
         var r_date = currentMonth + "/1/" + currentYear //fixed repayment date to be first of the month
         var next_repayment = (moment(r_date).add(1, 'M')).format("DD MMM YYYY")
         setRepaymentDate(next_repayment)
-    
-
     }, []);
 
     const handleAdd = () => {
