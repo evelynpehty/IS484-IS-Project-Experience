@@ -2,15 +2,26 @@ import axios from "axios";
 
 const API_URL = "http://localhost:5000/api/";
 
-const getSecurities = (userID) => {
-    var bodyFormData = new FormData();
-    bodyFormData.append("userID", userID)
+  const getSecurities = (userID) => {
+      var bodyFormData = new FormData();
+      bodyFormData.append("userID", userID)
 
+      return axios
+      ({
+          method: "post",
+          url: API_URL + "get_info_for_all_securities",
+          data: bodyFormData,
+      })
+        .then((response) => {
+          return response.data;
+        });
+    };
+
+  const getAllSecurities = () => {
     return axios
     ({
         method: "post",
-        url: API_URL + "get_info_for_all_securities",
-        data: bodyFormData,
+        url: API_URL + "get_all_securities",
     })
       .then((response) => {
         return response.data;
@@ -120,7 +131,8 @@ const getSecurities = (userID) => {
     updateWatchListName,
     deleteWatchList,
     addSecurities_WatchList,
-    removeSecurities_WatchList
+    removeSecurities_WatchList,
+    getAllSecurities
   }
 
 
