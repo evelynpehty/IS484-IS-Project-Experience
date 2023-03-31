@@ -10,8 +10,8 @@ from module.classes.watchlist import Watchlist
 from module.classes.watchlist_securities import Watchlist_Securities
 from module.classes.all_holdings import All_Holdings
 from module.classes.securities_holdings import Securities_Holdings
-from module.classes.Stock_Data_LR import StockData_LR
-#from module.classes.stock_predictor_LSTM import StockPredictorLSTM
+from module.classes.stock_data_LR import StockData_LR
+from module.classes.stock_predictor_LSTM import StockPredictorLSTM
 import datetime
 
 """
@@ -676,7 +676,7 @@ def get_watchlist_by_userID(userID):
                     row_dict["ticker"] = ticker
                     row_dict["WatchlistName"] = WatchlistName
                     row_dict["tickerName"] = tickerName
-                    row_dict["dataForEachPeriod"] = view_ticker_for_graph(ticker)
+                    # row_dict["dataForEachPeriod"] = view_ticker_for_graph(ticker)
                     ws_list.append(row_dict)
                     number_of_stock += 1
                 each_watchlist_info["watchlist_list"] = ws_list
@@ -769,13 +769,16 @@ def get_all_securities():
             security = Securities(info[0], info[1])
             change_within_24hrs_in_percent = get_1_day_change_in_percent(security.get_ticker())["data"]
             crrPrice = get_today_market_data(security.get_ticker())
-            market_data = get_market_data_by_ticker(security.get_ticker())["data"]
+            print(security.get_ticker())
+            record_for_past_24_hrs = past_24_hours_record(security.get_ticker())
+            # market_data = get_market_data_by_ticker(security.get_ticker())["data"]
             stock_data = {
                 "ticker": security.get_ticker(),
                 "tickerName": security.get_tickerName(),
                 "1_day_change_per_cent": change_within_24hrs_in_percent,
                 "currentPrice": crrPrice,
-                "market_data": market_data
+                "record_for_past_24_hrs":record_for_past_24_hrs
+                # "market_data": market_data
             }
             data.append(stock_data)
         return {
