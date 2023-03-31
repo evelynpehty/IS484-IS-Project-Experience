@@ -223,7 +223,7 @@ def get_net_worth_deposit(userID):
     return {
         "code": 404,
         "message": "no available information found",
-        "data": None
+        "data": 0.0
     }
 
 

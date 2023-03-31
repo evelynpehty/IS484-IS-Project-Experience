@@ -771,14 +771,14 @@ def get_all_securities():
             crrPrice = get_today_market_data(security.get_ticker())
             print(security.get_ticker())
             record_for_past_24_hrs = past_24_hours_record(security.get_ticker())
-            # market_data = get_market_data_by_ticker(security.get_ticker())["data"]
+            market_data = get_market_data_by_ticker(security.get_ticker())["data"]
             stock_data = {
                 "ticker": security.get_ticker(),
                 "tickerName": security.get_tickerName(),
                 "1_day_change_per_cent": change_within_24hrs_in_percent,
                 "currentPrice": crrPrice,
-                "record_for_past_24_hrs":record_for_past_24_hrs
-                # "market_data": market_data
+                "record_for_past_24_hrs":record_for_past_24_hrs,
+                "market_data": market_data
             }
             data.append(stock_data)
         return {
@@ -788,4 +788,27 @@ def get_all_securities():
     return {
         "code": 404,
         "data": data
+    }
+
+def get_net_worth_security_holdings(userID):
+    engine = create_engine()
+    sql = f"SELECT * FROM all_holdings WHERE holdingsID IN (SELECT holdingsID FROM securities_holdings WHERE userID='{userID}');"
+    net_worth = 0.0 
+    result = engine.execute(sql)
+    if result.rowcount>0:
+        for info in result.fetchall():
+            holding = All_Holdings(info[0], info[1], info[2], info[3])
+            current_price_USD = get_today_ticker_info(holding.get_ticker())
+            current_price_SGD = convert_USD_to_SGD(current_price_USD)
+            qty = holding.get_qty()
+            net_worth += current_price_SGD*qty
+        return {
+            "code": 200,
+            "data": net_worth,
+            "message": "Security holdings information retireve successfully"
+        }
+    return {
+        "code": 404,
+        "message": "no available information found",
+        "data": 0.0
     }

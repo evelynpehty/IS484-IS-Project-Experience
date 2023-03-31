@@ -1,5 +1,6 @@
 from module.databaseConnection import *
 from module.classes.user import User
+from module.securitiesModule import get_net_worth_security_holdings
 from module.depositModule import get_net_worth_deposit
 from module.loanModule import get_net_worth_loan, get_credit_card_net_worth
 import time
@@ -163,13 +164,17 @@ def peek_detail(userID):
   net_worth_deposit = get_net_worth_deposit(userID)
   net_worth_loan = get_net_worth_loan(userID)
   net_worth_credit_card = get_credit_card_net_worth(userID)
+  net_worth_security_holdings = get_net_worth_security_holdings(userID)
+  total_net_worth = net_worth_deposit["data"] + net_worth_security_holdings["data"] - net_worth_loan["data"]
   return {
      "code": 200,
      "message": "Peek data successfully",
      "data": {
+        "total_net_worth": total_net_worth,
         "deposit_net_worth": net_worth_deposit,
         "loan_net_worth": net_worth_loan,
-        "net_worth_credit_card": net_worth_credit_card
+        "net_worth_credit_card": net_worth_credit_card,
+        "net_worth_security_holdings": net_worth_security_holdings
      }
   }
 
