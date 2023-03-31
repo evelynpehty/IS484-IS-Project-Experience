@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 // MUI Components
 import Grid from '@mui/material/Unstable_Grid2';
-import { Container, Box, Typography } from "@mui/material";
+import { Container, Box, Typography, useTheme, Card, CardContent } from "@mui/material";
 
 // Customised Components
 import MainAppBar from "../../components/MainAppBar";
@@ -16,8 +16,14 @@ import DepositCard from "../../components/DepositCard";
 import EditDepositCard from "../../components/EditDepositCard";
 import FabButton from "../../components/FabButton";
 
+// Assets (Images & Icons)
+import { ReactComponent as CalculatorIcon } from "../../assets/icons/calculator-line.svg";
+import { ReactComponent as EmergencyIcon } from "../../assets/icons/emergency-line-red.svg";
+import { ReactComponent as LinkIcon } from "../../assets/icons/link-line-red.svg";
+
 function DepositSummary() {
     // Styling for Deposit Summary Page
+    const theme = useTheme();
     const styles = {
         grid: {
             marginBottom: "24px"
@@ -25,8 +31,25 @@ function DepositSummary() {
 
         label: {
             fontWeight: "bold",
-            color: "#4B4948",
+            color: theme.palette.secondary.main,
+            fontSize: "18px"
+        },
+
+        smallerLabel: {
+            fontWeight: "bold",
+            color: theme.palette.secondary.main,
             fontSize: "16px"
+        },
+
+        card: {
+            background: theme.palette.neutral.main,
+            marginBottom: "24px",
+            borderRadius: "10px",
+            padding: 10
+        },
+
+        cardContent: {
+            paddingBottom: "16px"
         },
 
         fabButton: {
@@ -56,6 +79,75 @@ function DepositSummary() {
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
                         <Typography style={ styles.label } variant="h6">Deposit Accounts</Typography>
                         { show === false ? <WhiteReusableButton function={ () => setShow(prev => !prev) } buttonText="MANAGE ACCOUNTS" /> : <OutlinedReusableButton function={ () => setShow(prev => !prev) } buttonText="DONE" /> }           
+                    </Grid>
+
+                    <Card style={ styles.card }>
+                        <CardContent style={ styles.cardContent }>
+                            <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                <Grid xs={7}>
+                                    <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
+                                        TOTAL BALANCE
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 20, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
+                                        S$15.526.70
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 10 }} color={ theme.palette.secondary.main }>
+                                        Across all deposit accounts
+                                    </Typography>
+                                </Grid>
+                                <Grid xs={5}>
+                                    <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
+                                        INCOME THIS MONTH
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} color="#109878">
+                                        S$16,875.30
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
+                                        EXPENSES THIS MONTH
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 14, fontWeight:"bold" }} color="#E60000">
+                                        S$10,782.20
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                        </CardContent>
+                    </Card>
+
+                    <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
+                        <Typography style={ styles.smallerLabel } >Quick Actions</Typography> 
+                        <Box
+                            sx={{
+                                p: 2,
+                                display: 'grid',
+                                gridTemplateColumns: { xs: '1fr 1fr 1fr' },
+                                gap: 2,
+                            }}
+                        >
+                            <Card style={styles.card2}>
+                                <CardContent sx={{ pt: "24px", textAlign: "center" }}>
+                                    <CalculatorIcon className="small-icon" />
+                                    <Typography sx={{ fontSize: 10, fontWeight: "bold" }} color="text.secondary" gutterBottom>
+                                        Net Worth
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                            <Card style={styles.card2}>
+                                <CardContent sx={{ pt: "24px", textAlign: "center" }}>
+                                    <EmergencyIcon className="small-icon" />
+                                    <Typography sx={{ fontSize: 10, fontWeight: "bold" }} color="text.secondary" gutterBottom>
+                                        Emergency Fund
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                            <Card style={styles.card2}>
+                                <CardContent sx={{ pt: "24px", textAlign: "center" }}>
+                                    <LinkIcon className="small-icon" />
+                                    <Typography sx={{ fontSize: 10, fontWeight: "bold" }} color="text.secondary" gutterBottom>
+                                        Link Accounts
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        </Box>
                     </Grid>
 
                     { !isEmpty && depositList.map ((value, index) => {
