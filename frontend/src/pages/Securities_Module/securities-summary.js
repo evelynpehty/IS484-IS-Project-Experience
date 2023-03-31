@@ -64,8 +64,9 @@ function SecuritiesSummary() {
         }
     }  
     
-    const { securitiesList, watchList } = useSelector((state) => state.securities);
+    const { securitiesList, allSecuritiesList, watchList } = useSelector((state) => state.securities);
     const navigate = useNavigate();
+    console.log(allSecuritiesList)
 
     const handleViewWatchList = () => {
         navigate('/view-watchlist')  
