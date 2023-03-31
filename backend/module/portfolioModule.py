@@ -1,7 +1,8 @@
 from module.databaseConnection import *
 from module.accountModule import peek_detail
 from module.classes.transaction_log import Transaction_Log
-from datetime import datetime, timedelta
+from module.classes.deposit_account import Deposit_Account
+# from datetime import datetime, timedelta
 def get_dashboard():
 
     return {
@@ -196,4 +197,30 @@ def get_user_net_worth(userID):
     return peek_detail(userID)
 
 def emergency_saving_target_amount(userID):
-    amount = get_cashflow_out_six_months(userID)["data"]["cashflow_out"]
+    six_months_amount = get_cashflow_out_six_months(userID)["data"]["cashflow_out"]
+    # six_months_amount = get_cashflow_out_six_months(userID)["data"]["cashflow_out"]
+    return {
+        "code": 200,
+        "data": {
+            "six_month_total_expense": six_months_amount,
+            "ideal_amount":{
+                "one_month": six_months_amount/6,
+                "three_month": six_months_amount/2,
+                "six_month": six_months_amount
+            }
+        }
+    }
+
+# def get_detail_of_emergency_saving(userID):
+#     engine = create_engine()
+#     sql = "SELECT * FROM deposit_account WHERE userID = "+str(userID)
+#     result = engine.execute(sql)
+#     target_amount = emergency_saving_target_amount(userID)
+#     if result.rowcount>0:
+#         accountInfo = []
+#         for info in result.fetchall():
+#             depositAccountInfo = Deposit_Account(
+#                 info[0], info[1], info[2], info[3], info[4], info[5], info[6], info[7],
+#                 info[8], info[9], info[10], info[11], info[12], info[13], info[14], info[15],
+#                 info[16], info[17]
+#             )

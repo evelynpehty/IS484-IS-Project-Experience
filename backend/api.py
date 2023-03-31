@@ -1493,3 +1493,41 @@ def get_all_securities_request():
       "message": str(e),
       "data": None
     }), 500
+  
+
+
+# required attribute(default): userID
+@api.route('/get_user_net_worth',methods = ['POST', 'GET'])
+def get_user_net_worth_requests():
+  try: 
+    userID = None
+    if request.method == 'POST':
+      userID = request.form['userID']
+    else:
+      userID = request.args.get('userID')
+    result = get_user_net_worth(userID)
+    return jsonify(result), result["code"]
+  except Exception as e:
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
+
+# required attribute(default): userID
+@api.route('/emergency_saving_target_amount',methods = ['POST', 'GET'])
+def emergency_saving_target_amount_requests():
+  try: 
+    userID = None
+    if request.method == 'POST':
+      userID = request.form['userID']
+    else:
+      userID = request.args.get('userID')
+    result = emergency_saving_target_amount(userID)
+    return jsonify(result), result["code"]
+  except Exception as e:
+    return jsonify({
+      "code": 500,
+      "message": str(e),
+      "data": None
+    }), 500
