@@ -98,9 +98,25 @@ function StockDetails() {
             return el.ticker === ticker
         })
         setDisplay(result[0])
-        setMarketData(result[0].market_data)
+        if(result[0].market_data !== undefined){
+            setMarketData(result[0].market_data)
+
+            (result[0].market_data).forEach(market_item => {
+                const d = moment(market_item.Date)
+                if(d.year()===moment().year()){
+                    var temp = {
+                        "Date": moment(market_item.Date).format('DD MMM YY'),
+                        "ClosingPrice": market_item.ClosingPrice,
+                    }
+                    result.unshift(temp)
+                }       
+            });
+            setGraphData(result)
+        }
+
 
         watchList.forEach(element => {
+            console.log(element.watchlist_list)
             if(element.watchlist_list !== null){
                 (element.watchlist_list).forEach(item => {
                     if(item.ticker === ticker){
@@ -111,17 +127,7 @@ function StockDetails() {
         });
 
         
-        (result[0].market_data).forEach(market_item => {
-            const d = moment(market_item.Date)
-            if(d.year()===moment().year()){
-                var temp = {
-                    "Date": moment(market_item.Date).format('DD MMM YY'),
-                    "ClosingPrice": market_item.ClosingPrice,
-                }
-                result.unshift(temp)
-            }       
-        });
-        setGraphData(result)
+       
     }, []);
 
     const dispatch = useDispatch()
