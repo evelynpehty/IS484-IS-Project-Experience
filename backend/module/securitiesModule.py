@@ -673,6 +673,9 @@ def get_watchlist_by_userID(userID):
                     ticker = ws["Ticker"]
                     WatchlistName = ws["WatchlistName"]
                     tickerName = get_securities_name(ticker)
+                    recent_1_day_record = get_last_day_exit_enter_price(ticker)
+                    row_dict["entry"] = recent_1_day_record["_channel_lower"]
+                    row_dict["exit"] = recent_1_day_record["_channel_upper"]
                     row_dict["ticker"] = ticker
                     row_dict["WatchlistName"] = WatchlistName
                     row_dict["tickerName"] = tickerName
@@ -777,8 +780,8 @@ def get_all_securities():
                 "tickerName": security.get_tickerName(),
                 "1_day_change_per_cent": change_within_24hrs_in_percent,
                 "currentPrice": crrPrice,
-                "record_for_past_24_hrs":record_for_past_24_hrs,
-                "market_data": market_data
+                "record_for_past_24_hrs":record_for_past_24_hrs
+                # "market_data": market_data
             }
             data.append(stock_data)
         return {

@@ -176,7 +176,13 @@ def get_user_net_worth(userID):
     return peek_detail(userID)
 
 def get_recent_one_month_transactions(userID):
-    pass
+    cashflow_in = get_cashflow_in_this_month(userID)["data"]["cashflowin"]
+    cashflow_out = get_cashflow_out_this_month(userID)["data"]["transactions"]
+    return {
+        "code": 200,
+        "cashflow_in": cashflow_in,
+        "cashflow_out": cashflow_out
+    }
 
 #View My Financial Goals
 
