@@ -245,103 +245,97 @@ function SecuritiesDetails() {
             <Container maxWidth="lg">
                 <Box sx={{ pt: 10, pb: 10 }}>
                     <Card style={ styles.card }>
-                            <CardContent style={ styles.cardContent }>
-                                <Typography sx={{ fontSize: 16, fontWeight:"bold" , color:"#4B4948" }}>
-                                    { securities_item[0].ticker }
-                                </Typography>
-                                <Typography sx={{ fontSize: 12, color:"#4B4948" }} >
-                                    { securities_item[0].stock_name }
-                                </Typography>
-                                <Typography sx={{ fontSize: 14, color:"#4B4948"}} >
-                                    { `US$${ securities_item[0].current_price_USD.toFixed(2).toLocaleString("en-US") } ` }
-                                    <Chip sx={(securities_item[0]["change_rate"] < 0) ? styles.chipRed : styles.chipGreen } size="small" label={ `${securities_item[0]["change_rate"].toFixed(2)} %` } />
-                                </Typography>
+                        <CardContent style={ styles.cardContent }>
+                            <Typography sx={{ fontSize: 16, fontWeight:"bold" , color:"#4B4948" }}>
+                                { securities_item[0].ticker }
+                            </Typography>
+                            <Typography sx={{ fontSize: 12, color:"#4B4948" }} >
+                                { securities_item[0].stock_name }
+                            </Typography>
+                            <Typography sx={{ fontSize: 14, color:"#4B4948"}} >
+                                { `US$${ securities_item[0].current_price_USD.toFixed(2).toLocaleString("en-US") } ` }
+                                <Chip sx={(securities_item[0]["change_rate"] < 0) ? styles.chipRed : styles.chipGreen } size="small" label={ `${securities_item[0]["change_rate"].toFixed(2)} %` } />
+                            </Typography>
 
-                                <Typography sx={{ fontSize: 12, color:"#4B4948" }} textAlign="end">
-                                    Total Current Holdings
-                                </Typography>
-                                <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }} textAlign="end">
-                                    SGD ${ (securities_item[0].qty * securities_item[0].current_price_SGD).toFixed(2).toLocaleString("en-US") }
-                                </Typography>
-                            </CardContent>
-                        </Card>
-
-
-
+                            <Typography sx={{ fontSize: 12, color:"#4B4948" }} textAlign="end">
+                                Total Current Holdings
+                            </Typography>
+                            <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }} textAlign="end">
+                                SGD ${ (securities_item[0].qty * securities_item[0].current_price_SGD).toFixed(2).toLocaleString("en-US") }
+                            </Typography>
+                        </CardContent>
+                    </Card>
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
                         <Typography style={ styles.label } variant="h6">Current Holdings</Typography>
                     </Grid>
                     <Card style={ styles.card2 }>
-                            <CardContent style={ styles.cardContent }>
-                                <Grid container direction="row" justifyContent="space-between">
-                                    <Grid xs={6}>
-                                        <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
-                                            TOTAL INVESTMENT
-                                        </Typography>
-                                        <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
-                                            S$6,059.44
-                                        </Typography>
-                                    </Grid>
-                                    <Grid xs={6}>
-                                        <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
-                                            CURRENT VALUE
-                                        </Typography>
-                                        <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
-                                            SGD ${ (securities_item[0].qty * securities_item[0].current_price_SGD).toFixed(2).toLocaleString("en-US") }
-                                        </Typography>
-                                    </Grid>
+                        <CardContent style={ styles.cardContent }>
+                            <Grid container direction="row" justifyContent="space-between">
+                                <Grid xs={6}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                        TOTAL INVESTMENT
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
+                                        S$6,059.44
+                                    </Typography>
                                 </Grid>
-
-                                
-                                <Grid container direction="row" justifyContent="space-between" sx={{mt:3}}>
-                                    <Grid xs={6}>
-                                        <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
-                                            AVERAGE PRICE (USD)
-                                        </Typography>
-                                        <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
-                                            US$148.98
-                                        </Typography>
-                                    </Grid>
-                                    <Grid xs={6}>
-                                        <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
-                                            PROFIT / LOSS
-                                        </Typography>
+                                <Grid xs={6}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                        CURRENT VALUE
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
+                                        SGD ${ (securities_item[0].qty * securities_item[0].current_price_SGD).toFixed(2).toLocaleString("en-US") }
+                                    </Typography>
+                                </Grid>
+                            </Grid>        
+                            <Grid container direction="row" justifyContent="space-between" sx={{mt:3}}>
+                                <Grid xs={6}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                        AVERAGE PRICE (USD)
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
+                                        US$148.98
+                                    </Typography>
+                                </Grid>
+                                <Grid xs={6}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                        PROFIT / LOSS
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#109878" }}>
+                                        + S$175.18
+                                    </Typography>
+                                </Grid>
+                            </Grid>   
+                            <Grid container direction="row" justifyContent="space-between" sx={{mt:3}}>
+                                <Grid xs={6}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                        QUANTITY HELD
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
+                                        {securities_item[0].qty}
+                                    </Typography>
+                                </Grid>
+                                <Grid xs={6}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                        1D CHANGE
+                                    </Typography>
+                                    { securities_item[0]["1_day_change_per_each"] >= 0 &&
                                         <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#109878" }}>
-                                            + S$175.18
+                                            S${securities_item[0]["1_day_change_per_each"].toFixed(2).toLocaleString("en-US") }
                                         </Typography>
-                                    </Grid>
-                                </Grid>
-                                
-                                <Grid container direction="row" justifyContent="space-between" sx={{mt:3}}>
-                                    <Grid xs={6}>
-                                        <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
-                                            QUANTITY HELD
+                                    }
+                                    { securities_item[0]["1_day_change_per_each"] < 0 &&
+                                        <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#E60000" }}>
+                                            - S${securities_item[0]["1_day_change_per_each"].toFixed(2).toLocaleString("en-US") }
                                         </Typography>
-                                        <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
-                                            {securities_item[0].qty}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid xs={6}>
-                                        <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
-                                            1D CHANGE
-                                        </Typography>
-                                        { securities_item[0]["1_day_change_per_each"] >= 0 &&
-                                            <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#109878" }}>
-                                                S${securities_item[0]["1_day_change_per_each"].toFixed(2).toLocaleString("en-US") }
-                                            </Typography>
-                                        }
-                                        { securities_item[0]["1_day_change_per_each"] < 0 &&
-                                            <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#E60000" }}>
-                                                - S${securities_item[0]["1_day_change_per_each"].toFixed(2).toLocaleString("en-US") }
-                                            </Typography>
-                                        }
-                                        
-                                    </Grid>
+                                    }
                                     
                                 </Grid>
                                 
-                            </CardContent>
-                        </Card>
+                            </Grid>
+                            
+                        </CardContent>
+                    </Card>
 
 
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
@@ -349,34 +343,34 @@ function SecuritiesDetails() {
                         <WhiteReusableButton function={ handleViewStock } buttonText="VIEW DETAILS" />
                     </Grid>
                     <Card style={ styles.card2 } elevation={ 4 }>
-                            <ResponsiveContainer width="100%" height={300}>
-                                <AreaChart width={730} height={250} data={graphData}
-                                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                                <defs>
-                                    <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor="#E99B96" stopOpacity={0.8}/>
-                                    <stop offset="95%" stopColor="#E99B96" stopOpacity={0}/>
-                                    </linearGradient>
-                                </defs>
-                                <XAxis dataKey="Date" />
-                                <YAxis />
-                                <Tooltip />
-                                <Area dataKey="ClosingPrice" stroke="#E60000" strokeWidth="2" fillOpacity={1} fill="url(#colorUv)" />
-                                </AreaChart>
-                            </ResponsiveContainer>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <AreaChart width={730} height={250} data={graphData}
+                            margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                            <defs>
+                                <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#E99B96" stopOpacity={0.8}/>
+                                <stop offset="95%" stopColor="#E99B96" stopOpacity={0}/>
+                                </linearGradient>
+                            </defs>
+                            <XAxis dataKey="Date" />
+                            <YAxis />
+                            <Tooltip />
+                            <Area dataKey="ClosingPrice" stroke="#E60000" strokeWidth="2" fillOpacity={1} fill="url(#colorUv)" />
+                            </AreaChart>
+                        </ResponsiveContainer>
 
-                            <CardContent>                     
-                                <Grid container justifyContent="center" sx={{mt:2, mb: 2}}> 
-                                    <Stack direction="row" spacing={1} style={ styles.stackChip }>
-                                        {
-                                            chipValue.map((item, index) => {
-                                                return <Chip label={item} id={index} key={index} sx={(item === selectedChip) ? styles.chipSelected : styles.chipUnSelected } variant="outlined" onClick={() => handleChip(item)} />
-                                            })
-                                        }
-                                    </Stack>
-                                </Grid>
-                            </CardContent>
-                        </Card>
+                        <CardContent>                     
+                            <Grid container justifyContent="center" sx={{mt:2, mb: 2}}> 
+                                <Stack direction="row" spacing={1} style={ styles.stackChip }>
+                                    {
+                                        chipValue.map((item, index) => {
+                                            return <Chip label={item} id={index} key={index} sx={(item === selectedChip) ? styles.chipSelected : styles.chipUnSelected } variant="outlined" onClick={() => handleChip(item)} />
+                                        })
+                                    }
+                                </Stack>
+                            </Grid>
+                        </CardContent>
+                    </Card>
                 
                 </Box>
             </Container>
