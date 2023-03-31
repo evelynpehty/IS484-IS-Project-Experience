@@ -2,6 +2,7 @@ from module.databaseConnection import create_engine
 from module.classes.deposit_account import Deposit_Account
 from module.classes.transaction_log import Transaction_Log
 from module.classes.product import Product
+# from module.portfolioModule import get_recent_one_month_transactions
 # from module.accountModule import get_net_worth
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -11,6 +12,8 @@ def get_view_all_deposit_accounts(userID):
     engine = create_engine()
     sql = "SELECT * FROM deposit_account WHERE userID = "+str(userID)
     result = engine.execute(sql)
+    cashflow = get_recent_one_month_transactions(userID)["data"]
+    totalBalance = 0.0 
     if result.rowcount>0:
         accountInfo = []
         for info in result.fetchall():
@@ -19,6 +22,8 @@ def get_view_all_deposit_accounts(userID):
                 info[8], info[9], info[10], info[11], info[12], info[13], info[14], info[15],
                 info[16], info[17]
             )
+            
+            totalBalance += depositAccountInfo.get_availBalance()
             productID = depositAccountInfo.get_productID()
             productName = get_product_name(productID)
             depositAccountInfo = depositAccountInfo.to_dict()
@@ -26,13 +31,23 @@ def get_view_all_deposit_accounts(userID):
             accountInfo.append(depositAccountInfo)
         return{
             "code": 200,
-            "data": accountInfo
+            "message": "Deposit Account information has retrived successfully",
+            "data": {
+                "totalBalance": totalBalance,
+                "cashflow_this_month": cashflow,
+                "accountInfo": accountInfo
+            }
+            
         }
 
     return {
         "code": 404,
         "message": "no available information found",
-        "data":None
+        "data": {
+                "totalBalance": totalBalance,
+                "cashflow_this_month": cashflow,
+                "accountInfo": None
+            }
     }
 
 
@@ -431,4 +446,161 @@ def update_deposit_account_color_and_name(depositAccountID, newColor, newName):
     }
 
 
+def get_cashflow_out_six_months(userID):
+    engine = create_engine()
+    sql = f"""
+            SELECT *
+            FROM transaction_log
+            WHERE (accountFrom IN (SELECT creditCardAccountID FROM credit_card WHERE userID = '{userID}')
+                   OR accountFrom IN (SELECT loanAccountID FROM loan_account WHERE userID = '{userID}'))
+                  AND transactionDate >= DATE_SUB(NOW(), INTERVAL 6 MONTH);
+            """
+    cashflowout = 0.0
+    transactions = []
+    result = engine.execute(sql)
+    if result.rowcount>0:
+        for info in result.fetchall():
+            transaction = Transaction_Log(
+                info[0], info[1], info[2], info[3], 
+                info[4], info[5], info[6], info[7],
+                info[8], info[9], info[10]
+            )
+            transactions.append(transaction.to_dict())
+            cashflowout += transaction.get_transactionAmount()
+        return {
+            "code": 200,
+            "data":{
+                "cashflow_out" : cashflowout,
+                "transactions": transactions
+            }
+        }
+    return {
+            "code": 404,
+            "data":{
+                "cashflow_out" : cashflowout,
+                "transactions": transactions
+            }
+    }
+
+def get_cashflow_in_six_months(userID):
+    engine = create_engine()
+    sql = f"""
+            SELECT *
+            FROM transaction_log
+            WHERE (accountTo IN (SELECT creditCardAccountID FROM credit_card WHERE userID = '{userID}')
+                   OR accountTo IN (SELECT loanAccountID FROM loan_account WHERE userID = '{userID}'))
+                  AND transactionDate >= DATE_SUB(NOW(), INTERVAL 6 MONTH);
+            """
+    cashflowin = 0.0
+    transactions = []
+    result = engine.execute(sql)
+    if result.rowcount>0:
+        for info in result.fetchall():
+            transaction = Transaction_Log(
+                info[0], info[1], info[2], info[3], 
+                info[4], info[5], info[6], info[7],
+                info[8], info[9], info[10]
+            )
+            transactions.append(transaction.to_dict())
+            cashflowin += transaction.get_transactionAmount()
+        return {
+            "code": 200,
+            "data": {
+                "cashflow_out" : cashflowin,
+                "transactions": transactions
+            }
+        }
+    return {
+            "code": 404,
+            "data": {
+                "cashflow_out" : cashflowin,
+                "transactions": transactions
+            }
+    }
+def get_cashflow_out_this_month(userID):
+    engine = create_engine()
+    sql = f"""
+            SELECT *
+            FROM transaction_log
+            WHERE (accountFrom IN (SELECT creditCardAccountID FROM credit_card WHERE userID = '{userID}')
+                   OR accountFrom IN (SELECT loanAccountID FROM loan_account WHERE userID = '{userID}'))
+                  AND MONTH(transactionDate) = MONTH(CURRENT_DATE())
+                  AND YEAR(transactionDate) = YEAR(CURRENT_DATE());
+
+            """
+    cashflowout = 0.0
+    transactions = []
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        for info in result.fetchall():
+            transaction = Transaction_Log(
+                info[0], info[1], info[2], info[3], 
+                info[4], info[5], info[6], info[7],
+                info[8], info[9], info[10]
+            )
+            transactions.append(transaction.to_dict())
+            cashflowout += transaction.get_transactionAmount()
+        return {
+            "code": 200,
+            "data":{
+                "cashflow_out" : cashflowout,
+                "transactions": transactions
+            }
+        }
+    return {
+            "code": 404,
+            "data":{
+                "cashflow_out" : cashflowout,
+                "transactions": transactions
+            }
+    }
+
+def get_cashflow_in_this_month(userID):
+    engine = create_engine()
+    sql = f"""
+            SELECT *
+            FROM transaction_log
+            WHERE (accountTo IN (SELECT creditCardAccountID FROM credit_card WHERE userID = '{userID}')
+                   OR accountTo IN (SELECT loanAccountID FROM loan_account WHERE userID = '{userID}'))
+                  AND MONTH(transactionDate) = MONTH(CURRENT_DATE())
+                  AND YEAR(transactionDate) = YEAR(CURRENT_DATE());
+            """
+    cashflowin = 0.0
+    transactions = []
+    result = engine.execute(sql)
+    if result.rowcount > 0:
+        for info in result.fetchall():
+            transaction = Transaction_Log(
+                info[0], info[1], info[2], info[3], 
+                info[4], info[5], info[6], info[7],
+                info[8], info[9], info[10]
+            )
+            transactions.append(transaction.to_dict())
+            cashflowin += transaction.get_transactionAmount()
+        return {
+            "code": 200,
+            "data":{
+                "cashflow_in" : cashflowin,
+                "transactions": transactions
+            }
+        }
+    return {
+            "code": 404,
+            "data":{
+                "cashflow_in" : cashflowin,
+                "transactions": transactions
+            }
+    }
+
+
+def get_recent_one_month_transactions(userID):
+    cashflow_in = get_cashflow_in_this_month(userID)["data"]["cashflow_in"]
+    cashflow_out = get_cashflow_out_this_month(userID)["data"]["cashflow_out"]
+    return {
+        "code": 200,
+        "data": {
+            "income": cashflow_in,
+            "expenses": cashflow_out
+        }
+    }
 

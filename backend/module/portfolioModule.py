@@ -45,14 +45,14 @@ def get_cashflow_out_six_months(userID):
         return {
             "code": 200,
             "data":{
-                "cashflowout" : cashflowout,
+                "cashflow_out" : cashflowout,
                 "transactions": transactions
             }
         }
     return {
             "code": 404,
             "data":{
-                "cashflowout" : cashflowout,
+                "cashflow_out" : cashflowout,
                 "transactions": transactions
             }
     }
@@ -81,14 +81,14 @@ def get_cashflow_in_six_months(userID):
         return {
             "code": 200,
             "data": {
-                "cashflowout" : cashflowin,
+                "cashflow_in" : cashflowin,
                 "transactions": transactions
             }
         }
     return {
             "code": 404,
             "data": {
-                "cashflowout" : cashflowin,
+                "cashflow_in" : cashflowin,
                 "transactions": transactions
             }
     }
@@ -118,14 +118,14 @@ def get_cashflow_out_this_month(userID):
         return {
             "code": 200,
             "data":{
-                "cashflowout" : cashflowout,
+                "cashflow_out" : cashflowout,
                 "transactions": transactions
             }
         }
     return {
             "code": 404,
             "data":{
-                "cashflowout" : cashflowout,
+                "cashflow_out" : cashflowout,
                 "transactions": transactions
             }
     }
@@ -155,14 +155,14 @@ def get_cashflow_in_this_month(userID):
         return {
             "code": 200,
             "data":{
-                "cashflowin" : cashflowin,
+                "cashflow_in" : cashflowin,
                 "transactions": transactions
             }
         }
     return {
             "code": 404,
             "data":{
-                "cashflowin" : cashflowin,
+                "cashflow_in" : cashflowin,
                 "transactions": transactions
             }
     }
@@ -171,20 +171,29 @@ def get_cashflow_in_this_month(userID):
 def get_cashflow_six_months(userID):
     cashflow_in = get_cashflow_in_six_months(userID)
     cashflow_out = get_cashflow_out_six_months(userID)
-#View Net Worth
-def get_user_net_worth(userID):
-    return peek_detail(userID)
+
 
 def get_recent_one_month_transactions(userID):
-    cashflow_in = get_cashflow_in_this_month(userID)["data"]["cashflowin"]
-    cashflow_out = get_cashflow_out_this_month(userID)["data"]["transactions"]
+    cashflow_in = get_cashflow_in_this_month(userID)["data"]["cashflow_in"]
+    cashflow_out = get_cashflow_out_this_month(userID)["data"]["cashflow_out"]
     return {
         "code": 200,
-        "cashflow_in": cashflow_in,
-        "cashflow_out": cashflow_out
+        "data": {
+            "cashflow_in": cashflow_in,
+            "cashflow_out": cashflow_out
+        }
     }
 
 #View My Financial Goals
 
 def view_my_financial_goals():
     pass 
+
+
+
+#View Net Worth
+def get_user_net_worth(userID):
+    return peek_detail(userID)
+
+def emergency_saving_target_amount(userID):
+    amount = get_cashflow_out_six_months(userID)["data"]["cashflow_out"]
