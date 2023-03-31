@@ -8,7 +8,7 @@ const DepositCard = (props) => {
     const styles = {
         card: {
             marginBottom: "24px",
-            borderRadius: "15px",
+            borderRadius: "10px",
             padding: 10
         },
 
