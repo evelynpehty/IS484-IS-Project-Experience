@@ -1,7 +1,6 @@
-import { inputAdornmentClasses } from "@mui/material";
-
 const initialState = {
     securitiesList: [],
+    allSecuritiesList: [],
     watchList: []
 }
 
@@ -18,6 +17,16 @@ switch (type) {
     return {
         ...state,
         securitiesList: []
+    };
+    case "ALL_SECURITIES_SUCCESS":
+      return {
+          ...state,
+          allSecuritiesList: payload.allSecuritiesList,
+      };
+    case "ALL_SECURITIES_FAIL":
+    return {
+        ...state,
+        allSecuritiesList: []
     };
     case "WATCHLIST_SUCCESS":
     return {
@@ -51,6 +60,26 @@ switch (type) {
             ...state,
             watchList: watchList
         };
+    /*case "REMOVE_SECURITIES_WATCHLIST_SUCCESS":
+
+        watchList.forEach(el => {
+            if(el.WatchlistID === payload.WatchlistID){
+                // const index = watchList.indexOf(el);
+                // watchList.splice(index, 1);
+                el.watchlist_list.forEach(item => {
+                    if(item.ticker === payload.ticker){
+                        const index = el.watchlist_list.indexOf(item);
+                        console.log(index)
+                        el.watchlist_list.splice(index, 1);
+                    }
+                })
+            }
+        });
+        console.log(watchList)
+        return {
+            ...state,
+            watchList: watchList
+        };*/
     default:
     return state;
 }

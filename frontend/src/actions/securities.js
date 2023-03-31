@@ -40,6 +40,46 @@ export const securities = (UserID) => (dispatch) => {
   );
 };
 
+export const allSecurities = () => (dispatch) => {
+  return securities_service.getAllSecurities().then(
+    (data) => {
+      if(data.code === 200){
+        dispatch({
+          type: "ALL_SECURITIES_SUCCESS",
+          payload: { allSecuritiesList: data.data },
+        });
+      }
+      else{
+        dispatch({
+          type: "ALL_SECURITIES_FAIL"
+        });
+
+        dispatch({
+          type: "SET_MESSAGE",
+          payload: "No Securities",
+        });
+        return Promise.reject();
+      }
+
+      return Promise.resolve();
+    },
+    (error) => {
+      console.log(error)
+      const message = error.message
+      dispatch({
+        type: "ALL_SECURITIES_FAIL",
+      });
+
+      dispatch({
+        type: "SET_MESSAGE",
+        payload: message,
+      });
+
+      return Promise.reject();
+    }
+  );
+};
+
 export const watchlist = (UserID) => (dispatch) => {
   return securities_service.getWatchList(UserID).then(
     (data) => {
@@ -157,12 +197,11 @@ export const removeSecurities_WatchList = (input) => (dispatch) => {
     (data) => {
         if(data.code === 200){
           /*dispatch({
-            type: "CREATE_WATCHLIST_SUCCESS",
+            type: "REMOVE_SECURITIES_WATCHLIST_SUCCESS",
             payload: input
-          });*/
+          });   */ 
           return Promise.resolve(data);
         }
-        
     },
     (error) => {
       console.log(error)
