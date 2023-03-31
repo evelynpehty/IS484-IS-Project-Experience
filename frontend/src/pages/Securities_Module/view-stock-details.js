@@ -8,7 +8,7 @@ import moment from 'moment';
 
 // MUI Components
 import Grid from '@mui/material/Unstable_Grid2';
-import { Container, Box, Typography, Card, CardContent, useTheme, Button, Modal, InputLabel, FormControl, MenuItem, Select, FormHelperText } from "@mui/material";
+import { Container, Box, Typography, Card, CardContent, useTheme, Modal,FormControl, MenuItem, Select, FormHelperText, Chip, Stack } from "@mui/material";
 
 // Customised Components
 import SecondaryAppBar from "../../components/SecondaryAppBar";
@@ -23,6 +23,15 @@ import { ReactComponent as HeartSolidIcon } from "../../assets/icons/heart-fille
 // API
 import { watchlist, addSecurities_WatchList, removeSecurities_WatchList } from "../../actions/securities";
 
+// Recharts
+import {
+    AreaChart,
+    ResponsiveContainer,
+    XAxis,
+    YAxis,
+    Tooltip,
+    Area,
+  } from "recharts";
 
 function StockDetails() {
     const theme = useTheme()
@@ -52,6 +61,18 @@ function StockDetails() {
             fontSize: "18px",
             fontWeight: "bold",
             color: theme.palette.primary.main
+        },
+        chipSelected: {
+            backgroundColor:theme.palette.secondary.light,
+        }, 
+
+        chipUnSelected: {
+            backgroundColor: theme.palette.neutral.main,
+        },
+        stackChip: {
+            overflow: "auto",
+            paddingLeft: "16px",
+            paddingRight: "16px"
         }
     }
 
@@ -61,6 +82,12 @@ function StockDetails() {
 
     const [display, setDisplay] = useState("");
     const [isWatchList, setIsWatchList] = useState("");
+
+    // Graph
+    const [chipValue, setChipValue] = useState(["1D", "1W", "1M", "6M", "1Y", "YTD"]);
+    const [selectedChip, setSelectedChip] = React.useState("YTD");
+    const [marketData, setMarketData] = useState([]);
+    const [graphData, setGraphData] = useState([]);
     
     console.log(allSecuritiesList)
     console.log(watchList)
@@ -71,6 +98,7 @@ function StockDetails() {
             return el.ticker === ticker
         })
         setDisplay(result[0])
+        setMarketData(result[0].market_data)
 
         watchList.forEach(element => {
             if(element.watchlist_list !== null){
@@ -81,11 +109,24 @@ function StockDetails() {
                 })
             }
         });
+
+        
+        (result[0].market_data).forEach(market_item => {
+            const d = moment(market_item.Date)
+            if(d.year()===moment().year()){
+                var temp = {
+                    "Date": moment(market_item.Date).format('DD MMM YY'),
+                    "ClosingPrice": market_item.ClosingPrice,
+                }
+                result.unshift(temp)
+            }       
+        });
+        setGraphData(result)
     }, []);
 
     const dispatch = useDispatch()
     const [loading, setLoading] = React.useState(false);
-    const [group, setGroup] = React.useState("None");
+    const [group, setGroup] = React.useState(1);
     const onChangeGroup = (e) => {
         setGroup(e.target.value);
     }
@@ -107,9 +148,11 @@ function StockDetails() {
                 setLoading(false)
                 setIsWatchList(true)
             }).catch((error)=>{
+                console.log(error)
                 setLoading(false)
             })
         }).catch((error)=>{
+            console.log(error)
             setLoading(false)
         })
 
@@ -152,6 +195,105 @@ function StockDetails() {
         })
     }
 
+    // Graph Chip Filter
+
+    function handleChip(item){
+        setSelectedChip(item)
+        var result = []
+        /*if(item === "1D"){
+            const oneD_data = securitiesArray[0].record_for_past_24_hrs
+            console.log(oneD_data)
+
+            oneD_data.forEach(market_item => {
+             
+                var temp = {
+                    "Date": moment.utc(market_item.Datetime).format('HH:mm a'),
+                    "ClosingPrice": market_item.Close
+                }
+                result.push(temp)
+                
+            });
+            setGraphData(result)
+
+        }*/
+        if(item === "1W"){
+            const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+            var top5 = marketData.slice(0,5).reverse()
+
+            const latest_item_day = moment(marketData[0].Date).format('dddd')
+            const index = days.indexOf(latest_item_day)+1
+            const sliced_marketData = (top5.slice(0,index)).reverse()
+    
+            sliced_marketData.forEach(market_item => {
+                const date_temp = moment().diff(market_item.Date, 'months');
+                console.log(date_temp)
+                if(date_temp < 1){
+                    var temp = {
+                        "Date": moment(market_item.Date).format('ddd'),
+                        "ClosingPrice": market_item.ClosingPrice,
+                    }
+                    result.unshift(temp)
+                }
+            });
+            setGraphData(result)
+        }
+        if(item === "1M"){
+            marketData.forEach(market_item => {
+                const date_temp = moment().diff(market_item.Date, 'months');
+                console.log(date_temp)
+                if(date_temp < 1){
+                    var temp = {
+                        "Date": moment(market_item.Date).format('DD MMM'),
+                        "ClosingPrice": market_item.ClosingPrice,
+                    }
+                    result.unshift(temp)
+                }
+            });
+            setGraphData(result)
+            
+        }
+        if(item === "6M"){
+            marketData.forEach(market_item => {
+                const date_temp = moment().diff(market_item.Date, 'months');
+                if(date_temp < 6){
+                    var temp = {
+                        "Date": moment(market_item.Date).format('DD MMM YY'),
+                        "ClosingPrice": market_item.ClosingPrice,
+                    }
+                    result.unshift(temp)
+                }
+            });
+            setGraphData(result)
+            
+        }
+        if(item === "1Y"){
+            marketData.forEach(market_item => {
+                const date_temp = moment().diff(market_item.Date, 'months');
+                if(date_temp < 12){
+                    var temp = {
+                        "Date": moment(market_item.Date).format('DD MMM YY'),
+                        "ClosingPrice": market_item.ClosingPrice,
+                    }
+                    result.unshift(temp)
+                }
+            });
+            setGraphData(result)
+        }
+        if(item === "YTD"){
+            marketData.forEach(market_item => {
+                const d = moment(market_item.Date)
+                if(d.year()===moment().year()){
+                    var temp = {
+                        "Date": moment(market_item.Date).format('DD MMM YY'),
+                        "ClosingPrice": market_item.ClosingPrice,
+                    }
+                    result.unshift(temp)
+                }       
+            });
+            setGraphData(result)
+        }
+    }
+
     return (
         <>
              { loading && <Loading></Loading> } 
@@ -166,9 +308,40 @@ function StockDetails() {
                         <Grid xs={8} textAlign="end">
                             {isWatchList && <WhiteReusableButton function={ handleRemoveOpen } icon={ <HeartSolidIcon /> } buttonText="REMOVE FROM WATCHLIST" />}
                             {!isWatchList && <WhiteReusableButton function={ handleAddOpen } icon={ <HeartLineIcon /> } buttonText="SAVE TO WATCHLIST" /> }
-                            
                         </Grid>                        
                     </Grid>
+
+                    {/* Graph */}
+                    <Card style={ styles.card2 } elevation={ 4 }>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <AreaChart width={730} height={250} data={graphData}
+                            margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                            <defs>
+                                <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#E99B96" stopOpacity={0.8}/>
+                                <stop offset="95%" stopColor="#E99B96" stopOpacity={0}/>
+                                </linearGradient>
+                            </defs>
+                            <XAxis dataKey="Date" />
+                            <YAxis />
+                            <Tooltip />
+                            <Area dataKey="ClosingPrice" stroke="#E60000" strokeWidth="2" fillOpacity={1} fill="url(#colorUv)" />
+                            </AreaChart>
+                        </ResponsiveContainer>
+
+                        <CardContent>                     
+                            <Grid container justifyContent="center" sx={{mt:2, mb: 2}}> 
+                                <Stack direction="row" spacing={1} style={ styles.stackChip }>
+                                    {
+                                        chipValue.map((item, index) => {
+                                            return <Chip label={item} id={index} key={index} sx={(item === selectedChip) ? styles.chipSelected : styles.chipUnSelected } variant="outlined" onClick={() => handleChip(item)} />
+                                        })
+                                    }
+                                </Stack>
+                            </Grid>
+                        </CardContent>
+                    </Card>
+
                 </Box>
 
                 {/* Add WatchList Modal */}
@@ -190,7 +363,7 @@ function StockDetails() {
                                 displayEmpty
                                 inputProps={{ 'aria-label': 'Without label' }}
                                 >
-                                    <MenuItem value="None">
+                                    <MenuItem value={1}>
                                         <em>None</em>
                                     </MenuItem>
                                     {watchList.map((item,index)=>{
