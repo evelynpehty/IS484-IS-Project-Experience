@@ -10,7 +10,7 @@ from module.classes.watchlist import Watchlist
 from module.classes.watchlist_securities import Watchlist_Securities
 from module.classes.all_holdings import All_Holdings
 from module.classes.securities_holdings import Securities_Holdings
-from module.classes.Stock_Data_LR import StockData_LR
+from module.classes.stock_data_LR import StockData_LR
 #from module.classes.stock_predictor_LSTM import StockPredictorLSTM
 import datetime
 
@@ -390,16 +390,16 @@ def get_holding_by_userID_and_ticker(holdingsID, ticker):
 def view_security(userID, holdingsID, ticker):
     
     result = {}
-    print(3, 3)
+    # print(3, 3)
     holding_data = get_holding_by_userID_and_ticker(holdingsID, ticker)["data"]
-    print(3)
+    # print(3)
     # print(len(holding_data) )
     if len(holding_data) == 0:
         return {
             "code": 404, 
             "data":result
         }
-    print(4)
+    # print(4)
     market_data = get_market_data_by_ticker(ticker)
     # print(market_data)
     get_holding_data_detail = get_holding_detail(holding_data, userID)
@@ -414,15 +414,22 @@ def view_security(userID, holdingsID, ticker):
 #View Stock Detail 
 def view_stock_detail(ticker):
     market_data = get_market_data_by_ticker(ticker)["data"]
+    summarize = get_summary_by_ticker(ticker)
     if market_data:
         return {
             "code": 200,
-            "data": market_data
+            "data": {
+                "market_data": market_data,
+                "summarize": summarize["data"]
+            }
         }
     else:
         return {
             "code": 404,
-            "data": market_data
+            "data": {
+                "market_data": market_data,
+                "summarize": summarize["data"]
+            }
     }
 def get_1_day_change(ticker):
     engine = create_engine()
@@ -814,4 +821,27 @@ def get_net_worth_security_holdings(userID):
         "code": 404,
         "message": "no available information found",
         "data": 0.0
+    }
+def convert_timestamp_to_datetime(timestamp):
+    import datetime
+    datetime_obj = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
+    return datetime_obj
+def get_summary_by_ticker(ticker):
+    info = yf.Ticker("AAPL").info
+    marketCap = info['marketCap']
+    regularMarketVolume = info['regularMarketVolume']
+    dividendDate = convert_timestamp_to_datetime(info['dividendDate'])
+    averageDailyVolume3Month = info['averageDailyVolume3Month']
+    priceEpsCurrentYear = info['priceEpsCurrentYear']
+    epsCurrentYear = info['epsCurrentYear']
+    return {
+        "code": 200,
+        "data":{
+            "marketCap":marketCap, 
+            "regularMarketVolume":regularMarketVolume, 
+            "dividendDate":dividendDate, 
+            "averageDailyVolume3Month":averageDailyVolume3Month, 
+            "priceEpsCurrentYear":priceEpsCurrentYear, 
+            "epsCurrentYear":epsCurrentYear, 
+        }
     }
