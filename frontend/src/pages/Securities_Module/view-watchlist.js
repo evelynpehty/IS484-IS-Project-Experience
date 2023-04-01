@@ -156,12 +156,13 @@ function ViewWatchList() {
                                         <Typography style={styles.label} variant="h6">{item.WatchlistGroupName}</Typography>
                                     </Grid>
                                 }
-                                {item.watchlist_list.map((value, i)=>{
+                                
+                                {item.watchlist_list !== null && item.watchlist_list.map((value, i)=>{
                                     return (
                                         <>
                                             <Card style={ styles.card }>
                                                 <CardContent style={ styles.cardContent }>
-                                                    <LightTooltip 
+                                                    {(index === 0 && i ===0) && <LightTooltip 
                                                         PopperProps={{
                                                             disablePortal: true,
                                                         }}
@@ -228,12 +229,64 @@ function ViewWatchList() {
                                                                 </Typography>
                                                             </Grid>
                                                         </Grid>
-                                                    </LightTooltip>
+                                                    </LightTooltip>}
+                                                    {(index !== 0 || i!==0) && <Grid container direction="row" justifyContent="space-between">
+                                                            {/* First 12 grids */}
+                                                            <Grid xs={3} sx={{m: "auto" }}>
+                                                                <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color={theme.palette.secondary.main}>{value.ticker}</Typography>
+                                                            </Grid>
+
+                                                            <Grid xs={3} textAlign="end" sx={{ margin: "auto" }}>
+                                                                <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color={theme.palette.secondary.main}>
+                                                                   {`$${getCurrentPrice(value.ticker)}`}
+                                                                </Typography>
+                                                            </Grid>
+                                                            
+                                                            <Grid xs={6} textAlign="end" sx={{ mb: 1 }}>
+                                                                <Typography sx={{ fontSize: 12 }} color="#979797" onClick={ handleTooltip }>
+                                                                    ENTRY
+                                                                    {/* Styling code for grey chip is styles.greyChip */}
+                                                                    {value.entry > getCurrentPrice(value.ticker) && <Chip sx={{ ml: 1 }} style={ styles.greenChip } size="small" label={`$${value.entry.toFixed(2)}`}></Chip>}
+                                                                    {value.entry <= getCurrentPrice(value.ticker) && <Chip sx={{ ml: 1 }} style={ styles.greyChip } size="small" label={`$${value.entry.toFixed(2)}`}></Chip>}
+ 
+                                                                </Typography>
+                                                            </Grid>
+
+                                                            {/* Second 12 grids */}
+                                                            <Grid xs={3} sx={{ margin: "auto" }}>
+                                                                <Typography sx={{ fontSize: 12 }} color={theme.palette.secondary.main}>{value.tickerName}</Typography>
+                                                            </Grid>
+
+                                                            <Grid xs={3} textAlign="end" sx={{ margin: "auto" }}>
+                                                                <Typography sx={{ fontSize: 12 }} color="#979797">
+                                                                    1D
+                                                                    <Typography sx={{ fontSize: 12, ml: 1 }} variant="p" color={ ( getChange(value.ticker) < 0) ? styles.negative : styles.positive }>
+                                                                        {`${getChange(value.ticker)}%`}
+                                                                    </Typography>
+                                                                    
+                                                                </Typography>
+                                                            </Grid>
+
+                                                            <Grid xs={6} textAlign="end">
+                                                                <Typography sx={{ fontSize: 12 }} color="#979797">
+                                                                    EXIT
+                                                                    {/* Styling code for grey chip is styles.greyChip */}
+                                                                    {value.exit >= getCurrentPrice(value.ticker) && <Chip sx={{ ml: 1 }} style={ styles.greyChip } size="small" label={`$${value.exit.toFixed(2)}`}></Chip>}
+                                                                    {value.exit < getCurrentPrice(value.ticker) && <Chip sx={{ ml: 1 }} style={ styles.redChip } size="small" label={`$${value.exit.toFixed(2)}`}></Chip>}
+
+
+                                                                </Typography>
+                                                            </Grid>
+                                                        </Grid>}
                                                 </CardContent>
                                             </Card>
                                         </>
                                     )
                                 })}
+
+                                {item.watchlist_list === null && 
+                                    <p>no securities</p>
+                                }
 
                                 
                                 

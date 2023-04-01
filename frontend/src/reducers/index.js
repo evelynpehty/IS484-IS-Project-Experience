@@ -5,6 +5,7 @@ import loanReducer from "./loan.js";
 import peekDetailReducer from "./peekdetail";
 import messageReducer from "./message.js";
 import securitiesReducer from "./securities.js";
+import dashboardReducer from "./dashboard.js";
 import {combineReducers} from "redux"
 
 const allReducers = combineReducers({
@@ -14,6 +15,7 @@ const allReducers = combineReducers({
     securities: securitiesReducer,
     peekDetail: peekDetailReducer,
     creditcard: creditCardReducer,
+    dashboard: dashboardReducer,
     message: messageReducer
 })
 

@@ -92,6 +92,7 @@ function BrowseSecurities() {
                         <Typography style={styles.label} variant="h6">Browse Securities</Typography>
                     </Grid>
                     
+                    {/* 
                     <Card style={ styles.card }>
                         <CardContent style={ styles.cardContent }>
                             <Typography sx={{ fontSize: 16, fontWeight: "bold"}} color={ theme.palette.secondary.main }>
@@ -107,6 +108,8 @@ function BrowseSecurities() {
                             </Button>
                         </CardContent>
                     </Card>
+                    */}
+                    
 
                     <FormControl sx={{ mb: 2, background: theme.palette.neutral.main }} variant="outlined" fullWidth="true">
                         <InputLabel sx={{ color: "#BFBFBF" }} htmlFor="outlined-adornment-password">Search</InputLabel>

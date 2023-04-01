@@ -64,9 +64,8 @@ function SecuritiesSummary() {
         }
     }  
     
-    const { securitiesList, allSecuritiesList, watchList } = useSelector((state) => state.securities);
+    const { securitiesList } = useSelector((state) => state.securities);
     const navigate = useNavigate();
-    console.log(allSecuritiesList)
 
     const handleViewWatchList = () => {
         navigate('/view-watchlist')  
@@ -214,74 +213,6 @@ function SecuritiesSummary() {
                         </>
                     )
                 })}
-                
-                <Card style={ styles.card2 }>
-                    {/* ### temporary add a Link to see the view-stock-details.js layout*/}
-                    <Link to="/view-stock-details"/>
-                    <CardContent>
-                        <Grid container direction="row" justifyContent="space-between" alignItems="center">
-                            <Typography variant="p" sx={{ fontSize: 16, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
-                                AAPL
-                                <Typography variant="p" sx={{ fontSize: 12, fontWeight:"regular", ml: 2 }}>
-                                    Apple Inc.
-                                </Typography>
-                            </Typography>
-                            
-                            <Typography variant="p" sx={{ fontSize: 12 }} textAlign="end" color="#9197A4">
-                                Qty 30
-                                <Typography variant="p" sx={{ fontSize: 12, fontWeight:"regular", ml: 2 }} color={ styles.positive }>
-                                    <ArrowUpIcon />
-                                    175.18
-                                </Typography>
-                            </Typography>
-                            
-                        </Grid>
-                        <Grid container direction="row" justifyContent="space-between" alignItems="center">
-                            <Typography variant="p" sx={{ fontSize: 14 }} color={ theme.palette.secondary.main }>
-                                US$155.09
-                                <Typography variant="p" sx={{ fontSize: 12, fontWeight:"regular", ml: 2 }} color={ styles.negative } >
-                                    -0.13%
-                                </Typography>
-                            </Typography>
-                            <Typography sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="#4B4948">
-                                SGD $6,234.62
-                            </Typography>
-                        </Grid>
-                    </CardContent>
-                </Card>
-
-                <Card style={ styles.card2 }>
-                    <CardContent>
-                        <Grid container direction="row" justifyContent="space-between" alignItems="center">
-                            <Typography variant="p" sx={{ fontSize: 16, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
-                                TSLA
-                                <Typography variant="p" sx={{ fontSize: 12, fontWeight:"regular", ml: 2 }}>
-                                    Tesla Inc.
-                                </Typography>
-                            </Typography>
-                            
-                            <Typography variant="p" sx={{ fontSize: 12 }} textAlign="end" color="#9197A4">
-                                Qty 20
-                                <Typography variant="p" sx={{ fontSize: 12, fontWeight:"regular", ml: 2 }} color={ styles.negative }>
-                                    <ArrowDownIcon />
-                                    91.36
-                                </Typography>
-                            </Typography>
-                            
-                        </Grid>
-                        <Grid container direction="row" justifyContent="space-between" alignItems="center">
-                            <Typography variant="p" sx={{ fontSize: 14 }} color={ theme.palette.secondary.main }>
-                                US$180.83
-                                <Typography variant="p" sx={{ fontSize: 12, fontWeight:"regular", ml: 2 }} color={ styles.negative } >
-                                    -2.68%
-                                </Typography>
-                            </Typography>
-                            <Typography sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="#4B4948">
-                                SGD $4,191.45
-                            </Typography>
-                        </Grid>
-                    </CardContent>
-                </Card>
             </Box>
         </Container>
         </React.Fragment>

@@ -19,6 +19,8 @@ import Loading from '../../components/loading.js'
 // Assets (Images & Icons)
 import { ReactComponent as HeartLineIcon } from "../../assets/icons/heart-line-red.svg";
 import { ReactComponent as HeartSolidIcon } from "../../assets/icons/heart-filled-red.svg";
+import { ReactComponent as Rangebar } from "../../assets/icons/52weekLine.svg";
+
 
 // API
 import { watchlist, addSecurities_WatchList, removeSecurities_WatchList } from "../../actions/securities";
@@ -73,7 +75,20 @@ function StockDetails() {
             overflow: "auto",
             paddingLeft: "16px",
             paddingRight: "16px"
-        }
+        },
+        card2: {
+            marginTop: "24px",
+            marginBottom: "24px",
+            marginLeft: "16px",
+            marginRight: "16px",
+            borderRadius: "15px",
+            padding: 10
+        },
+
+        cardContent2: {
+            paddingBottom: "16px",
+            borderBottom: "1px dashed #BFBFBF"
+        },
     }
 
     const { ticker } = useParams()
@@ -86,21 +101,23 @@ function StockDetails() {
     // Graph
     const [chipValue, setChipValue] = useState(["1D", "1W", "1M", "6M", "1Y", "YTD"]);
     const [selectedChip, setSelectedChip] = React.useState("YTD");
-    const [marketData, setMarketData] = useState([]);
     const [graphData, setGraphData] = useState([]);
     
     console.log(allSecuritiesList)
     console.log(watchList)
 
     useEffect(() => {
+
+        // get securities data for the ticker
         var result = allSecuritiesList.filter(function (el)
         {
             return el.ticker === ticker
         })
-        setDisplay(result[0])
-        if(result[0].market_data !== undefined){
-            setMarketData(result[0].market_data)
-
+        setDisplay(result[0]) // for ticker and ticker name
+      
+        // prepare graph YTD data
+        var r = []
+        if(result[0].market_data.length !== 0){
             (result[0].market_data).forEach(market_item => {
                 const d = moment(market_item.Date)
                 if(d.year()===moment().year()){
@@ -108,13 +125,13 @@ function StockDetails() {
                         "Date": moment(market_item.Date).format('DD MMM YY'),
                         "ClosingPrice": market_item.ClosingPrice,
                     }
-                    result.unshift(temp)
+                    r.unshift(temp)
                 }       
             });
-            setGraphData(result)
+            setGraphData(r)
         }
 
-
+        // check ticker in watchlist
         watchList.forEach(element => {
             console.log(element.watchlist_list)
             if(element.watchlist_list !== null){
@@ -125,9 +142,6 @@ function StockDetails() {
                 })
             }
         });
-
-        
-       
     }, []);
 
     const dispatch = useDispatch()
@@ -202,14 +216,11 @@ function StockDetails() {
     }
 
     // Graph Chip Filter
-
     function handleChip(item){
         setSelectedChip(item)
         var result = []
-        /*if(item === "1D"){
-            const oneD_data = securitiesArray[0].record_for_past_24_hrs
-            console.log(oneD_data)
-
+        if(item === "1D"){
+            const oneD_data = display.record_for_past_24_hrs
             oneD_data.forEach(market_item => {
              
                 var temp = {
@@ -221,12 +232,12 @@ function StockDetails() {
             });
             setGraphData(result)
 
-        }*/
+        }
         if(item === "1W"){
             const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-            var top5 = marketData.slice(0,5).reverse()
+            var top5 = (display.market_data).slice(0,5).reverse()
 
-            const latest_item_day = moment(marketData[0].Date).format('dddd')
+            const latest_item_day = moment((display.market_data)[0].Date).format('dddd')
             const index = days.indexOf(latest_item_day)+1
             const sliced_marketData = (top5.slice(0,index)).reverse()
     
@@ -244,7 +255,7 @@ function StockDetails() {
             setGraphData(result)
         }
         if(item === "1M"){
-            marketData.forEach(market_item => {
+            (display.market_data).forEach(market_item => {
                 const date_temp = moment().diff(market_item.Date, 'months');
                 console.log(date_temp)
                 if(date_temp < 1){
@@ -259,7 +270,7 @@ function StockDetails() {
             
         }
         if(item === "6M"){
-            marketData.forEach(market_item => {
+            (display.market_data).forEach(market_item => {
                 const date_temp = moment().diff(market_item.Date, 'months');
                 if(date_temp < 6){
                     var temp = {
@@ -273,7 +284,7 @@ function StockDetails() {
             
         }
         if(item === "1Y"){
-            marketData.forEach(market_item => {
+            (display.market_data).forEach(market_item => {
                 const date_temp = moment().diff(market_item.Date, 'months');
                 if(date_temp < 12){
                     var temp = {
@@ -286,7 +297,7 @@ function StockDetails() {
             setGraphData(result)
         }
         if(item === "YTD"){
-            marketData.forEach(market_item => {
+            (display.market_data).forEach(market_item => {
                 const d = moment(market_item.Date)
                 if(d.year()===moment().year()){
                     var temp = {
@@ -336,7 +347,7 @@ function StockDetails() {
                         </ResponsiveContainer>
 
                         <CardContent>                     
-                            <Grid container justifyContent="center" sx={{mt:2, mb: 2}}> 
+                            <Grid container justifyContent="center" sx={{mt:2}}> 
                                 <Stack direction="row" spacing={1} style={ styles.stackChip }>
                                     {
                                         chipValue.map((item, index) => {
@@ -345,6 +356,122 @@ function StockDetails() {
                                     }
                                 </Stack>
                             </Grid>
+
+                            <Grid display="flex" justifyContent="space-between" sx={{mt:3}}>
+                                <Grid xs={4}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                        LAST PRICE
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
+                                        $2609.03B
+                                    </Typography>
+                                </Grid>
+                                <Grid xs={4}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                        CHANGE
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
+                                        $2609.03B
+                                    </Typography>
+                                </Grid>
+                                <Grid xs={4}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                        % CHANGE
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
+                                        $68.75M
+                                    </Typography>
+                                </Grid>
+                            </Grid>    
+                            <Grid container direction="row" justifyContent="space-between" sx={{mt:2}}> 
+                                <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                    52-Week Range
+                                </Typography>
+                            </Grid>
+                            <Grid container direction="row" justifyContent="space-between" sx={{mt:1}}> 
+                                <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                     <Rangebar />
+                                </Typography>
+                            </Grid>    
+                            <Grid container direction="row" justifyContent="space-between" sx={{mt:1}}> 
+                            <Grid sx={6}>
+                                <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                     $124.17
+                                </Typography>
+                            </Grid>
+                               <Grid sx={6}>
+                                <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                     $165.10
+                                </Typography>
+                            </Grid>
+                            </Grid>        
+
+                            
+                        </CardContent>
+                    </Card>
+
+                    {/* Summary */}
+                    <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
+                        <Typography style={ styles.label } variant="h6">Summary</Typography>
+                    </Grid>
+                    <Card style={ styles.card2 }>
+                        <CardContent style={ styles.cardContent }>
+                        <Grid container direction="row" justifyContent="space-between" alignItems="center" >
+                                <Grid xs={6}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                        MARKET DATA
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
+                                        $2609.03B
+                                    </Typography>
+                                </Grid>
+                                <Grid xs={6}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                        MARKET VOL
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
+                                        $68.75M
+                                    </Typography>
+                                </Grid>
+                            </Grid>        
+                            <Grid container direction="row" justifyContent="space-between" alignItems="center" sx={{mt:3}}>
+                                <Grid xs={6}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                        DVIVIDENED DATE
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
+                                        Feb 16, 2023
+                                    </Typography>
+                                </Grid>
+                                <Grid xs={6}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                       AVG VOL
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#109878" }}>
+                                        68.88M
+                                    </Typography>
+                                </Grid>
+                            </Grid>   
+                            <Grid container direction="row" justifyContent="space-between" alignItems="center" sx={{mt:3}}>
+                                <Grid xs={6}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                       P/E
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
+                                        27.58
+                                    </Typography>
+                                </Grid>
+                                <Grid xs={6}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                        EPS
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#E60000" }}>
+                                        5.98
+                                    </Typography>                                
+                                </Grid>
+                                
+                            </Grid>
+                            
                         </CardContent>
                     </Card>
 
@@ -369,9 +496,6 @@ function StockDetails() {
                                 displayEmpty
                                 inputProps={{ 'aria-label': 'Without label' }}
                                 >
-                                    <MenuItem value={1}>
-                                        <em>None</em>
-                                    </MenuItem>
                                     {watchList.map((item,index)=>{
                                         return(
                                             <MenuItem key={index} value={item.WatchlistID}>
