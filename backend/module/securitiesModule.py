@@ -780,8 +780,8 @@ def get_all_securities():
                 "tickerName": security.get_tickerName(),
                 "1_day_change_per_cent": change_within_24hrs_in_percent,
                 "currentPrice": crrPrice,
-                "record_for_past_24_hrs":record_for_past_24_hrs
-                # "market_data": market_data
+                "record_for_past_24_hrs":record_for_past_24_hrs,
+                "market_data": market_data
             }
             data.append(stock_data)
         return {
