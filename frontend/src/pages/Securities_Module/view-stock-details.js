@@ -19,6 +19,8 @@ import Loading from '../../components/loading.js'
 // Assets (Images & Icons)
 import { ReactComponent as HeartLineIcon } from "../../assets/icons/heart-line-red.svg";
 import { ReactComponent as HeartSolidIcon } from "../../assets/icons/heart-filled-red.svg";
+import { ReactComponent as Rangebar } from "../../assets/icons/52weekLine.svg";
+
 
 // API
 import { watchlist, addSecurities_WatchList, removeSecurities_WatchList } from "../../actions/securities";
@@ -73,7 +75,20 @@ function StockDetails() {
             overflow: "auto",
             paddingLeft: "16px",
             paddingRight: "16px"
-        }
+        },
+        card2: {
+            marginTop: "24px",
+            marginBottom: "24px",
+            marginLeft: "16px",
+            marginRight: "16px",
+            borderRadius: "15px",
+            padding: 10
+        },
+
+        cardContent2: {
+            paddingBottom: "16px",
+            borderBottom: "1px dashed #BFBFBF"
+        },
     }
 
     const { ticker } = useParams()
@@ -332,7 +347,7 @@ function StockDetails() {
                         </ResponsiveContainer>
 
                         <CardContent>                     
-                            <Grid container justifyContent="center" sx={{mt:2, mb: 2}}> 
+                            <Grid container justifyContent="center" sx={{mt:2}}> 
                                 <Stack direction="row" spacing={1} style={ styles.stackChip }>
                                     {
                                         chipValue.map((item, index) => {
@@ -341,6 +356,122 @@ function StockDetails() {
                                     }
                                 </Stack>
                             </Grid>
+
+                            <Grid display="flex" justifyContent="space-between" sx={{mt:3}}>
+                                <Grid xs={4}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                        LAST PRICE
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
+                                        $2609.03B
+                                    </Typography>
+                                </Grid>
+                                <Grid xs={4}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                        CHANGE
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
+                                        $2609.03B
+                                    </Typography>
+                                </Grid>
+                                <Grid xs={4}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                        % CHANGE
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
+                                        $68.75M
+                                    </Typography>
+                                </Grid>
+                            </Grid>    
+                            <Grid container direction="row" justifyContent="space-between" sx={{mt:2}}> 
+                                <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                    52-Week Range
+                                </Typography>
+                            </Grid>
+                            <Grid container direction="row" justifyContent="space-between" sx={{mt:1}}> 
+                                <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                     <Rangebar />
+                                </Typography>
+                            </Grid>    
+                            <Grid container direction="row" justifyContent="space-between" sx={{mt:1}}> 
+                            <Grid sx={6}>
+                                <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                     $124.17
+                                </Typography>
+                            </Grid>
+                               <Grid sx={6}>
+                                <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                     $165.10
+                                </Typography>
+                            </Grid>
+                            </Grid>        
+
+                            
+                        </CardContent>
+                    </Card>
+
+                    {/* Summary */}
+                    <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
+                        <Typography style={ styles.label } variant="h6">Summary</Typography>
+                    </Grid>
+                    <Card style={ styles.card2 }>
+                        <CardContent style={ styles.cardContent }>
+                        <Grid container direction="row" justifyContent="space-between" alignItems="center" >
+                                <Grid xs={6}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                        MARKET DATA
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
+                                        $2609.03B
+                                    </Typography>
+                                </Grid>
+                                <Grid xs={6}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                        MARKET VOL
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
+                                        $68.75M
+                                    </Typography>
+                                </Grid>
+                            </Grid>        
+                            <Grid container direction="row" justifyContent="space-between" alignItems="center" sx={{mt:3}}>
+                                <Grid xs={6}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                        DVIVIDENED DATE
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
+                                        Feb 16, 2023
+                                    </Typography>
+                                </Grid>
+                                <Grid xs={6}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                       AVG VOL
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#109878" }}>
+                                        68.88M
+                                    </Typography>
+                                </Grid>
+                            </Grid>   
+                            <Grid container direction="row" justifyContent="space-between" alignItems="center" sx={{mt:3}}>
+                                <Grid xs={6}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                       P/E
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
+                                        27.58
+                                    </Typography>
+                                </Grid>
+                                <Grid xs={6}>
+                                    <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
+                                        EPS
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#E60000" }}>
+                                        5.98
+                                    </Typography>                                
+                                </Grid>
+                                
+                            </Grid>
+                            
                         </CardContent>
                     </Card>
 
