@@ -86,21 +86,23 @@ function StockDetails() {
     // Graph
     const [chipValue, setChipValue] = useState(["1D", "1W", "1M", "6M", "1Y", "YTD"]);
     const [selectedChip, setSelectedChip] = React.useState("YTD");
-    const [marketData, setMarketData] = useState([]);
     const [graphData, setGraphData] = useState([]);
     
     console.log(allSecuritiesList)
     console.log(watchList)
 
     useEffect(() => {
+
+        // get securities data for the ticker
         var result = allSecuritiesList.filter(function (el)
         {
             return el.ticker === ticker
         })
-        setDisplay(result[0])
-        if(result[0].market_data !== undefined){
-            setMarketData(result[0].market_data)
-
+        setDisplay(result[0]) // for ticker and ticker name
+      
+        // prepare graph YTD data
+        var r = []
+        if(result[0].market_data.length !== 0){
             (result[0].market_data).forEach(market_item => {
                 const d = moment(market_item.Date)
                 if(d.year()===moment().year()){
@@ -108,13 +110,13 @@ function StockDetails() {
                         "Date": moment(market_item.Date).format('DD MMM YY'),
                         "ClosingPrice": market_item.ClosingPrice,
                     }
-                    result.unshift(temp)
+                    r.unshift(temp)
                 }       
             });
-            setGraphData(result)
+            setGraphData(r)
         }
 
-
+        // check ticker in watchlist
         watchList.forEach(element => {
             console.log(element.watchlist_list)
             if(element.watchlist_list !== null){
@@ -125,9 +127,6 @@ function StockDetails() {
                 })
             }
         });
-
-        
-       
     }, []);
 
     const dispatch = useDispatch()
@@ -202,14 +201,11 @@ function StockDetails() {
     }
 
     // Graph Chip Filter
-
     function handleChip(item){
         setSelectedChip(item)
         var result = []
-        /*if(item === "1D"){
-            const oneD_data = securitiesArray[0].record_for_past_24_hrs
-            console.log(oneD_data)
-
+        if(item === "1D"){
+            const oneD_data = display.record_for_past_24_hrs
             oneD_data.forEach(market_item => {
              
                 var temp = {
@@ -221,12 +217,12 @@ function StockDetails() {
             });
             setGraphData(result)
 
-        }*/
+        }
         if(item === "1W"){
             const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-            var top5 = marketData.slice(0,5).reverse()
+            var top5 = (display.market_data).slice(0,5).reverse()
 
-            const latest_item_day = moment(marketData[0].Date).format('dddd')
+            const latest_item_day = moment((display.market_data)[0].Date).format('dddd')
             const index = days.indexOf(latest_item_day)+1
             const sliced_marketData = (top5.slice(0,index)).reverse()
     
@@ -244,7 +240,7 @@ function StockDetails() {
             setGraphData(result)
         }
         if(item === "1M"){
-            marketData.forEach(market_item => {
+            (display.market_data).forEach(market_item => {
                 const date_temp = moment().diff(market_item.Date, 'months');
                 console.log(date_temp)
                 if(date_temp < 1){
@@ -259,7 +255,7 @@ function StockDetails() {
             
         }
         if(item === "6M"){
-            marketData.forEach(market_item => {
+            (display.market_data).forEach(market_item => {
                 const date_temp = moment().diff(market_item.Date, 'months');
                 if(date_temp < 6){
                     var temp = {
@@ -273,7 +269,7 @@ function StockDetails() {
             
         }
         if(item === "1Y"){
-            marketData.forEach(market_item => {
+            (display.market_data).forEach(market_item => {
                 const date_temp = moment().diff(market_item.Date, 'months');
                 if(date_temp < 12){
                     var temp = {
@@ -286,7 +282,7 @@ function StockDetails() {
             setGraphData(result)
         }
         if(item === "YTD"){
-            marketData.forEach(market_item => {
+            (display.market_data).forEach(market_item => {
                 const d = moment(market_item.Date)
                 if(d.year()===moment().year()){
                     var temp = {
@@ -369,9 +365,6 @@ function StockDetails() {
                                 displayEmpty
                                 inputProps={{ 'aria-label': 'Without label' }}
                                 >
-                                    <MenuItem value={1}>
-                                        <em>None</em>
-                                    </MenuItem>
                                     {watchList.map((item,index)=>{
                                         return(
                                             <MenuItem key={index} value={item.WatchlistID}>
