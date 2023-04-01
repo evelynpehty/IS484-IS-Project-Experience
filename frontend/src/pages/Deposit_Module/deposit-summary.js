@@ -64,8 +64,12 @@ function DepositSummary() {
     const [show, setShow] = useState(false);
 
     // Get list of deposit account from state
-    const { depositList } = useSelector((state) => state.deposit);
+    const { depositList, cashflow_this_month, totalBalance } = useSelector((state) => state.deposit);
     const [isEmpty, setIsEmpty] = useState(false);
+
+    console.log(depositList)
+    console.log(cashflow_this_month)
+    console.log(totalBalance)
     
     if(depositList.length === 0){
         setIsEmpty(true)
@@ -89,7 +93,7 @@ function DepositSummary() {
                                         TOTAL BALANCE
                                     </Typography>
                                     <Typography sx={{ fontSize: 20, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
-                                        S$15.526.70
+                                        SGD ${totalBalance.toLocaleString("en-US")}
                                     </Typography>
                                     <Typography sx={{ fontSize: 10 }} color={ theme.palette.secondary.main }>
                                         Across all deposit accounts
@@ -100,13 +104,13 @@ function DepositSummary() {
                                         INCOME THIS MONTH
                                     </Typography>
                                     <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} color="#109878">
-                                        S$16,875.30
+                                        SGD ${cashflow_this_month.income.toLocaleString("en-US")}
                                     </Typography>
                                     <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
                                         EXPENSES THIS MONTH
                                     </Typography>
                                     <Typography sx={{ fontSize: 14, fontWeight:"bold" }} color="#E60000">
-                                        S$10,782.20
+                                        SGD ${cashflow_this_month.expenses.toLocaleString("en-US")}
                                     </Typography>
                                 </Grid>
                             </Grid>

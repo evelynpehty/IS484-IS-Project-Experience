@@ -1,5 +1,7 @@
 const initialState = {
     depositList: [],
+    cashflow_this_month:{},
+    totalBalance:0,
     transactionHistoryList: []
 }
 
@@ -10,12 +12,18 @@ switch (type) {
     case "DEPOSIT_SUCCESS":
       return {
           ...state,
-          depositList: payload.depositList,
+          depositList: payload.depositList.accountInfo,
+          cashflow_this_month: payload.depositList.cashflow_this_month,
+          totalBalance: payload.depositList.totalBalance
+
       };
     case "DEPOSIT_FAIL":
     return {
         ...state,
-        depositList: []
+        depositList: [],
+        cashflow_this_month:{},
+        totalBalance:0,
+        transactionHistoryList: []
     };
     case "TRANSACTION_HISTORY_SUCCESS":
       return {
