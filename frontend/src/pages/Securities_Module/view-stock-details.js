@@ -102,6 +102,7 @@ function StockDetails() {
     const [chipValue, setChipValue] = useState(["1D", "1W", "1M", "6M", "1Y", "YTD"]);
     const [selectedChip, setSelectedChip] = React.useState("YTD");
     const [graphData, setGraphData] = useState([]);
+    const [summary, setSummary] = React.useState("");
     
     console.log(allSecuritiesList)
     console.log(watchList)
@@ -114,7 +115,8 @@ function StockDetails() {
             return el.ticker === ticker
         })
         setDisplay(result[0]) // for ticker and ticker name
-      
+        
+        setSummary(result[0].summary.data)
         // prepare graph YTD data
         var r = []
         if(result[0].market_data.length !== 0){
@@ -363,15 +365,24 @@ function StockDetails() {
                                         LAST PRICE
                                     </Typography>
                                     <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
-                                        $2609.03B
+                                        ${display.currentPrice}
                                     </Typography>
                                 </Grid>
                                 <Grid xs={4}>
                                     <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
                                         CHANGE
-                                    </Typography>
+                                    </Typography>   
                                     <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
-                                        $2609.03B
+                                        { display["1_day_change_in_price"] >= 0 &&
+                                        <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#109878" }}>
+                                            ${display["1_day_change_in_price"].toFixed(2)}
+                                        </Typography>
+                                        }
+                                        { display["1_day_change_in_price"] < 0 &&
+                                        <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#E60000" }}>
+                                        - ${display["1_day_change_in_price"].toFixed(2)}
+                                        </Typography>
+                                        } 
                                     </Typography>
                                 </Grid>
                                 <Grid xs={4}>
@@ -379,7 +390,17 @@ function StockDetails() {
                                         % CHANGE
                                     </Typography>
                                     <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
-                                        $68.75M
+                                        
+                                        { display["1_day_change_per_cent"] >= 0 &&
+                                        <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#109878" }}>
+                                            {display["1_day_change_per_cent"].toFixed(2)}%
+                                        </Typography>
+                                        }
+                                        { display["1_day_change_per_cent"] < 0 &&
+                                            <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#E60000" }}>
+                                                - {display["1_day_change_per_cent"].toFixed(2)}%
+                                            </Typography>
+                                        } 
                                     </Typography>
                                 </Grid>
                             </Grid>    
@@ -419,10 +440,10 @@ function StockDetails() {
                         <Grid container direction="row" justifyContent="space-between" alignItems="center" >
                                 <Grid xs={6}>
                                     <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
-                                        MARKET DATA
+                                        MARKET CAP
                                     </Typography>
                                     <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
-                                        $2609.03B
+                                        {`$${((summary.marketCap)/1000000000).toFixed(2)}B`}
                                     </Typography>
                                 </Grid>
                                 <Grid xs={6}>
@@ -430,25 +451,26 @@ function StockDetails() {
                                         MARKET VOL
                                     </Typography>
                                     <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
-                                        $68.75M
+                                        {`${((summary.regularMarketVolume)/1000000).toFixed(2)}M`}
                                     </Typography>
                                 </Grid>
                             </Grid>        
                             <Grid container direction="row" justifyContent="space-between" alignItems="center" sx={{mt:3}}>
                                 <Grid xs={6}>
                                     <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
-                                        DVIVIDENED DATE
+                                        DIVIDEND DATE
                                     </Typography>
                                     <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
-                                        Feb 16, 2023
+                                        {summary.dividendDate !== null && moment(summary.dividendDate).format("MMM DD, YYYY")}
+                                        {summary.dividendDate === null && "No Date"}
                                     </Typography>
                                 </Grid>
                                 <Grid xs={6}>
                                     <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
                                        AVG VOL
                                     </Typography>
-                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#109878" }}>
-                                        68.88M
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
+                                        {`${summary["averageDailyVolume3Month_in_million"]}M`}
                                     </Typography>
                                 </Grid>
                             </Grid>   
@@ -458,15 +480,15 @@ function StockDetails() {
                                        P/E
                                     </Typography>
                                     <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
-                                        27.58
+                                        {`${summary["priceEpsCurrentYear_in_2dp"]}`}
                                     </Typography>
                                 </Grid>
                                 <Grid xs={6}>
                                     <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
                                         EPS
                                     </Typography>
-                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#E60000" }}>
-                                        5.98
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
+                                        {`${summary.epsCurrentYear}`}
                                     </Typography>                                
                                 </Grid>
                                 
