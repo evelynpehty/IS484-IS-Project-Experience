@@ -779,7 +779,6 @@ def get_all_securities():
             security = Securities(info[0], info[1])
             change_within_24hrs_in_percent = get_1_day_change_in_percent(security.get_ticker())["data"]
             crrPrice = get_today_market_data(security.get_ticker())
-            print(security.get_ticker())
             record_for_past_24_hrs = past_24_hours_record(security.get_ticker())
             market_data = get_market_data_by_ticker(security.get_ticker())["data"]
             summary = get_summary_by_ticker(security.get_ticker())
@@ -829,13 +828,46 @@ def convert_timestamp_to_datetime(timestamp):
     datetime_obj = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
     return datetime_obj
 def get_summary_by_ticker(ticker):
-    info = yf.Ticker("AAPL").info
-    marketCap = info['marketCap']
-    regularMarketVolume = info['regularMarketVolume']
-    dividendDate = convert_timestamp_to_datetime(info['dividendDate'])
-    averageDailyVolume3Month = info['averageDailyVolume3Month']
-    priceEpsCurrentYear = info['priceEpsCurrentYear']
-    epsCurrentYear = info['epsCurrentYear']
+    info = yf.Ticker(ticker).info
+    try:
+        marketCap = info['marketCap']
+    except:
+        marketCap = 0.0
+        
+    try:
+        
+        regularMarketVolume = info['regularMarketVolume']
+    except:
+        regularMarketVolume = 0.0    
+    
+    try:
+        
+        dividendDate = convert_timestamp_to_datetime(info['dividendDate'])
+    except:
+        dividendDate = None
+    
+    try:
+        
+        averageDailyVolume3Month = info['averageDailyVolume3Month']
+    except:
+        averageDailyVolume3Month = 0.0
+    
+    try:
+        
+        averageDailyVolume3Month = info['averageDailyVolume3Month']
+    except:
+        averageDailyVolume3Month = 0.0
+    
+    try:
+        
+        priceEpsCurrentYear = info['priceEpsCurrentYear']
+    except:
+        priceEpsCurrentYear = 0.0
+    try:
+        
+        epsCurrentYear = info['epsCurrentYear']
+    except:
+        epsCurrentYear = 0.0
     return {
         "code": 200,
         "data":{
