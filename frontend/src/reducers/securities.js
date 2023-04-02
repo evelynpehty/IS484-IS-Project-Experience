@@ -1,7 +1,6 @@
-import { inputAdornmentClasses } from "@mui/material";
-
 const initialState = {
     securitiesList: [],
+    allSecuritiesList: [],
     watchList: []
 }
 
@@ -18,6 +17,16 @@ switch (type) {
     return {
         ...state,
         securitiesList: []
+    };
+    case "ALL_SECURITIES_SUCCESS":
+      return {
+          ...state,
+          allSecuritiesList: payload.allSecuritiesList,
+      };
+    case "ALL_SECURITIES_FAIL":
+    return {
+        ...state,
+        allSecuritiesList: []
     };
     case "WATCHLIST_SUCCESS":
     return {

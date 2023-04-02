@@ -390,16 +390,16 @@ def get_holding_by_userID_and_ticker(holdingsID, ticker):
 def view_security(userID, holdingsID, ticker):
     
     result = {}
-    print(3, 3)
+    # print(3, 3)
     holding_data = get_holding_by_userID_and_ticker(holdingsID, ticker)["data"]
-    print(3)
+    # print(3)
     # print(len(holding_data) )
     if len(holding_data) == 0:
         return {
             "code": 404, 
             "data":result
         }
-    print(4)
+    # print(4)
     market_data = get_market_data_by_ticker(ticker)
     # print(market_data)
     get_holding_data_detail = get_holding_detail(holding_data, userID)
@@ -414,15 +414,22 @@ def view_security(userID, holdingsID, ticker):
 #View Stock Detail 
 def view_stock_detail(ticker):
     market_data = get_market_data_by_ticker(ticker)["data"]
+    summarize = get_summary_by_ticker(ticker)
     if market_data:
         return {
             "code": 200,
-            "data": market_data
+            "data": {
+                "market_data": market_data,
+                "summarize": summarize["data"]
+            }
         }
     else:
         return {
             "code": 404,
-            "data": market_data
+            "data": {
+                "market_data": market_data,
+                "summarize": summarize["data"]
+            }
     }
 def get_1_day_change(ticker):
     engine = create_engine()
@@ -673,10 +680,13 @@ def get_watchlist_by_userID(userID):
                     ticker = ws["Ticker"]
                     WatchlistName = ws["WatchlistName"]
                     tickerName = get_securities_name(ticker)
+                    recent_1_day_record = get_last_day_exit_enter_price(ticker)
+                    row_dict["entry"] = recent_1_day_record["_channel_lower"]
+                    row_dict["exit"] = recent_1_day_record["_channel_upper"]
                     row_dict["ticker"] = ticker
                     row_dict["WatchlistName"] = WatchlistName
                     row_dict["tickerName"] = tickerName
-                    row_dict["dataForEachPeriod"] = view_ticker_for_graph(ticker)
+                    # row_dict["dataForEachPeriod"] = view_ticker_for_graph(ticker)
                     ws_list.append(row_dict)
                     number_of_stock += 1
                 each_watchlist_info["watchlist_list"] = ws_list
@@ -769,13 +779,19 @@ def get_all_securities():
             security = Securities(info[0], info[1])
             change_within_24hrs_in_percent = get_1_day_change_in_percent(security.get_ticker())["data"]
             crrPrice = get_today_market_data(security.get_ticker())
+            record_for_past_24_hrs = past_24_hours_record(security.get_ticker())
             market_data = get_market_data_by_ticker(security.get_ticker())["data"]
+            summary = get_summary_by_ticker(security.get_ticker())
+            get_1_day_change_in_price = get_1_day_change(security.get_ticker())["data"]
             stock_data = {
                 "ticker": security.get_ticker(),
                 "tickerName": security.get_tickerName(),
                 "1_day_change_per_cent": change_within_24hrs_in_percent,
+                "1_day_change_in_price": get_1_day_change_in_price,
                 "currentPrice": crrPrice,
-                "market_data": market_data
+                "record_for_past_24_hrs":record_for_past_24_hrs,
+                "market_data": market_data,
+                "summary": summary
             }
             data.append(stock_data)
         return {
@@ -785,4 +801,86 @@ def get_all_securities():
     return {
         "code": 404,
         "data": data
+    }
+
+def get_net_worth_security_holdings(userID):
+    engine = create_engine()
+    sql = f"SELECT * FROM all_holdings WHERE holdingsID IN (SELECT holdingsID FROM securities_holdings WHERE userID='{userID}');"
+    net_worth = 0.0 
+    result = engine.execute(sql)
+    if result.rowcount>0:
+        for info in result.fetchall():
+            holding = All_Holdings(info[0], info[1], info[2], info[3])
+            current_price_USD = get_today_ticker_info(holding.get_ticker())
+            current_price_SGD = convert_USD_to_SGD(current_price_USD)
+            qty = holding.get_qty()
+            net_worth += current_price_SGD*qty
+        return {
+            "code": 200,
+            "data": net_worth,
+            "message": "Security holdings information retireve successfully"
+        }
+    return {
+        "code": 404,
+        "message": "no available information found",
+        "data": 0.0
+    }
+def convert_timestamp_to_datetime(timestamp):
+    import datetime
+    datetime_obj = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
+    return datetime_obj
+def get_summary_by_ticker(ticker):
+    info = yf.Ticker(ticker).info
+    try:
+        marketCap = info['marketCap']
+    except:
+        marketCap = 0.0
+        
+    try:
+        
+        regularMarketVolume = info['regularMarketVolume']
+    except:
+        regularMarketVolume = 0.0    
+    
+    try:
+        
+        dividendDate = convert_timestamp_to_datetime(info['dividendDate'])
+    except:
+        dividendDate = None
+    
+    try:
+        
+        averageDailyVolume3Month = info['averageDailyVolume3Month']
+    except:
+        averageDailyVolume3Month = 0.0
+    
+    try:
+        
+        averageDailyVolume3Month = info['averageDailyVolume3Month']
+    except:
+        averageDailyVolume3Month = 0.0
+    
+    try:
+        
+        priceEpsCurrentYear = info['priceEpsCurrentYear']
+    except:
+        priceEpsCurrentYear = 0.0
+    try:
+        
+        epsCurrentYear = info['epsCurrentYear']
+    except:
+        epsCurrentYear = 0.0
+    return {
+        "code": 200,
+        "data":{
+            "marketCap":marketCap, 
+            "regularMarketVolume":regularMarketVolume, 
+            "dividendDate":dividendDate, 
+            "averageDailyVolume3Month": averageDailyVolume3Month,
+            "averageDailyVolume3Month_in_million":round(averageDailyVolume3Month/1000/1000,2), 
+            "averageDailyVolume3Month_in_billion":round(averageDailyVolume3Month/1000/1000/1000,2), 
+            "priceEpsCurrentYear": priceEpsCurrentYear,
+            "priceEpsCurrentYear_in_2dp":round(priceEpsCurrentYear ,2), 
+            "epsCurrentYear":epsCurrentYear, 
+        }
     }

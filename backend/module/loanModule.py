@@ -195,7 +195,11 @@ def get_net_worth_loan(userID):
     if result.rowcount > 0:
         availLoan = 0.0
         for info in result.fetchall():
-            availLoan += info[6]
+            loan = Loan_Account(
+                info[0], info[1], info[2], info[3], info[4], info[5], info[6], info[7],
+                info[8], info[9], info[10], info[11], info[12], info[13], info[14]
+            )
+            availLoan += loan.get_loanBalance()
         return{
         "code": 200,
         "message": "Loan information retireve successfully",
@@ -205,7 +209,7 @@ def get_net_worth_loan(userID):
     return {
         "code": 404,
         "message": "no available information found",
-        "data": None
+        "data": 0.0
     }
 
 
@@ -518,14 +522,17 @@ def get_credit_card_net_worth(userID):
                 info[4], info[5], info[6], info[7],
                 info[8], info[9]
             )
+            
             net_worth += creditCardInfo.get_creditCardLimit()
         return{
             "code": 200,
-            "data": net_worth
+            "data": net_worth,
+            "message": "Credit Card information retireve successfully"
         }
     return{
         "code": 404,
-        "data": net_worth
+        "data": net_worth,
+        "message": "no available information found"
     }
 def get_lastest_reminder_id(loanAccountID):
     engine = create_engine()
