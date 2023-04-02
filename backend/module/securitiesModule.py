@@ -782,13 +782,15 @@ def get_all_securities():
             print(security.get_ticker())
             record_for_past_24_hrs = past_24_hours_record(security.get_ticker())
             market_data = get_market_data_by_ticker(security.get_ticker())["data"]
+            summary = get_summary_by_ticker(security.get_ticker())
             stock_data = {
                 "ticker": security.get_ticker(),
                 "tickerName": security.get_tickerName(),
                 "1_day_change_per_cent": change_within_24hrs_in_percent,
                 "currentPrice": crrPrice,
                 "record_for_past_24_hrs":record_for_past_24_hrs,
-                "market_data": market_data
+                "market_data": market_data,
+                "summary": summary
             }
             data.append(stock_data)
         return {
