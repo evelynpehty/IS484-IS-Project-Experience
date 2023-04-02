@@ -876,8 +876,11 @@ def get_summary_by_ticker(ticker):
             "marketCap":marketCap, 
             "regularMarketVolume":regularMarketVolume, 
             "dividendDate":dividendDate, 
-            "averageDailyVolume3Month":averageDailyVolume3Month, 
-            "priceEpsCurrentYear":priceEpsCurrentYear, 
+            "averageDailyVolume3Month": averageDailyVolume3Month,
+            "averageDailyVolume3Month_in_million":round(averageDailyVolume3Month/1000/1000,2), 
+            "averageDailyVolume3Month_in_billion":round(averageDailyVolume3Month/1000/1000/1000,2), 
+            "priceEpsCurrentYear": priceEpsCurrentYear,
+            "priceEpsCurrentYear_in_2dp":round(priceEpsCurrentYear ,2), 
             "epsCurrentYear":epsCurrentYear, 
         }
     }
