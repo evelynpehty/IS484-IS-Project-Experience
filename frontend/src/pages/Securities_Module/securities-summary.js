@@ -17,6 +17,8 @@ import { ReactComponent as ArrowUpIcon } from "../../assets/icons/arrow-up-green
 import { ReactComponent as ArrowDownIcon } from "../../assets/icons/arrow-down-red.svg";
 import { ReactComponent as CalculatorIcon } from "../../assets/icons/calculator-line-red.svg";
 import { ReactComponent as LinkIcon } from "../../assets/icons/link-line-red.svg";
+import { ReactComponent as PnLIcon } from "../../assets/icons/pnl-analysis.svg";
+
 
 function SecuritiesSummary() {
     // Styling for Securities Summary Page
@@ -146,11 +148,11 @@ function SecuritiesSummary() {
                             </Typography>
                         </CardContent>
                     </Card>
-                    <Card>
+                    <Card onClick={ handleViewWatchList }>
                         <CardContent sx={{ textAlign: "center" }}>
-                            <CalculatorIcon />
+                            <PnLIcon />
                             <Typography sx={{ fontSize: 10, fontWeight: "bold" }} color="text.secondary" gutterBottom>
-                                Performance Analysis
+                                P&L Analysis
                             </Typography>
                         </CardContent>
                     </Card>

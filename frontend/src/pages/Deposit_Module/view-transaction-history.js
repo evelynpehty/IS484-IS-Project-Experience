@@ -392,42 +392,6 @@ export default function ColorTabs() {
                     </div>
                 </Grid>
 
-                {/* <Grid container style={ styles.grid } direction="row" justifyContent="end" alignItems="center">                    
-                    <Popper
-                    open={open}
-                    anchorEl={anchorRef.current}
-                    role={undefined}
-                    placement="bottom-start"
-                    transition
-                    disablePortal
-                    >
-                    {({ TransitionProps, placement }) => (
-                        <Grow
-                        {...TransitionProps}
-                        style={{
-                            transformOrigin:
-                            placement === 'bottom-start' ? 'left top' : 'left bottom',
-                        }}
-                        >
-                        <Paper>
-                            <ClickAwayListener onClickAway={handleClose}>
-                            <MenuList
-                                autoFocusItem={open}
-                                id="composition-menu"
-                                aria-labelledby="composition-button"
-                            >
-                                <MenuItem name="All" sx={( transFilter === "All") ? styles.chipSelected : styles.chipUnSelected } onClick={() => handleFilter("All")}>All</MenuItem>
-                                <MenuItem sx={{color: styles.positive }} style={( transFilter === "Income") ? styles.chipSelected : styles.chipUnSelected } onClick={() => handleFilter("Income")}>Income</MenuItem>
-                                <MenuItem sx={{color: styles.negative }} style={( transFilter === "Expense") ? styles.chipSelected : styles.chipUnSelected } onClick={() => handleFilter("Expense")}>Expense</MenuItem>
-                            </MenuList>
-                            </ClickAwayListener>
-                        </Paper>
-                        </Grow>
-                    )}
-                    </Popper>
-                </Grid> */}
-
-
                 <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
                     <Tabs
                         value={value}
@@ -454,7 +418,7 @@ export default function ColorTabs() {
                 </Stack>
 
                 {/* By Year */}
-                {/* { value === "Yearly" && Object.keys(transactionDisplay).map(year => {
+                { value === "Yearly" && Object.keys(transactionDisplay).map(year => {
                 return (
                     <>
                         { Object.keys(transactionDisplay[year]).map( (month, index) => {
@@ -503,50 +467,50 @@ export default function ColorTabs() {
                         }
                         )}
                     </>
-                )
-            })
-            } */}
+                    )
+                })
+            }
 
 
-                {/* By Month */}
-                { value === "Monthly" && transactionDisplay.map((item,index)=> {
-                        return (
-                            <>
-                                <Accordion defaultExpanded>
-                                    <AccordionSummary
-                                        expandIcon={<ExpandMoreIcon />}
-                                        aria-controls="panel2a-content"
-                                        id="panel2a-header"
-                                        sx={{ backgroundColor: "#F8F8F8" }}
-                                        >
-                                            <Typography sx={{ fontWeight: "bold", color: "#4B4948" }}>
-                                                { moment(item.transactionDate).format('dddd, Do MMM YYYY') } 
+            {/* By Month */}
+            { value === "Monthly" && transactionDisplay.map((item,index)=> {
+                    return (
+                        <>
+                            <Accordion defaultExpanded>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel2a-content"
+                                    id="panel2a-header"
+                                    sx={{ backgroundColor: "#F8F8F8" }}
+                                    >
+                                        <Typography sx={{ fontWeight: "bold", color: "#4B4948" }}>
+                                            { moment(item.transactionDate).format('dddd, Do MMM YYYY') } 
+                                        </Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Box>
+                                        <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                            <Typography sx={{ fontSize: 16, fontWeight:"bold" }} color="#4B4948">
+                                                {item.transactionID}
                                             </Typography>
-                                    </AccordionSummary>
-                                    <AccordionDetails>
-                                        <Box>
-                                            <Grid container direction="row" justifyContent="space-between" alignItems="center">
-                                                <Typography sx={{ fontSize: 16, fontWeight:"bold" }} color="#4B4948">
-                                                    {item.transactionID}
-                                                </Typography>
-                                                <Typography style={ (item.accountFrom === id) ? styles.negative : styles.positive } sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="#4B4948">
-                                                    {(item.accountFrom === id) ? `- SGD $${ item.transactionAmount.toLocaleString("en-US") }` : `SGD $${ item.transactionAmount.toLocaleString("en-US") }` }
-                                                </Typography>
-                                            </Grid>
-                                            <Grid container direction="row" justifyContent="space-between" alignItems="center">
-                                                <Typography sx={{ fontSize: 12 }} color="#9197A4">
-                                                    { item.transactionDescription }
-                                                </Typography>
-                                                <Typography sx={{ fontSize: 12 }} textAlign="end" color="#9197A4">
-                                                    { item.transactionDate.replace(" GMT", "") }
-                                                </Typography>
-                                            </Grid>
-                                        </Box>
-                                    </AccordionDetails>
-                                </Accordion>  
-                            </>
-                        )
-                    })}
+                                            <Typography style={ (item.accountFrom === id) ? styles.negative : styles.positive } sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="#4B4948">
+                                                {(item.accountFrom === id) ? `- SGD $${ item.transactionAmount.toLocaleString("en-US") }` : `SGD $${ item.transactionAmount.toLocaleString("en-US") }` }
+                                            </Typography>
+                                        </Grid>
+                                        <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                            <Typography sx={{ fontSize: 12 }} color="#9197A4">
+                                                { item.transactionDescription }
+                                            </Typography>
+                                            <Typography sx={{ fontSize: 12 }} textAlign="end" color="#9197A4">
+                                                { item.transactionDate.replace(" GMT", "") }
+                                            </Typography>
+                                        </Grid>
+                                    </Box>
+                                </AccordionDetails>
+                            </Accordion>  
+                        </>
+                    )
+                })}
             </Box>
         </Container>
     </React.Fragment>
