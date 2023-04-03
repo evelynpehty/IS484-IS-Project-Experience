@@ -25,7 +25,7 @@ import { ReactComponent as EditIcon } from "../../assets/icons/edit-white.svg"
 
 
 function LoanSummary() {
-    // Styling for Deposit Summary Page
+    // Styling for Loan Summary Page
     const theme = useTheme();
     const styles = {
         grid: {
@@ -39,7 +39,6 @@ function LoanSummary() {
         },
 
         card: {
-            background: "linear-gradient(to top right, #E69F9F, #E60000)",
             marginBottom: "24px",
             borderRadius: "15px",
             padding: 10
@@ -56,7 +55,6 @@ function LoanSummary() {
             color: theme.palette.neutral.main,
             paddingLeft: "2px",
             paddingRight: "2px",
-            background: "linear-gradient(to top right, #FF9364, #F25F33)",
         },
 
         cardContent: {
@@ -72,7 +70,7 @@ function LoanSummary() {
         }
     }
 
-    const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+    /*const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
         height: 20,
         borderRadius: 5,
         [`&.${linearProgressClasses.colorPrimary}`]: {
@@ -82,7 +80,7 @@ function LoanSummary() {
           borderRadius: 5,
           backgroundColor: theme.palette.mode === 'light' ? 'linear-gradient(to top right, #E69F9F, #E60000)' : 'linear-gradient(to top right, #E69F9F, #E60000)',
         },
-    }));
+    }));*/
 
     // Change State of page
     const [show, setShow] = useState(false);
@@ -98,6 +96,8 @@ function LoanSummary() {
     const [repaymentDate, setRepaymentDate] = useState(false);
     const [loan_DisplayArray, setLoanDisplayArray] = useState(loanList.accountInformation);
 
+    console.log(loan_DisplayArray)
+    
     if(loan_DisplayArray.length === 0){
          setIsEmpty(true)
     }
@@ -192,7 +192,7 @@ function LoanSummary() {
                             return (
                                 <>
                                 <Link to={`/loan-account-details/${item.LoanAccountID}`} key={item.LoanAccountID}> 
-                                    <Card style={styles.card}>
+                                    <Card style={styles.card} sx={{background: `${item.ChosenColor}`}}>
                                         <CardContent style={styles.cardContent}>
                                             {show && 
                                                 <Grid container style={ styles.grid } justifyContent="center  ">
@@ -231,7 +231,14 @@ function LoanSummary() {
                                             }
                                             <Grid container direction="row" justifyContent="space-between" alignItems="center" sx={{mt:1, mb: 2}}>
                                                     <Grid xs={12}>
-                                                        <BorderLinearProgress variant="determinate" value={item.progress} />
+                                                        <LinearProgress variant="determinate" value={item.progress}  sx={{
+                                                                                                        height: 20,
+                                                                                                        borderRadius: 5,    
+                                                                                                        background: `${item.ChosenColor}`,
+                                                                                                        "& .MuiLinearProgress-bar": {
+                                                                                                        backgroundColor: `#FFFF`
+                                                                                                        }
+                                                                                                    }}/>
                                                         <Typography sx={{ fontSize: 14, fontWeight:"light", textAlign: "center" }} color="#E60000">                                        </Typography>
                                                     </Grid>
                                             </Grid>

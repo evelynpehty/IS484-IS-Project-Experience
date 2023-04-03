@@ -74,9 +74,7 @@ function SignIn() {
             const p4 = dispatch(securities(UserID))
             const p5 = dispatch(watchlist(UserID))
             const p6 = dispatch(allSecurities())
-            // const p4 = dispatch(loanTransactionHistory(UserID))
-            // const p5 = dispatch(creditcard(UserID))
-            // const p6 = dispatch(peekDetail(UserID))
+           
             Promise.all([p1,p2,p3,p4,p5,p6]).then(()=>{
                 dispatch(DataLoaded())
                 if(route){

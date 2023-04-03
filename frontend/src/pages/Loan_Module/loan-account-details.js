@@ -48,13 +48,11 @@ function LoanAccountDetails() {
             fontWeight: "bold",
             fontSize: "12px",
             color: theme.palette.neutral.main,
-            paddingLeft: "8px",
-            paddingRight: "8px",
-            background: "linear-gradient(to top right, #FF9364, #F25F33)",
+            paddingLeft: "2px",
+            paddingRight: "2px",
         },
 
         card: {
-            background: "linear-gradient(to top right, #E69F9F, #E60000)",
             marginBottom: "24px",
             borderRadius: "15px",
             padding: 10
@@ -120,6 +118,7 @@ function LoanAccountDetails() {
     const [totalLoanAmount, setTotalLoanAmount] = useState("");
     const [timeToCompletion, setTimeToCompletion] = useState("");
     const [progress, setProgress] = useState("");
+        
 
     // Navigation to Payment Reminders Page
     const handlePaymentReminders = () => {
@@ -193,7 +192,7 @@ function LoanAccountDetails() {
             <SecondaryAppBar link="/loan" text="All Loans" />
             <Container maxWidth="lg">
                 <Box sx={{ pt: 10, pb: 10 }}>
-                    <Card style={ styles.card }>
+                    <Card style={ styles.card } sx={{background: `${loan_item[0].ChosenColor}`}}>
                         <CardContent style={ styles.cardContent }>
                             <Typography sx={{ fontSize: 12 }} color="white">
                                 { loan_item[0].ProductName }
