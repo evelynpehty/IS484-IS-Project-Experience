@@ -7,7 +7,10 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 
 import Grid from '@mui/material/Unstable_Grid2';
-import { Container, Box, Button, Card, CardContent, Typography, AppBar, Toolbar } from "@mui/material";
+import { Container, Box, Button, Card, CardContent, Typography, AppBar, Toolbar, SvgIcon } from "@mui/material";
+
+
+import { ReactComponent as IIcon } from "../../assets/icons/info-circle-line.svg";
 
 // Customised Components
 import SecondaryAppBar from "../../components/SecondaryAppBar";
@@ -23,7 +26,9 @@ import {
     Area,
     PieChart, 
     Pie,
-    Label
+    Cell,
+    Label,
+    LabelList
   } from "recharts";
 import { DensityMedium } from "@mui/icons-material";
 
@@ -71,6 +76,26 @@ function EmergencyFund() {
         
     }
 
+    const data02 = [
+        {
+          "name": "Emergency",
+          "value": 2400,
+          "fill": "#FF9364"
+
+        },
+        {
+          "name": "Deposit",
+          "value": 4567,
+          "fill": "#109878"
+        },
+      ];
+
+      const COLORS = [
+        { start: "#FF9364", end: "#F25F33" },
+        { start: "#109878", end: "#8AB8B2" },
+      ];
+
+    const [totalAmount, settotalAmount] = useState(18600);
     const { depositList } = useSelector((state) => state.deposit);
     const { transactionHistoryList } = useSelector((state) => state.deposit);
 
@@ -93,7 +118,7 @@ function EmergencyFund() {
         var current_Year = moment().year()
         const currentMonth = moment().month()
         const sixMonthAgo = moment().subtract(5, 'months').format("MMM")
-        
+
         const indexof = months.indexOf(sixMonthAgo)
         const limit = indexof + 5
 
@@ -185,21 +210,81 @@ function EmergencyFund() {
       const handleViewSavings = () => {
 
       }
-    
 
+      function CustomLabel({viewBox}){
+        const {cx, cy} = viewBox;
+        return (
+            <>
+            <text x={cx} y={cy-10} fill="#7D8895" className="recharts-text recharts-label" textAnchor="middle" dominantBaseline="central">
+            <tspan alignmentBaseline="middle" fontSize="12" fontWeight="Bold">
+                Ideal Amount 
+             </tspan>
+             </text>
+            </>
+         
+        )
+      }
+
+      function CustomLabel2({viewBox, value1}){
+        const {cx, cy} = viewBox;
+        return (
+         <text x={cx} y={cy+10} fill="#303841" className="recharts-text recharts-label" textAnchor="middle" dominantBaseline="central">
+            <tspan alignmentBaseline="middle" fontWeight="Bold" fontSize="16">{value1}</tspan>
+         </text>
+        )
+      }
+
+    
     return (
         <>
         <SecondaryAppBar link="/dashboard" text="Dashboard" />
         <Container maxWidth="lg">
             <Box sx={{ pt: 10, pb: 10 }}>
                 <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
-                    <Typography style={ styles.label } variant="h6">Emergency Fund</Typography>
+                    <Typography style={ styles.label } variant="h6">Emergency Fund <IIcon/></Typography>
                     <WhiteReusableButton function={handleViewSavings} buttonText="VIEW SAVINGS" />
+                    
                 </Grid>
                 
 
                 {/* PIE CHART */}
-
+                <Grid container justify = "center">
+                    <ResponsiveContainer width="100%" height={300}>
+                   
+                        <PieChart width={1000} height={250}>
+                        <defs>
+                        {data02.map((entry, index) => (
+                            <linearGradient id={`myGradient${index}`}>
+                            <stop
+                                offset="0%"
+                                stopColor={COLORS[index % COLORS.length].start}
+                            />
+                            <stop
+                                offset="100%"
+                                stopColor={COLORS[index % COLORS.length].end}
+                            />
+                            </linearGradient>
+                        ))}
+                        </defs>
+                            
+                        <Pie data={data02} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={80} outerRadius={120} label>
+      
+                        {data02.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={`url(#myGradient${index})`} />
+                        ))}
+                                            
+                            <Label position="centerBottom"
+                                content={<CustomLabel />}>
+                            </Label>
+                            <Label position="centerTop"
+                                content={<CustomLabel2 value1={totalAmount}/>}>
+                            </Label>
+                        </Pie> 
+                        </PieChart>
+                    </ResponsiveContainer>
+                   
+                 </Grid>
+                
 
 
                 {/* YOUR SAVINGS & SAVINGS NEEDED */}
