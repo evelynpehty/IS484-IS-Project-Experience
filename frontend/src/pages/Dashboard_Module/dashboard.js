@@ -94,7 +94,8 @@ function DashBoard() {
         },
 
         button: {
-            paddingLeft: 0
+            paddingLeft: 0,
+            textTransform: "initial"
         }
     }
 
@@ -290,13 +291,13 @@ function DashBoard() {
                             <CardMedia component="img" image={cardBG} style={styles.media}/>
                             <Box style={styles.overlay}>
                                 <Typography sx={{ fontSize: 16, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
-                                    VIEW PROFIT & LOSS ANALYSIS
+                                    View Profit & Loss Analysis
                                 </Typography>
                                 <Typography sx={{ fontSize: 14 }} color={ styles.negative }>
                                     Recommended entry/exit prices
                                 </Typography>
 
-                                <Button onClick={ handleWatchlist } style={ styles.button } endIcon={ <NextIcon /> }>View in Watchlist</Button>
+                                <Button onClick={ handleWatchlist } style={ styles.button } endIcon={ <NextIcon /> } sx={{ mt: 2 }}>View in Watchlist</Button>
                             </Box>
                         </Card>
                     </Box>
