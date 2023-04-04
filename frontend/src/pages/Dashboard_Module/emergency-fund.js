@@ -76,42 +76,44 @@ function EmergencyFund() {
         
     }
 
-    const data02 = [
-        {
-          "name": "Emergency",
-          "value": 2400,
-          "fill": "#FF9364"
-
-        },
-        {
-          "name": "Deposit",
-          "value": 4567,
-          "fill": "#109878"
-        },
-      ];
+    
 
       const COLORS = [
         { start: "#FF9364", end: "#F25F33" },
         { start: "#109878", end: "#8AB8B2" },
       ];
 
-    const [totalAmount, settotalAmount] = useState(18600);
     const { depositList } = useSelector((state) => state.deposit);
     const { transactionHistoryList } = useSelector((state) => state.deposit);
+
+    const { emergencySaving } = useSelector((state) => state.dashboard);
 
     const [selectedMonth, setSelectedMonth] = useState("");
     const [totalIncome, setTotalIncome] = useState("");
     const [totalExpense, setTotalExpense] = useState("");
     const [netCashFlow, setNetCashflow] = useState("");
     const [type, setType] = useState("");
-    const [finalData, setFinalData] = useState([]);
+
+    // AREA CHART
+    const [finalData, setFinalData] = useState([]); 
+
+    // PIE CHART
+    const [pieData, setPieData] = useState([]); 
+
+    const [totalSavings, setTotalSavings] = useState(""); // DISPLAY THIS AS YOUR SAVINGS
+    const [savingsNeeded, setSavingsNeeded] = useState(""); //DISPLAY THIS AS SAVINGS NEEDED
+    const [emergencySavings, setEmergencySavings] = useState(emergencySaving["six_month_total_expense"]);
+
 
     console.log(depositList)
     console.log(transactionHistoryList)
+    console.log(emergencySaving)
 
     useEffect(() => {
-        // DATA
+        // AREA CHART DATA
         var final_data = []
+
+        var temp_savings = 0
 
         // X-Axis
         var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -132,9 +134,9 @@ function EmergencyFund() {
             final_data.push(temp_obj)
         }
         
-        var didArray = []
+      
         depositList.forEach(ditem => {
-            didArray.push(ditem.DepositAccountID)
+            temp_savings += ditem.AvailBalance
             const id = ditem.DepositAccountID
             //income 
             const income_transaction_data = transactionHistoryList.filter(function (el)
@@ -184,9 +186,24 @@ function EmergencyFund() {
             item["Net"] = item["Income"] - item["Expense"]
         });
 
+        const sNeeded = emergencySavings-temp_savings
+
+         // PIE CHART DATA
+         const tempPieData = [
+            {
+              "name": "Savings Needed",
+              "value": sNeeded,
+            },
+            {
+              "name": "Your Savings",
+              "value": temp_savings,
+            },
+          ];
+        setPieData(tempPieData)
         setFinalData(final_data)
+        setTotalSavings(temp_savings)
+        setSavingsNeeded(sNeeded)
         
-       
     }, []);
 
     const handleIncome = (event,payload) => {
@@ -229,7 +246,7 @@ function EmergencyFund() {
         const {cx, cy} = viewBox;
         return (
          <text x={cx} y={cy+10} fill="#303841" className="recharts-text recharts-label" textAnchor="middle" dominantBaseline="central">
-            <tspan alignmentBaseline="middle" fontWeight="Bold" fontSize="16">{value1}</tspan>
+            <tspan alignmentBaseline="middle" fontWeight="Bold" fontSize="16">{`$${value1.toLocaleString("en-US")}`}</tspan>
          </text>
         )
       }
@@ -253,7 +270,7 @@ function EmergencyFund() {
                    
                         <PieChart width={1000} height={250}>
                         <defs>
-                        {data02.map((entry, index) => (
+                        {pieData.map((entry, index) => (
                             <linearGradient id={`myGradient${index}`}>
                             <stop
                                 offset="0%"
@@ -267,9 +284,9 @@ function EmergencyFund() {
                         ))}
                         </defs>
                             
-                        <Pie data={data02} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={80} outerRadius={120} label>
+                        <Pie data={pieData} dataKey="value" nameKey="name" innerRadius={80} outerRadius={120} label>
       
-                        {data02.map((entry, index) => (
+                        {pieData.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={`url(#myGradient${index})`} />
                         ))}
                                             
@@ -277,7 +294,7 @@ function EmergencyFund() {
                                 content={<CustomLabel />}>
                             </Label>
                             <Label position="centerTop"
-                                content={<CustomLabel2 value1={totalAmount}/>}>
+                                content={<CustomLabel2 value1={emergencySavings}/>}>
                             </Label>
                         </Pie> 
                         </PieChart>
@@ -285,17 +302,16 @@ function EmergencyFund() {
                    
                  </Grid>
                 
-
-
                 {/* YOUR SAVINGS & SAVINGS NEEDED */}
-
                
-                {/* Consolidated Cashflow */}
+                
+                
+                
+                 {/* Consolidated Cashflow */}
                 <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
                     <Typography style={ styles.label } variant="h6">Consolidated Cashflow</Typography>
                 </Grid>
 
-                {/* Visualization */}
                 <Card style={ styles.card2 } elevation={ 4 }>
                     <ResponsiveContainer width="100%" height={300}>
                         <AreaChart width={730} height={250} data={finalData}
