@@ -25,7 +25,7 @@ import Loading from '../../components/loading.js'
 import { deposit, depositTransactionHistory } from "../../actions/deposit";
 import { loan } from "../../actions/loan";
 import { securities, allSecurities, watchlist } from "../../actions/securities";
-
+import { userNetWorth, emergencySaving } from "../../actions/dashboard";
 
 //import account_service from "../services/account.js";
 import { login, DataLoaded } from "../../actions/auth";
@@ -74,8 +74,10 @@ function SignIn() {
             const p4 = dispatch(securities(UserID))
             const p5 = dispatch(watchlist(UserID))
             const p6 = dispatch(allSecurities())
+            const p7 = dispatch(userNetWorth(UserID))
+            const p8 = dispatch(emergencySaving(UserID))
            
-            Promise.all([p1,p2,p3,p4,p5,p6]).then(()=>{
+            Promise.all([p1,p2,p3,p4,p5,p6,p7,p8]).then(()=>{
                 dispatch(DataLoaded())
                 if(route){
                     setLoading(false)
