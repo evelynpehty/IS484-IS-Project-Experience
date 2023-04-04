@@ -68,14 +68,14 @@ function SignIn() {
         dispatch(login(username, password)).then((response) => {
             const UserID = response.data.UserID
         
-            const p1 = dispatch(loan(UserID))
+            // const p1 = dispatch(loan(UserID))
             const p2 = dispatch(deposit(UserID))
             const p3 = dispatch(depositTransactionHistory(UserID))
-            const p4 = dispatch(securities(UserID))
-            const p5 = dispatch(watchlist(UserID))
-            const p6 = dispatch(allSecurities())
+            //const p4 = dispatch(securities(UserID))
+            //const p5 = dispatch(watchlist(UserID))
+            //const p6 = dispatch(allSecurities())
            
-            Promise.all([p1,p2,p3,p4,p5,p6]).then(()=>{
+            Promise.all([p2,p3]).then(()=>{
                 dispatch(DataLoaded())
                 if(route){
                     setLoading(false)
