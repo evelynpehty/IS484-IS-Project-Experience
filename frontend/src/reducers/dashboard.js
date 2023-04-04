@@ -1,5 +1,6 @@
 const initialState = {
-    netWorth: {}
+    netWorth: {},
+    emergencySaving: {}
 }
 
 const dashboardReducer = (state = initialState, action) => {
@@ -14,7 +15,17 @@ switch (type) {
     case "NETWORTH_FAIL":
     return {
         ...state,
-        netWorth: []
+        netWorth: {}
+    };
+    case "EMERGENCY_SUCCESS":
+      return {
+          ...state,
+          emergencySaving: payload.emergencySaving,
+      };
+    case "EMERGENCY_FAIL":
+    return {
+        ...state,
+        netWorth: {}
     };
   
     default:
