@@ -121,7 +121,7 @@ function DepositSummary() {
                         <Typography style={ styles.smallerLabel } >Quick Actions</Typography> 
                         <Box
                             sx={{
-                                p: 2,
+                                p: 1,
                                 display: 'grid',
                                 gridTemplateColumns: { xs: '1fr 1fr 1fr' },
                                 gap: 2,
