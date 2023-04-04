@@ -13,6 +13,7 @@ import Login from "./pages/Account_Module/login.js";
 
 // Dashboard Module
 import DashBoard from './pages/Dashboard_Module/dashboard.js'
+import NetWorth from './pages/Dashboard_Module/networth.js'
 import EmergencyFund from './pages/Dashboard_Module/emergency-fund.js'
 
 // Deposit Module
@@ -83,6 +84,7 @@ useEffect(() => {
               <Route exact path={"/"} element= {!currentUser && <PeekBalance></PeekBalance>} />
               <Route exact path={"/login"} element= {<Login />} />
               <Route exact path={"/dashboard"} element={<DashBoard />} />
+              <Route exact path={"/networth"} element={<NetWorth />} />
               <Route exact path={"/emergencyfund"} element={<EmergencyFund />} />
 
               {/* Deposit Module */}

@@ -105,11 +105,23 @@ function DashBoard() {
         { start: "#109878", end: "#8AB8B2" },
     ];
 
-    const { isFirstLoad } = useSelector((state) => state.auth);
-    const { user } = useSelector((state) => state.auth);
-    const [loading, setLoading] = useState(false);
-    const UserID = user.data.UserID
-    
+    const { netWorth, emergencySaving } = useSelector((state) => state.dashboard);
+
+    const [totalSavings, setTotalSavings] = useState(netWorth["deposit_net_worth"]["data"]); // DISPLAY THIS AS YOUR SAVINGS
+    const [savingsNeeded, setSavingsNeeded] = useState(""); //DISPLAY THIS AS SAVINGS NEEDED
+    const [emergencySavings, setEmergencySavings] = useState(emergencySaving["six_month_total_expense"]);
+
+    console.log(netWorth)
+    console.log(emergencySaving)
+
+    useEffect(() => {
+        
+       
+        const sNeeded = emergencySavings-totalSavings
+        setSavingsNeeded(sNeeded.toFixed(2))
+    },[])
+
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -153,7 +165,7 @@ function DashBoard() {
                         </Grid>
 
                         {/* Consolidation Card Segment */}
-                        <Link to={`/net-worth`}>
+                        <Link to={`/networth`}>
                             <Card style={ styles.card }>
                                 <CardContent style={ styles.cardContent }>
                                     <Grid container direction="row" justifyContent="space-between" alignItems="center">
@@ -165,7 +177,8 @@ function DashBoard() {
                                                 YOUR NET WORTH
                                             </Typography>
                                             <Typography sx={{ fontSize: 20, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
-                                                S$8719.05
+                                                {netWorth["total_net_worth"] <0 && `-S$${netWorth["total_net_worth"].toFixed(2).toLocaleString("en-US").slice(1)}`}
+                                                {netWorth["total_net_worth"] >=0 && `S$${netWorth["total_net_worth"].toFixed(2).toLocaleString("en-US")}`}
                                             </Typography>
                                             <Typography sx={{ fontSize: 10 }} color={ theme.palette.secondary.main }>
                                                 Total assets & liabilities
@@ -245,7 +258,7 @@ function DashBoard() {
                             </Box>
                         </Grid>
                         
-                        <Link to={"/ emergencyfund"}> 
+                        <Link to={"/emergencyfund"}> 
                             <Card style={ styles.card }>
                                 <CardContent style={ styles.cardContent }>
                                     <Grid container direction="row" justifyContent="space-between" alignItems="center">
@@ -257,7 +270,7 @@ function DashBoard() {
                                                 IDEAL EMERGENCY FUND
                                             </Typography>
                                             <Typography sx={{ fontSize: 20, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
-                                                S$18,600.00
+                                                {`$${emergencySavings.toFixed(2).toLocaleString("en-US")}`}
                                             </Typography>
                                             <Typography sx={{ fontSize: 10 }} color={ theme.palette.secondary.main }>
                                                 Based on your cash flow
@@ -270,7 +283,7 @@ function DashBoard() {
                                                     CURRENT SAVINGS
                                                 </Typography>
                                                 <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color={ theme.palette.secondary.main }>
-                                                    S$15,526.70
+                                                    {`$${savingsNeeded.toLocaleString("en-US")}`}
                                                 </Typography>
                                             </Paper>
                                             <Paper style={ styles.paper } elevation={1}>
@@ -278,7 +291,7 @@ function DashBoard() {
                                                     SAVINGS NEEDED
                                                 </Typography>
                                                 <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color={ styles.negative }>
-                                                    S$3,073.30
+                                                    {`$${totalSavings.toFixed(2).toLocaleString("en-US")}`}
                                                 </Typography>
                                             </Paper>
                                         </Grid>
