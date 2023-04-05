@@ -1,5 +1,11 @@
+// Packages
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, Link } from "react-router-dom";
+
+// MUI Components
+import Grid from '@mui/material/Unstable_Grid2';
+import { Container, Box, Typography, useTheme, Card, CardContent, CardMedia, Paper, Button } from "@mui/material";
 
 import { deposit, depositTransactionHistory } from "../../actions/deposit";
 import { loan } from "../../actions/loan";
@@ -11,10 +17,141 @@ import Loading from "../../components/loading.js";
 
 // Customised Components
 import MainAppBar from "../../components/MainAppBar";
-import MainBottomNavigation from "../../components/MainBottomNavigation";
+import WhiteReusableButton from "../../components/WhiteButton";
+
+// Assets (Images & Icons)
+import cardBG from "../../assets/images/cardBG.png"
+import {ReactComponent as PieChartImage} from "../../assets/images/piechart.svg";
+import { ReactComponent as RepaymentIcon } from "../../assets/icons/paper-fold-text-line.svg";
+import { ReactComponent as WatchlistIcon } from "../../assets/icons/watchlist-line-red.svg";
+import { ReactComponent as LinkIcon } from "../../assets/icons/link-line-red.svg";
+import { ReactComponent as NextIcon } from "../../assets/icons/next-icon-red.svg";
+
+// Recharts
+// import {
+//     PieChart,
+//     Pie,
+//     Cell
+// } from "recharts";
+
+// Functions
+import { logout } from "../../actions/auth";
 
 
 function DashBoard() {
+    // Styling for Dashboard Page
+    const theme = useTheme();
+    const styles = {
+        grid: {
+            marginBottom: "24px"
+        },
+
+        label: {
+            fontWeight: "bold",
+            color: theme.palette.secondary.main,
+            fontSize: "18px"
+        },
+
+        smallerLabel: {
+            fontWeight: "bold",
+            color: theme.palette.secondary.main,
+            fontSize: "16px"
+        },
+
+        card: {
+            background: theme.palette.neutral.main,
+            marginBottom: "24px",
+            borderRadius: "10px",
+            padding: 10
+        },
+
+        cardContent: {
+            padding: "8px"
+        },
+
+        card2: {
+            position: "relative"
+        },
+
+        paper: {
+            backgroundColor: "#FBFBFB",
+            borderRadius: "10px",
+            padding: 10
+        },
+
+        positive: {
+            color: "#3BB537"
+        },
+
+        negative: {
+            color: "#E60000"
+        },
+
+        overlay: {
+            position: 'absolute',
+            top: '20px',
+            left: '20px',
+        },
+
+        button: {
+            paddingLeft: 0,
+            textTransform: "initial"
+        }
+    }
+
+    const COLORS = [
+        { start: "#FF9364", end: "#F25F33" },
+        { start: "#FF9364", end: "#F25F33" },
+        { start: "#109878", end: "#8AB8B2" },
+    ];
+
+    const { netWorth, emergencySaving } = useSelector((state) => state.dashboard);
+
+    const [totalSavings, setTotalSavings] = useState(netWorth["deposit_net_worth"]["data"]); // DISPLAY THIS AS YOUR SAVINGS
+    const [savingsNeeded, setSavingsNeeded] = useState(""); //DISPLAY THIS AS SAVINGS NEEDED
+    const [emergencySavings, setEmergencySavings] = useState(emergencySaving["six_month_total_expense"]);
+
+    console.log(netWorth)
+    console.log(emergencySaving)
+
+    useEffect(() => {
+        
+       
+        const sNeeded = emergencySavings-totalSavings
+        setSavingsNeeded(sNeeded.toFixed(2))
+    },[])
+
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const handleLogOut = () => {
+        dispatch(logout());
+        navigate("/")
+    };
+
+    const handleWatchlist = () => {
+        navigate("/view-watchlist");
+    }
+
+    // Mock Data
+    const data = [
+        {
+          "name": "Group A",
+          "value": 300
+        },
+        {
+          "name": "Group B",
+          "value": 300
+        },
+        {
+          "name": "Group C",
+          "value": 300
+        }
+    ];
+
+    let renderLabel = function(entry) {
+        return entry.name;
     // Styling for Dashboard Page
     const theme = useTheme();
     const styles = {
@@ -136,7 +273,7 @@ function DashBoard() {
                                 <CardContent style={ styles.cardContent }>
                                     <Grid container direction="row" justifyContent="space-between" alignItems="center">
                                         <Grid xs={5}>
-                                            <Typography style={ styles.gradientText } sx={{ fontSize: 20, fontWeight:"bold", mb: 2 }}>
+                                            <Typography sx={{ fontSize: 20, fontWeight:"bold", mb: 2 }} color={ theme.palette.primary.main }>
                                                 Wealth
                                             </Typography>
                                             <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
@@ -188,7 +325,7 @@ function DashBoard() {
                         
                         {/* Quick Actions Segment */}
                         <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
-                            <Typography style={ styles.smallerLabel } >Frequently Accessed</Typography> 
+                            <Typography style={ styles.smallerLabel } >Quick Actions</Typography> 
                             <Box
                                 sx={{
                                     p: 1,
@@ -229,7 +366,7 @@ function DashBoard() {
                                 <CardContent style={ styles.cardContent }>
                                     <Grid container direction="row" justifyContent="space-between" alignItems="center">
                                         <Grid xs={6}>
-                                            <Typography style={ styles.gradientText } sx={{ fontSize: 20, fontWeight:"bold", mb: 2 }}>
+                                            <Typography sx={{ fontSize: 20, fontWeight:"bold", mb: 2 }} color={ theme.palette.primary.main }>
                                                 Financial Health
                                             </Typography>
                                             <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
@@ -256,7 +393,7 @@ function DashBoard() {
                                                 <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#979797">
                                                     SAVINGS NEEDED
                                                 </Typography>
-                                                <Typography style={ styles.gradientText } sx={{ fontSize: 14, fontWeight: "bold" }}>
+                                                <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color={ styles.negative }>
                                                     {`$${totalSavings.toFixed(2).toLocaleString("en-US")}`}
                                                 </Typography>
                                             </Paper>
@@ -272,7 +409,7 @@ function DashBoard() {
                                 <Typography sx={{ fontSize: 16, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
                                     View Profit & Loss Analysis
                                 </Typography>
-                                <Typography sx={{ fontSize: 14 }} color={ theme.palette.secondary.main }>
+                                <Typography sx={{ fontSize: 14 }} color={ styles.negative }>
                                     Recommended entry/exit prices
                                 </Typography>
 

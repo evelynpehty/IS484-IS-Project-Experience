@@ -66,7 +66,7 @@ function EmergencyFund() {
         },
 
         cardContent: {
-            paddingBottom: "16px"
+            paddingBottom: "1px"
         },
 
         card2: {
@@ -228,8 +228,8 @@ function EmergencyFund() {
           ];
         setPieData(tempPieData)
         setFinalData(final_data)
-        setTotalSavings(temp_savings)
-        setSavingsNeeded(sNeeded)
+        setTotalSavings(temp_savings.toFixed(2))
+        setSavingsNeeded(sNeeded.toFixed(2))
         
     }, []);
 
