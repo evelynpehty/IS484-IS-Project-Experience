@@ -15,45 +15,274 @@ import MainBottomNavigation from "../../components/MainBottomNavigation";
 
 
 function DashBoard() {
-  const { isFirstLoad } = useSelector((state) => state.auth);
-  const { user } = useSelector((state) => state.auth);
+    // Styling for Dashboard Page
+    const theme = useTheme();
+    const styles = {
+        grid: {
+            marginBottom: "24px"
+        },
 
-  // const { depositList } = useSelector((state) => state.deposit);
-  // const { transactionHistoryList } = useSelector((state) => state.deposit);
-  // const { loanList } = useSelector((state) => state.loan);
-  // const { loan_transactionHistoryList } = useSelector((state) => state.loan);
-  ///const { creditCardList } = useSelector((state) => state.creditcard);
-  // const { peek_detail_item } = useSelector((state) => state.peekDetail);
-  
-  const [loading, setLoading] = useState(false);
-  const UserID = user.data.UserID
-  
-  const dispatch = useDispatch()
-  
-  /*useEffect(() => {
-    if(isFirstLoad){
-      setLoading(true)
-      const p1 = dispatch(loan(UserID))
-      const p2 = dispatch(deposit(UserID))
-      const p3 = dispatch(depositTransactionHistory(UserID))
-      // const p4 = dispatch(loanTransactionHistory(UserID))
-      // const p5 = dispatch(creditcard(UserID))
-      // const p6 = dispatch(peekDetail(UserID))
-      Promise.all([p1,p2,p3]).then(()=>{
-        dispatch(RemoveFirstLoad())
-        setLoading(false)
-    })
-    } else{
-      console.log("not first load")
+        label: {
+            fontWeight: "bold",
+            color: theme.palette.secondary.main,
+            fontSize: "18px"
+        },
+
+        smallerLabel: {
+            fontWeight: "bold",
+            color: theme.palette.secondary.main,
+            fontSize: "16px"
+        },
+
+        card: {
+            background: theme.palette.neutral.main,
+            marginBottom: "24px",
+            borderRadius: "10px",
+            padding: 10
+        },
+
+        cardContent: {
+            padding: "8px"
+        },
+
+        card2: {
+            position: "relative"
+        },
+
+        paper: {
+            backgroundColor: "#FBFBFB",
+            borderRadius: "10px",
+            padding: 10
+        },
+
+        positive: {
+            color: "#3BB537"
+        },
+
+        negative: {
+            color: "#E60000"
+        },
+
+        overlay: {
+            position: 'absolute',
+            top: '20px',
+            left: '20px',
+        },
+
+        button: {
+            paddingLeft: 0,
+            textTransform: "initial",
+            background: "linear-gradient(to top right, #E69F9F, #E60000)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+        },
+
+        gradientText: {
+            background: "linear-gradient(to top right, #E69F9F, #E60000)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+        }
     }
-    },[]);*/
 
-  return (
-    <React.Fragment>
-      <MainAppBar />
-      <MainBottomNavigation />
-    </React.Fragment>
-  )
+    // const COLORS = [
+    //     { start: "#FF9364", end: "#F25F33" },
+    //     { start: "#FF9364", end: "#F25F33" },
+    //     { start: "#109878", end: "#8AB8B2" },
+    // ];
+
+    // const { netWorth, emergencySaving } = useSelector((state) => state.dashboard);
+
+    // const [totalSavings, setTotalSavings] = useState(netWorth["deposit_net_worth"]["data"]); // DISPLAY THIS AS YOUR SAVINGS
+    // const [savingsNeeded, setSavingsNeeded] = useState(""); //DISPLAY THIS AS SAVINGS NEEDED
+    // const [emergencySavings, setEmergencySavings] = useState(emergencySaving["six_month_total_expense"]);
+
+    // console.log(netWorth)
+    // console.log(emergencySaving)
+
+    // useEffect(() => {
+        
+       
+    //     const sNeeded = emergencySavings-totalSavings
+    //     setSavingsNeeded(sNeeded.toFixed(2))
+    // },[])
+
+
+    // const navigate = useNavigate();
+    // const dispatch = useDispatch();
+
+    // const handleLogOut = () => {
+    //     dispatch(logout());
+    //     navigate("/")
+    // };
+
+    // const handleWatchlist = () => {
+    //     navigate("/view-watchlist");
+    // }
+    // });
+
+    return (
+        <React.Fragment>
+            <MainAppBar />
+                <Container maxWidth="lg">
+                    <Box sx={{ pt: 10, pb: 10 }}>
+                        <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
+                            <Typography style={ styles.label } variant="h6">Deposit Accounts</Typography>
+                            <WhiteReusableButton function={ handleLogOut } buttonText="LOGOUT" />           
+                        </Grid>
+
+                        {/* Consolidation Card Segment */}
+                        <Link to={`/networth`}>
+                            <Card style={ styles.card }>
+                                <CardContent style={ styles.cardContent }>
+                                    <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                        <Grid xs={5}>
+                                            <Typography style={ styles.gradientText } sx={{ fontSize: 20, fontWeight:"bold", mb: 2 }}>
+                                                Wealth
+                                            </Typography>
+                                            <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
+                                                YOUR NET WORTH
+                                            </Typography>
+                                            <Typography sx={{ fontSize: 20, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
+                                                {netWorth["total_net_worth"] <0 && `-S$${netWorth["total_net_worth"].toFixed(2).toLocaleString("en-US").slice(1)}`}
+                                                {netWorth["total_net_worth"] >=0 && `S$${netWorth["total_net_worth"].toFixed(2).toLocaleString("en-US")}`}
+                                            </Typography>
+                                            <Typography sx={{ fontSize: 10 }} color={ theme.palette.secondary.main }>
+                                                Total assets & liabilities
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={7} textAlign="end">
+                                            <PieChartImage />
+                                            {/* <Box
+                                                component="img"
+                                                sx={{
+                                                    maxHeight: { xs: 400, sm: 400, md: 200, lg: 230, xl: 300 },
+                                                    maxWidth: { xs: 400, sm: 400, md: 200, lg: 230, xl: 300 }
+                                                }}
+                                                alt="piechart"
+                                                src={ piechart }
+                                            /> */}
+                                            {/* <PieChart width={400} height={150}>
+                                                <Pie 
+                                                    data={ data } 
+                                                    dataKey="value" 
+                                                    nameKey="name" 
+                                                    cx="27%" 
+                                                    cy="50%" 
+                                                    innerRadius={5} 
+                                                    outerRadius={20}
+                                                    labelLine={ false }
+                                                    label={ renderLabel } 
+                                                >
+                                                </Pie>
+                                                <g>
+                                                    <text x="50%" y="50%" dy={8} textAnchor="middle" fill="black">
+                                                        Name
+                                                    </text>
+                                                </g>
+                                            </PieChart> */}
+                                        </Grid>
+                                    </Grid>
+                                </CardContent>
+                            </Card>
+                        </Link>
+                        
+                        {/* Quick Actions Segment */}
+                        <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
+                            <Typography style={ styles.smallerLabel } >Frequently Accessed</Typography> 
+                            <Box
+                                sx={{
+                                    p: 1,
+                                    display: 'grid',
+                                    gridTemplateColumns: { xs: '1fr 1fr 1fr' },
+                                    gap: 2,
+                                }}
+                            >
+                                <Card style={styles.card2}>
+                                    <CardContent sx={{ pt: "24px", textAlign: "center" }}>
+                                        <RepaymentIcon />
+                                        <Typography sx={{ fontSize: 10, fontWeight: "bold" }} color="text.secondary" gutterBottom>
+                                            Repayments
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                                <Card style={styles.card2}>
+                                    <CardContent sx={{ pt: "24px", textAlign: "center" }}>
+                                        <WatchlistIcon />
+                                        <Typography sx={{ fontSize: 10, fontWeight: "bold" }} color="text.secondary" gutterBottom>
+                                            Watchlist
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                                <Card style={styles.card2}>
+                                    <CardContent sx={{ pt: "24px", textAlign: "center" }}>
+                                        <LinkIcon />
+                                        <Typography sx={{ fontSize: 10, fontWeight: "bold" }} color="text.secondary" gutterBottom>
+                                            Link Accounts
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </Box>
+                        </Grid>
+                        
+                        <Link to={"/emergencyfund"}> 
+                            <Card style={ styles.card }>
+                                <CardContent style={ styles.cardContent }>
+                                    <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                        <Grid xs={6}>
+                                            <Typography style={ styles.gradientText } sx={{ fontSize: 20, fontWeight:"bold", mb: 2 }}>
+                                                Financial Health
+                                            </Typography>
+                                            <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
+                                                IDEAL EMERGENCY FUND
+                                            </Typography>
+                                            <Typography sx={{ fontSize: 20, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
+                                                {`$${emergencySavings.toFixed(2).toLocaleString("en-US")}`}
+                                            </Typography>
+                                            <Typography sx={{ fontSize: 10 }} color={ theme.palette.secondary.main }>
+                                                Based on your cash flow
+                                            </Typography>
+                                        </Grid>
+
+                                        <Grid xs={5}>
+                                            <Paper style={ styles.paper } elevation={1} sx={{ mb: 2 }}>
+                                                <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#979797">
+                                                    CURRENT SAVINGS
+                                                </Typography>
+                                                <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color={ theme.palette.secondary.main }>
+                                                    {`$${savingsNeeded.toLocaleString("en-US")}`}
+                                                </Typography>
+                                            </Paper>
+                                            <Paper style={ styles.paper } elevation={1}>
+                                                <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#979797">
+                                                    SAVINGS NEEDED
+                                                </Typography>
+                                                <Typography style={ styles.gradientText } sx={{ fontSize: 14, fontWeight: "bold" }}>
+                                                    {`$${totalSavings.toFixed(2).toLocaleString("en-US")}`}
+                                                </Typography>
+                                            </Paper>
+                                        </Grid>
+                                    </Grid>
+                                </CardContent>
+                            </Card>
+                        </Link>
+
+                        <Card style={ styles.card2 }>
+                            <CardMedia component="img" image={cardBG} style={styles.media}/>
+                            <Box style={styles.overlay}>
+                                <Typography sx={{ fontSize: 16, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
+                                    View Profit & Loss Analysis
+                                </Typography>
+                                <Typography sx={{ fontSize: 14 }} color={ theme.palette.secondary.main }>
+                                    Recommended entry/exit prices
+                                </Typography>
+
+                                <Button onClick={ handleWatchlist } style={ styles.button } endIcon={ <NextIcon /> } sx={{ mt: 2 }}>View in Watchlist</Button>
+                            </Box>
+                        </Card>
+                    </Box>
+                </Container>
+        </React.Fragment>
+    )
   
 }
 
