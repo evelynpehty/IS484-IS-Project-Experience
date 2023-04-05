@@ -59,7 +59,7 @@ export default function ColorTabs() {
         },
 
         positive: {
-            color: theme.palette.other.sucess
+            color: theme.palette.other.success
         },
 
         negative: {
@@ -86,7 +86,8 @@ export default function ColorTabs() {
         stackChip: {
             overflow: "auto",
             paddingLeft: "16px",
-            paddingRight: "16px"
+            paddingRight: "16px",
+            marginBottom: "24px"
         },
         
         chipSelected: {
@@ -216,17 +217,7 @@ export default function ColorTabs() {
     const [searchText, setSearchText] = React.useState("");
     const handleSearch = (e) => {
         const text = e.target.value;
-        setSearchText(text);
-        /*
-        if(text !== ""){
-            const filteredData = transactionDisplay.filter((item) => {
-                return Object.values(item.transactionDescription).join('').toLowerCase().includes(text.toLowerCase())
-            })
-            setTransDisplay(filteredData)
-        } else{
-            handleFilter(transFilter)
-        }*/
-        
+        setSearchText(text);        
     };
 
     function filter_transaction_item(filter){
@@ -358,37 +349,37 @@ export default function ColorTabs() {
                 <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
                     <Typography style={ styles.label } variant="h6">All Transactions</Typography>
                     <div>
-                    <IconButton 
-                        style={ styles.iconButton } 
-                        ref={anchorRef}
-                        id="composition-button"
-                        // aria-controls={open ? 'composition-menu' : undefined}
-                        // aria-expanded={open ? 'true' : undefined}
-                        aria-haspopup="true"
-                        onClick={handleMenu}
-                        color="inherit"
-                    >
-                        <FilterIcon />
-                    </IconButton>
-                    <Menu
-                        id="menu-appbar"
-                        anchorEl={anchorEl}
-                        anchorOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        open={Boolean(anchorEl)}
-                        onClose={handleClose}
-                    >
-                        <MenuItem onClick={ () => handleFilter("All") }>All</MenuItem>
-                        <MenuItem style={ styles.positive } onClick={ () => handleFilter("Income") }>Income</MenuItem>
-                        <MenuItem style={ styles.negative } onClick={ () => handleFilter("Expense") }>Expenses</MenuItem>
-                    </Menu>
+                        <IconButton 
+                            style={ styles.iconButton } 
+                            ref={anchorRef}
+                            id="composition-button"
+                            // aria-controls={open ? 'composition-menu' : undefined}
+                            // aria-expanded={open ? 'true' : undefined}
+                            aria-haspopup="true"
+                            onClick={handleMenu}
+                            color="inherit"
+                        >
+                            <FilterIcon />
+                        </IconButton>
+                        <Menu
+                            id="menu-appbar"
+                            anchorEl={anchorEl}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={Boolean(anchorEl)}
+                            onClose={handleClose}
+                        >
+                            <MenuItem onClick={ () => handleFilter("All") }>All</MenuItem>
+                            <MenuItem style={ styles.positive } onClick={ () => handleFilter("Income") }>Income</MenuItem>
+                            <MenuItem style={ styles.negative } onClick={ () => handleFilter("Expense") }>Expenses</MenuItem>
+                        </Menu>
                     </div>
                 </Grid>
 
@@ -493,7 +484,7 @@ export default function ColorTabs() {
                                             <Typography sx={{ fontSize: 16, fontWeight:"bold" }} color="#4B4948">
                                                 {item.transactionID}
                                             </Typography>
-                                            <Typography style={ (item.accountFrom === id) ? styles.negative : styles.positive } sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="#4B4948">
+                                            <Typography style={ (item.accountFrom === id) ? styles.negative : styles.positive } sx={{ fontSize: 16, fontWeight: "bold" }} textAlign="end" color="#4B4948">
                                                 {(item.accountFrom === id) ? `- SGD $${ item.transactionAmount.toLocaleString("en-US") }` : `SGD $${ item.transactionAmount.toLocaleString("en-US") }` }
                                             </Typography>
                                         </Grid>

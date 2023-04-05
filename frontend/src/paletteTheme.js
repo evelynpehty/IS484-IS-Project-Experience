@@ -1,4 +1,3 @@
-import React from "react";
 import { createTheme } from "@mui/material";
 
 // import '@fontsource/roboto/300.css';
@@ -34,7 +33,7 @@ export const appTheme = createTheme({
             lightGreen: "#8AB8B2",
             mainGreen: "#109878",
             lightRed: "#F7E6E6",
-            sucess: "#3BB537"
+            success: "#109878"
         }
     },
 

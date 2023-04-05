@@ -7,9 +7,9 @@ import moment from "moment";
 
 // MUI Components
 import Grid from '@mui/material/Unstable_Grid2';
-import { Container, Box, Button, Card, CardContent, Typography, AppBar, Toolbar, SvgIcon, useTheme, styled, tooltipClasses } from "@mui/material";
+import { Container, Box, Button, Card, CardContent, Typography, AppBar, Toolbar, SvgIcon, useTheme, styled, tooltipClasses, Paper, ClickAwayListener } from "@mui/material";
 
-// Assets (Images * Icons)
+// Assets (Images & Icons)
 import { ReactComponent as InfoIcon } from "../../assets/icons/info-circle-line.svg";
 import { ReactComponent as GreenOval } from "../../assets/icons/green-oval.svg";
 import { ReactComponent as RedOval } from "../../assets/icons/red-oval.svg";
@@ -36,17 +36,6 @@ import {
 function EmergencyFund() {
     // Styling 
     const theme = useTheme();
-
-    // const LightTooltip = styled(({ className, ...props }) => (
-    //     <Tooltip {...props} classes={{ popper: className }} />
-    //     ))(({ theme }) => ({
-    //         [`& .${tooltipClasses.tooltip}`]: {
-    //         backgroundColor: theme.palette.common.white,
-    //         color: 'rgba(0, 0, 0, 0.87)',
-    //         boxShadow: theme.shadows[4],
-    //         padding: "10px"
-    //         },
-    //     }));
 
     const styles = {
         grid: {
@@ -92,18 +81,48 @@ function EmergencyFund() {
         GreenGradientText: {
             background: "linear-gradient(to top right, #109878, #8AB8B2)",
             WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            fontWeight: "bold",
-            fontSize: "18px"
+            WebkitTextFillColor: "transparent"
         },
 
         RedGradientText: {
             background: "linear-gradient(to top right, #E60000, #E69F9F)",
             WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            fontWeight: "bold",
-            fontSize: "18px"
+            WebkitTextFillColor: "transparent"
+        },
+
+        wrapper: {
+            position: "relative",
+            width: "358px", 
+            height: "320px"
+        },
+
+        centerContent: {
+            position: "absolute",
+            top: "65%",
+            left: "47%",
+            zIndex: 0,
+            transform: "translate(-42%, -50%)",
+            borderRadius: "50%",
+            width: "50%",
+            height: "50%",
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center"
+        },
+
+        popoverContent: {
+            position: "absolute",
+            top: "20%",
+            left: "47%",
+            zIndex: 0,
+            transform: "translate(-42%, -50%)",
+            borderRadius: "15px",
+            width: "250px",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "14px"
         }
+
     }
 
     const COLORS = [
@@ -218,14 +237,14 @@ function EmergencyFund() {
          // PIE CHART DATA
          const tempPieData = [
             {
-              "name": "Savings Needed",
-              "value": sNeeded,
+                "name": "Savings Needed",
+                "value": sNeeded,
             },
             {
-              "name": "Your Savings",
-              "value": temp_savings,
+                "name": "Your Savings",
+                "value": temp_savings,
             },
-          ];
+        ];
         setPieData(tempPieData)
         setFinalData(final_data)
         setTotalSavings(temp_savings.toFixed(2))
@@ -256,33 +275,12 @@ function EmergencyFund() {
         navigate("/deposit");
     }
 
-    const [open, setOpen] = React.useState(true);
-    const handleTooltip = () => {
-        setOpen(prev => !prev);
-    };
+    const [show, setShow] = useState(false);
+    function handleTooltip() {
+        setShow(prev => !prev);
+    }
 
-    //   function CustomLabel({viewBox}){
-    //     const {cx, cy} = viewBox;
-    //     return (
-    //         <>
-    //         <text x={cx} y={cy-10} fill="#7D8895" className="recharts-text recharts-label" textAnchor="middle" dominantBaseline="central">
-    //         <tspan alignmentBaseline="middle" fontSize="12" fontWeight="Bold">
-    //             Ideal Amount 
-    //          </tspan>
-    //          </text>
-    //         </>
-         
-    //     )
-    //   }
-
-    //   function CustomLabel2({viewBox, value1}){
-    //     const {cx, cy} = viewBox;
-    //     return (
-    //      <text x={cx} y={cy+10} fill="#303841" className="recharts-text recharts-label" textAnchor="middle" dominantBaseline="central">
-    //         <tspan alignmentBaseline="middle" fontWeight="Bold" fontSize="16">{`$${value1.toLocaleString("en-US")}`}</tspan>
-    //      </text>
-    //     )
-    //   }
+    console.log(pieData)
     
     return (
         <React.Fragment>
@@ -293,81 +291,62 @@ function EmergencyFund() {
                         <Typography style={ styles.label } variant="h6">Emergency Fund</Typography>
                         <WhiteReusableButton function={ handleViewSavings } buttonText="VIEW SAVINGS" />
                     </Grid>
-                    
 
                     {/* PIE CHART */}
-                    <Grid container justify = "center">
-                        <ResponsiveContainer width="100%" height={300}>
-                            <PieChart width={1000} height={250}>
-                                <defs>
-                                    {pieData.map((entry, index) => (
-                                        <linearGradient id={`myGradient${index}`}>
-                                        <stop
-                                            offset="0%"
-                                            stopColor={COLORS[index % COLORS.length].start}
-                                        />
-                                        <stop
-                                            offset="100%"
-                                            stopColor={COLORS[index % COLORS.length].end}
-                                        />
-                                        </linearGradient>
-                                    ))}
-                                </defs>
-                                
-                                <Pie 
-                                    data={pieData} 
-                                    dataKey="value" 
-                                    nameKey="name" 
-                                    innerRadius={80} 
-                                    outerRadius={120} 
-                                    labelLine = { false }
-                                    label>
-        
+                    <div style={ styles.wrapper }>
+                        <PieChart width={358} height={300}>
+                            <defs>
                                 {pieData.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={`url(#myGradient${index})`} />
+                                    <linearGradient id={`myGradient${index}`}>
+                                    <stop
+                                        offset="0%"
+                                        stopColor={COLORS[index % COLORS.length].start}
+                                    />
+                                    <stop
+                                        offset="100%"
+                                        stopColor={COLORS[index % COLORS.length].end}
+                                    />
+                                    </linearGradient>
                                 ))}
-                                                    
-                                    {/* <Label position="centerBottom"
-                                        content={<CustomLabel />}>
-                                    </Label>
-                                    <Label position="centerTop"
-                                        content={<CustomLabel2 value1={emergencySavings}/>}>
-                                    </Label> */}
-                                </Pie>
-                                {/* <LightTooltip 
-                                    PopperProps={{
-                                        disablePortal: true,
-                                    }}
-                                    arrow
-                                    open={ open }
-                                    onClose={ handleTooltip }
-                                    title={
-                                        <div> 
-                                            <Typography sx={{ fontWeight: 10, fontWeight: "bold", color: theme.palette.primary.main }}>P&L Analysis</Typography>
-                                            <Typography sx={{ fontWeight: 10, color: theme.palette.secondary.main }}>Recommended entry/exit prices</Typography>
-                                        </div> 
-                                    } 
-                                /> */}
-                                    <g>
-                                        <text x="47%" y="45%" dy={8} textAnchor="middle" fill="#7D8895" fontWeight="bold" fontSize="16px">
-                                            Ideal Amount
-                                        </text>
-                                        <InfoIcon x="62%" y="43%"  />
-                                        <text x="50%" y="55%" dy={8} textAnchor="middle" fill="#303841" fontWeight="bold" fontSize="16px">
-                                            S${ emergencySavings.toLocaleString("en-US") }
-                                        </text>
-                                    </g>
-                            </PieChart>
-                        </ResponsiveContainer>
-                    
-                    </Grid>
+                            </defs>
+                            
+                            <Pie 
+                                data={pieData} 
+                                dataKey="value" 
+                                nameKey="name" 
+                                innerRadius={80} 
+                                outerRadius={120} 
+                                labelLine = { false }
+                                label>
+    
+                            {pieData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={`url(#myGradient${index})`} />
+                            ))}
+                            </Pie>
+                            <g onClick={ handleTooltip }>
+                                <text x="47%" y="45%" dy={8} textAnchor="middle" fill="#7D8895" fontWeight="bold" fontSize="16px">
+                                    Ideal Amount
+                                </text>
+                                <InfoIcon x="62%" y="43%"  />
+                                <text x="50%" y="55%" dy={8} textAnchor="middle" fill="#303841" fontWeight="bold" fontSize="16px">
+                                    S${ emergencySavings.toLocaleString("en-US") }
+                                </text>
+                            </g>
+                        </PieChart>
+                        { show && 
+                            <Paper elevation={2} style={ styles.popoverContent }>
+                                <Typography style={ styles.RedGradientText } sx={{ fontSize: 10, fontWeight: "bold" }}>How is the Ideal Amount calculated?</Typography>
+                                <Typography sx={{ fontSize: 10 }} color={ theme.palette.secondary.main }>Based on your average monthly expenses, Monetari calculates a recommended amount 6 times your monthly expenses to be set aside in cash savings for emergencies </Typography>
+                            </Paper>
+                        }
+                    </div>
                     
                     {/* YOUR SAVINGS & SAVINGS NEEDED */}
                     <Grid container spacing={2} columns={12}>
                         <Grid item xs={6}>
                             <Card style={styles.card2}>
                                 <CardContent style={ styles.cardContent }>         
-                                    <Typography sx={{ fontSize: 14, fontWeight: "bold", fontColor:"#4B4948", mb:1 }} >
+                                    <Typography sx={{ fontSize: 14, fontWeight: "bold", mb:1 }} color={ theme.palette.secondary.main }>
                                         <GreenOval/> Your Savings
                                     </Typography>
                                     <Typography sx={{ fontSize: 20, fontWeight:"bold",mb:1 }} style={styles.GreenGradientText} color={ theme.palette.secondary.main }>
@@ -382,10 +361,10 @@ function EmergencyFund() {
                         <Grid item xs={6}>
                             <Card style={styles.card2}>
                                 <CardContent style={ styles.cardContent }>         
-                                    <Typography sx={{ fontSize: 14, fontWeight: "bold", fontColor:"#4B4948", mb:1 }} >
+                                    <Typography sx={{ fontSize: 14, fontWeight: "bold", mb:1 }} color={ theme.palette.secondary.main }>
                                         <RedOval/> Savings Needed
                                     </Typography>
-                                    <Typography sx={{ fontSize: 20, fontWeight:"bold",mb:1 }} style={styles.RedGradientText} color={ theme.palette.secondary.main }>
+                                    <Typography sx={{ fontSize: 20, fontWeight:"bold", mb:1 }} style={styles.RedGradientText}>
                                         {`$${savingsNeeded.toLocaleString("en-US")}`}
                                     </Typography>
                                     <Typography sx={{ fontSize: 10 }} color={ theme.palette.secondary.main }>
@@ -445,7 +424,7 @@ function EmergencyFund() {
                                             <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">
                                                 NET CASH FLOW
                                             </Typography>
-                                            <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} style={ netCashFlow<0 ? styles.negative : styles.positive }>
+                                            <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} style={ netCashFlow < 0 ? styles.negative : styles.positive }>
                                                 SGD ${netCashFlow.toLocaleString("en-US")}
                                             </Typography>
                                             <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">

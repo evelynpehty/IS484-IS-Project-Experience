@@ -27,13 +27,6 @@ import { ReactComponent as WatchlistIcon } from "../../assets/icons/watchlist-li
 import { ReactComponent as LinkIcon } from "../../assets/icons/link-line-red.svg";
 import { ReactComponent as NextIcon } from "../../assets/icons/next-icon-red.svg";
 
-// Recharts
-// import {
-//     PieChart,
-//     Pie,
-//     Cell
-// } from "recharts";
-
 // Functions
 import { logout } from "../../actions/auth";
 
@@ -95,7 +88,16 @@ function DashBoard() {
 
         button: {
             paddingLeft: 0,
-            textTransform: "initial"
+            textTransform: "initial",
+            background: "linear-gradient(to top right, #E60000, #E69F9F)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+        },
+
+        gradientText: {
+            background: "linear-gradient(to top right, #E60000, #E69F9F)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
         }
     }
 
@@ -170,7 +172,7 @@ function DashBoard() {
                                 <CardContent style={ styles.cardContent }>
                                     <Grid container direction="row" justifyContent="space-between" alignItems="center">
                                         <Grid xs={5}>
-                                            <Typography sx={{ fontSize: 20, fontWeight:"bold", mb: 2 }} color={ theme.palette.primary.main }>
+                                            <Typography style={ styles.gradientText } sx={{ fontSize: 20, fontWeight:"bold", mb: 2 }}>
                                                 Wealth
                                             </Typography>
                                             <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
@@ -263,7 +265,7 @@ function DashBoard() {
                                 <CardContent style={ styles.cardContent }>
                                     <Grid container direction="row" justifyContent="space-between" alignItems="center">
                                         <Grid xs={6}>
-                                            <Typography sx={{ fontSize: 20, fontWeight:"bold", mb: 2 }} color={ theme.palette.primary.main }>
+                                            <Typography style={ styles.gradientText } sx={{ fontSize: 20, fontWeight:"bold", mb: 2 }}>
                                                 Financial Health
                                             </Typography>
                                             <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
@@ -290,7 +292,7 @@ function DashBoard() {
                                                 <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#979797">
                                                     SAVINGS NEEDED
                                                 </Typography>
-                                                <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color={ styles.negative }>
+                                                <Typography style={ styles.gradientText } sx={{ fontSize: 14, fontWeight: "bold" }}>
                                                     {`$${totalSavings.toFixed(2).toLocaleString("en-US")}`}
                                                 </Typography>
                                             </Paper>
@@ -306,7 +308,7 @@ function DashBoard() {
                                 <Typography sx={{ fontSize: 16, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
                                     View Profit & Loss Analysis
                                 </Typography>
-                                <Typography sx={{ fontSize: 14 }} color={ styles.negative }>
+                                <Typography sx={{ fontSize: 14 }} color={ theme.palette.secondary.main }>
                                     Recommended entry/exit prices
                                 </Typography>
 

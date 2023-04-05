@@ -9,7 +9,7 @@ import moment from "moment";
 
 // MUI Components
 import Grid from '@mui/material/Unstable_Grid2';
-import { Container, Box, Button, Card, CardContent, Typography, AppBar, Toolbar, Tab, Tabs } from "@mui/material";
+import { Container, Box, Button, Card, CardContent, Typography, Tab, Tabs, useTheme } from "@mui/material";
 
 // Customised Components
 import SecondaryAppBar from "../../components/SecondaryAppBar"
@@ -35,6 +35,7 @@ import {
   } from "recharts";
 
 function CashFlow() {
+    const theme = useTheme();
     const styles = {
         grid: {
             marginBottom: "24px",
@@ -86,19 +87,30 @@ function CashFlow() {
             borderBottom: "1px dashed #BFBFBF"
         },
 
-        positive: {
-            color: "#3BB537"
+        GreenGradientText: {
+            background: "linear-gradient(to top right, #109878, #8AB8B2)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
         },
 
-        negative: {
-            color: "#E60000"
+        RedGradientText: {
+            background: "linear-gradient(to top right, #E60000, #E69F9F)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
         },
         
         default: {
             background: "#FFFFFF",
             color: "#000000"
-            
-        }
+        },
+
+        positive: {
+            color: "#109878"
+        },
+
+        negative: {
+            color: "#E60000"
+        },
     }
 
     const {state} = useLocation();
@@ -346,8 +358,8 @@ function CashFlow() {
                         variant="fullWidth"
                         centered
                         sx={{ 
-                            "& .MuiTab-root.Mui-selected": { color: "#4B4948", fontWeight: "bold" },
-                            "& .MuiTabs-indicator": { backgroundColor: "#4B4948" }
+                            "& .MuiTab-root.Mui-selected": { color: theme.palette.secondary.main, fontWeight: "bold" },
+                            "& .MuiTabs-indicator": { backgroundColor: theme.palette.secondary.main }
                         }}
                         >
                             <Tab value="Monthly" label="By Month" />
@@ -380,67 +392,67 @@ function CashFlow() {
                         </ResponsiveContainer>
 
                         {selectedMonth!=="" && 
-                        <CardContent style={ styles.cardContent }>     
-                            {type==="Income" &&  
-                                <Grid container direction="row" justifyContent="space-between" alignItems="center">
-                                    <Grid xs={8}>
-                                        <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">
-                                            TOTAL INCOME
-                                        </Typography>
-                                        <Typography sx={{ fontSize: 18, fontWeight:"bold" }} color="#3BB537">
-                                            SGD ${totalIncome.toLocaleString("en-US")}
-                                        </Typography>
-                                        <Typography sx={{ fontSize: 10 }} color="#9197A4">
-                                            {value==="Monthly" ? "For month of " + selectedMonth : "For year of " + selectedMonth}
-                                        </Typography>
+                            <CardContent style={ styles.cardContent }>     
+                                {type==="Income" &&  
+                                    <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                        <Grid xs={8}>
+                                            <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
+                                                TOTAL INCOME
+                                            </Typography>
+                                            <Typography sx={{ fontSize: 18, fontWeight:"bold" }} color={ styles.GreenGradientText }>
+                                                SGD ${totalIncome.toLocaleString("en-US")}
+                                            </Typography>
+                                            <Typography sx={{ fontSize: 10 }} color="#9197A4">
+                                                {value==="Monthly" ? "For month of " + selectedMonth : "For year of " + selectedMonth}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={4}>
+                                            <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
+                                                NET CASH FLOW
+                                            </Typography>
+                                            <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} style={ netCashFlow < 0 ? styles.RedGradientText : styles.GreenGradientText }>
+                                                SGD ${netCashFlow.toLocaleString("en-US")}
+                                            </Typography>
+                                            <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
+                                                TOTAL EXPENSES
+                                            </Typography>
+                                            <Typography sx={{ fontSize: 14, fontWeight:"bold" }} color={ styles.RedGradientText }>
+                                                SGD ${totalExpense.toLocaleString("en-US")}
+                                            </Typography>
+                                        </Grid>
                                     </Grid>
-                                    <Grid xs={4}>
-                                        <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">
-                                            NET CASH FLOW
-                                        </Typography>
-                                        <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} style={ netCashFlow<0 ? styles.negative : styles.positive }>
-                                            SGD ${netCashFlow.toLocaleString("en-US")}
-                                        </Typography>
-                                        <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">
-                                            TOTAL EXPENSES
-                                        </Typography>
-                                        <Typography sx={{ fontSize: 14, fontWeight:"bold" }} color="#E60000">
-                                            SGD ${totalExpense.toLocaleString("en-US")}
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                            }
+                                }
 
-                            {type==="Expense" &&  
-                                <Grid container direction="row" justifyContent="space-between" alignItems="center">
-                                    <Grid xs={8}>
-                                        <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">
-                                            TOTAL EXPENSE
-                                        </Typography>
-                                        <Typography sx={{ fontSize: 18, fontWeight:"bold" }} color="#E60000">
-                                            SGD ${totalExpense.toLocaleString("en-US")}
-                                        </Typography>
-                                        <Typography sx={{ fontSize: 10 }} color="#9197A4">
-                                            {value==="Monthly" ? "For month of " + selectedMonth : "For year of " + selectedMonth}
-                                        </Typography>
+                                {type==="Expense" &&  
+                                    <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                        <Grid xs={8}>
+                                            <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
+                                                TOTAL EXPENSE
+                                            </Typography>
+                                            <Typography sx={{ fontSize: 18, fontWeight:"bold" }} color={ styles.RedGradientText }>
+                                                SGD ${totalExpense.toLocaleString("en-US")}
+                                            </Typography>
+                                            <Typography sx={{ fontSize: 10 }} color="#9197A4">
+                                                {value==="Monthly" ? "For month of " + selectedMonth : "For year of " + selectedMonth}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={4}>
+                                            <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
+                                                NET CASH FLOW
+                                            </Typography>
+                                            <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} style={ netCashFlow < 0 ? styles.RedGradientText : styles.GreenGradientText }>
+                                                SGD ${netCashFlow.toLocaleString("en-US")}
+                                            </Typography>
+                                            <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
+                                                TOTAL INCOME
+                                            </Typography>
+                                            <Typography sx={{ fontSize: 14, fontWeight:"bold" }} color="#3BB537">
+                                                SGD ${totalIncome.toLocaleString("en-US")}
+                                            </Typography>
+                                        </Grid>
                                     </Grid>
-                                    <Grid xs={4}>
-                                        <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">
-                                            NET CASH FLOW
-                                        </Typography>
-                                        <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} style={ netCashFlow<0 ? styles.negative : styles.positive }>
-                                            SGD ${netCashFlow.toLocaleString("en-US")}
-                                        </Typography>
-                                        <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">
-                                            TOTAL INCOME
-                                        </Typography>
-                                        <Typography sx={{ fontSize: 14, fontWeight:"bold" }} color="#3BB537">
-                                            SGD ${totalIncome.toLocaleString("en-US")}
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                            }
-                        </CardContent>} 
+                                }
+                            </CardContent>} 
                     </Card>
 
                     <Box style={{ padding: 20 }}>

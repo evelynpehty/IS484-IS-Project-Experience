@@ -2,7 +2,7 @@
 import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 // MUI Components
 import Grid from '@mui/material/Unstable_Grid2';
@@ -57,6 +57,18 @@ function DepositSummary() {
             bottom: 80,
             right: 16,
             backgroundColor: "#F7E6E6"
+        }, 
+
+        GreenGradientText: {
+            background: "linear-gradient(to top right, #109878, #8AB8B2)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+        },
+
+        RedGradientText: {
+            background: "linear-gradient(to top right, #E60000, #E69F9F)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
         }
     }
 
@@ -67,10 +79,6 @@ function DepositSummary() {
     const { depositList, cashflow_this_month, totalBalance } = useSelector((state) => state.deposit);
     const [isEmpty, setIsEmpty] = useState(false);
 
-    console.log(depositList)
-    console.log(cashflow_this_month)
-    console.log(totalBalance)
-    
     if(depositList.length === 0){
         setIsEmpty(true)
     }
@@ -100,16 +108,16 @@ function DepositSummary() {
                                     </Typography>
                                 </Grid>
                                 <Grid xs={5}>
-                                    <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
+                                    <Typography sx={{ fontSize: 10, fontWeight:"bold" }}>
                                         INCOME THIS MONTH
                                     </Typography>
-                                    <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} color="#109878">
+                                    <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} color={ styles.GreenGradientText }>
                                         SGD ${cashflow_this_month.income.toLocaleString("en-US")}
                                     </Typography>
                                     <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
                                         EXPENSES THIS MONTH
                                     </Typography>
-                                    <Typography sx={{ fontSize: 14, fontWeight:"bold" }} color="#E60000">
+                                    <Typography sx={{ fontSize: 14, fontWeight:"bold" }} color={ styles.RedGradientText }>
                                         SGD ${cashflow_this_month.expenses.toLocaleString("en-US")}
                                     </Typography>
                                 </Grid>
@@ -157,7 +165,6 @@ function DepositSummary() {
                     { !isEmpty && depositList.map ((value, index) => {
                         return (
                             <Link to={`/account-details/${value.DepositAccountID}`} key={value.DepositAccountID}> 
-                                {/* <DepositCard index={ index } accountName={ value.AccountName } accountID={ value.DepositAccountID } availableBalance={ value.AvailBalance } /> */}
                                 { show === false ? 
                                     <DepositCard index={ index } accountName={ value.AccountName } accountID={ value.DepositAccountID } availableBalance={ value.AvailBalance } chosenColor={value.ChosenColor}/> :
                                     <EditDepositCard index={ index } accountName={ value.AccountName } accountID={ value.DepositAccountID } availableBalance={ value.AvailBalance } chosenColor={value.ChosenColor} link={ `/manage-deposit/${value.DepositAccountID}` } />

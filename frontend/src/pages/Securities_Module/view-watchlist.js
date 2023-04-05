@@ -168,8 +168,8 @@ function ViewWatchList() {
                                                         }}
                                                         title= { 
                                                             <div> 
-                                                                <Typography sx={{ fontWeight: 10, fontWeight: "bold", color: theme.palette.primary.main }}>P&L Analysis</Typography>
-                                                                <Typography sx={{ fontWeight: 10, color: theme.palette.secondary.main }}>Recommended entry/exit prices</Typography>
+                                                                <Typography sx={{ fontSize: 10, fontWeight: "bold", color: theme.palette.primary.main }}>P&L Analysis</Typography>
+                                                                <Typography sx={{ fontSize: 10, color: theme.palette.secondary.main }}>Recommended entry/exit prices</Typography>
                                                             </div> 
                                                         }
                                                         arrow

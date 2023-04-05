@@ -5,23 +5,21 @@ import moment from 'moment';
 
 // MUI Components
 import Grid from '@mui/material/Unstable_Grid2';
-import { styled } from '@mui/material/styles';
-import { Container, Box, Typography, Card, CardContent, useTheme, Chip, Button } from "@mui/material";
-import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
+import { Container, Box, Typography, Card, CardContent, useTheme, Chip } from "@mui/material";
+import LinearProgress from '@mui/material/LinearProgress';
 
 // Customised Components
 import MainAppBar from "../../components/MainAppBar";
 import WhiteReusableButton from "../../components/WhiteButton";
 import OutlinedReusableButton from "../../components/OutlinedButton";
-import DepositCard from "../../components/DepositCard";
-import EditDepositCard from "../../components/EditDepositCard";
 import FabButton from "../../components/FabButton";
 
 // Import icon
 import { ReactComponent as Calculator } from "../../assets/icons/calculator-line.svg";
-import { ReactComponent as Bell } from "../../assets/icons/bell-line.svg";
 import { ReactComponent as Repayment } from "../../assets/icons/paper-fold-text-line.svg";
 import { ReactComponent as EditIcon } from "../../assets/icons/edit-white.svg"
+import { ReactComponent as LinkIcon } from "../../assets/icons/link-line-red.svg";
+import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-right-white.svg";
 
 
 function LoanSummary() {
@@ -141,16 +139,16 @@ function LoanSummary() {
                             <Grid container direction="row" justifyContent="space-between" alignItems="center">
                                 {/* Loan Summary left side */}
                                 <CardContent style={styles.cardContent}>
-                                    <Typography sx={{ fontSize: 10, fontWeight:"light" }} color={ theme.palette.secondary.main }>OUTSTANDING LOANS</Typography>
+                                    <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>OUTSTANDING LOANS</Typography>
                                     <Typography sx={{ fontSize: 22, fontWeight:"bold"}} color={ theme.palette.secondary.main }>{ `S$${ outstanding_Loan.toLocaleString("en-US") }` }</Typography>
                                     <Typography sx={{ fontSize: 10 }} color="grey" fontWeight="light">Next repayment: {repaymentDate}</Typography>
                                 </CardContent>
 
                                 {/* Loan Summary right side */}
                                 <CardContent style={styles.cardContent}>
-                                    <Typography sx={{ fontSize: 10, fontWeight:"light" }} color={ theme.palette.secondary.main }>TOTAL LOAN AMOUNT</Typography>
+                                    <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>TOTAL LOAN AMOUNT</Typography>
                                     <Typography sx={styles.gradientText} marginBottom="12px">{ `S$${ totalLoanAmt.toLocaleString("en-US") }` }</Typography>
-                                    <Typography sx={{ fontSize: 10, fontWeight:"light" }} color={ theme.palette.secondary.main }>TOTAL REPAYMENTS</Typography>
+                                    <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>TOTAL REPAYMENTS</Typography>
                                     <Typography sx={styles.gradientText}>{ `S$${ total_repayment.toFixed(2).toLocaleString("en-US") }` }</Typography>
                                 </CardContent>
                             </Grid>
@@ -158,13 +156,13 @@ function LoanSummary() {
                     </Card>
 
                     {/* Quick Tools */}
-                    <Grid xs={12} display={{ xs: "block" }}>
-                        <Typography style={styles.label} variant="h6">Quick Actions</Typography>
+                    <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
+                        <Typography style={ styles.smallerLabel } >Quick Actions</Typography> 
                         <Box
                             sx={{
-                                p: 2,
+                                p: 1,
                                 display: 'grid',
-                                gridTemplateColumns: { xs: '1fr 1fr' },
+                                gridTemplateColumns: { xs: '1fr 1fr 1fr' },
                                 gap: 2,
                             }}
                         >
@@ -180,7 +178,15 @@ function LoanSummary() {
                                 <CardContent sx={{ pt: "24px", textAlign: "center" }}>
                                     <Repayment className="small-icon" />
                                     <Typography sx={{ fontSize: 10, fontWeight: "bold" }} color="text.secondary" gutterBottom>
-                                        All Repayments
+                                        Repayments
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                            <Card style={styles.card2}>
+                                <CardContent sx={{ pt: "24px", textAlign: "center" }}>
+                                    <LinkIcon />
+                                    <Typography sx={{ fontSize: 10, fontWeight: "bold" }} color="text.secondary" gutterBottom>
+                                        Link Accounts
                                     </Typography>
                                 </CardContent>
                             </Card>
@@ -201,12 +207,12 @@ function LoanSummary() {
                                                             { item.ProductName }
                                                         </Typography>
                                                         <Typography sx={{ fontSize: 16, fontWeight: "bold" }} color="white">
-                                                        { item.AccountName } <Chip style={styles.chip} size="small" label={`${item.InterestRate}%`} />
-                                                    </Typography>
-                                                    <Typography sx={{ fontSize: 12 }} color="white">
-                                                        { `SGD $${ (item.Detail.monthly_payment).toFixed(2).toLocaleString("en-US")}` } due on {repaymentDate} {/* !!! here need to connect the repayment value and date */}
-                                                    </Typography>
-                                                </Grid>
+                                                            { item.AccountName } <Chip style={styles.chip} size="small" label={`${item.InterestRate}%`} />
+                                                        </Typography>
+                                                        <Typography sx={{ fontSize: 12 }} color="white">
+                                                            { `SGD $${ (item.Detail.monthly_payment).toFixed(2).toLocaleString("en-US")}` } due on {repaymentDate} {/* !!! here need to connect the repayment value and date */}
+                                                        </Typography>
+                                                    </Grid>
                                                     <Grid xs={ 4 }>
                                                         <Typography textAlign="end" >
                                                             <Link to={ `/manage-loan/${item.LoanAccountID}` }> 
@@ -217,30 +223,38 @@ function LoanSummary() {
                                                 </Grid>
                                             }
                                             { !show &&
-                                                <>
-                                                    <Typography sx={{ fontSize: 12 }} color="white">
-                                                    { item.ProductName }
-                                                    </Typography>
-                                                    <Typography sx={{ fontSize: 16, fontWeight: "bold" }} color="white">
-                                                        { item.AccountName } <Chip style={styles.chip} size="small" label={`${item.InterestRate}%`} />
-                                                    </Typography>
-                                                    <Typography sx={{ fontSize: 12 }} color="white">
-                                                        { `SGD $${ (item.Detail.monthly_payment.toFixed(2)).toLocaleString("en-US")}` } due on {repaymentDate} {/* !!! here need to connect the repayment value and date */}
-                                                    </Typography>
-                                                </>
+                                                <Grid container style={ styles.grid } justifyContent="center  ">
+                                                    <Grid xs={8}>
+                                                        <Typography sx={{ fontSize: 12 }} color="white">
+                                                            { item.ProductName }
+                                                        </Typography>
+                                                        <Typography sx={{ fontSize: 16, fontWeight: "bold" }} color="white">
+                                                            { item.AccountName } <Chip style={styles.chip} size="small" label={`${item.InterestRate}%`} />
+                                                        </Typography>
+                                                        <Typography sx={{ fontSize: 12 }} color="white">
+                                                            { `SGD $${ (item.Detail.monthly_payment).toFixed(2).toLocaleString("en-US")}` } due on {repaymentDate} {/* !!! here need to connect the repayment value and date */}
+                                                        </Typography>
+                                                    </Grid>
+                                                    <Grid xs={ 4 }>
+                                                        <Typography textAlign="end" >
+                                                            <Link to={ `/manage-loan/${item.LoanAccountID}` }> 
+                                                                <ArrowIcon />
+                                                            </Link>
+                                                        </Typography>
+                                                    </Grid>
+                                                </Grid>
                                             }
                                             <Grid container direction="row" justifyContent="space-between" alignItems="center" sx={{mt:1, mb: 2}}>
-                                                    <Grid xs={12}>
-                                                        <LinearProgress variant="determinate" value={item.progress}  sx={{
-                                                                                                        height: 20,
-                                                                                                        borderRadius: 5,    
-                                                                                                        background: `${item.ChosenColor}`,
-                                                                                                        "& .MuiLinearProgress-bar": {
-                                                                                                        backgroundColor: `#FFFF`
-                                                                                                        }
-                                                                                                    }}/>
-                                                        <Typography sx={{ fontSize: 14, fontWeight:"light", textAlign: "center" }} color="#E60000">                                        </Typography>
-                                                    </Grid>
+                                                <Grid xs={12}>
+                                                    <LinearProgress variant="determinate" value={item.progress}  sx={{
+                                                        height: 20,
+                                                        borderRadius: 5,    
+                                                        background: `${item.ChosenColor}`,
+                                                        "& .MuiLinearProgress-bar": {
+                                                        backgroundColor: `#FFFF`
+                                                        }
+                                                    }}/>
+                                                </Grid>
                                             </Grid>
                                             <Typography sx={{ fontSize: 12 }} textAlign="end" color="white">
                                                 Outstanding Amount
@@ -258,7 +272,7 @@ function LoanSummary() {
                     {/* to beautify */}
                     {isEmpty && <p>You do not have any loan account</p>}
                 </Box>
-                {/*<FabButton />*/}
+                <FabButton />
             </Container>
         </React.Fragment>
     )
