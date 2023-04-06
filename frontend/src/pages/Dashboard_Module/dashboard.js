@@ -27,13 +27,6 @@ import { ReactComponent as WatchlistIcon } from "../../assets/icons/watchlist-li
 import { ReactComponent as LinkIcon } from "../../assets/icons/link-line-red.svg";
 import { ReactComponent as NextIcon } from "../../assets/icons/next-icon-red.svg";
 
-// Recharts
-// import {
-//     PieChart,
-//     Pie,
-//     Cell
-// } from "recharts";
-
 // Functions
 import { logout } from "../../actions/auth";
 
@@ -95,15 +88,18 @@ function DashBoard() {
 
         button: {
             paddingLeft: 0,
-            textTransform: "initial"
+            textTransform: "initial",
+            background: "linear-gradient(to top right, #E60000, #E69F9F)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+        },
+
+        gradientText: {
+            background: "linear-gradient(to top right, #E60000, #E69F9F)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
         }
     }
-
-    const COLORS = [
-        { start: "#FF9364", end: "#F25F33" },
-        { start: "#FF9364", end: "#F25F33" },
-        { start: "#109878", end: "#8AB8B2" },
-    ];
 
     const { netWorth, emergencySaving } = useSelector((state) => state.dashboard);
 
@@ -118,7 +114,7 @@ function DashBoard() {
         
        
         const sNeeded = emergencySavings-totalSavings
-        setSavingsNeeded(sNeeded.toFixed(2))
+        setSavingsNeeded(sNeeded)
     },[])
 
 
@@ -133,22 +129,6 @@ function DashBoard() {
     const handleWatchlist = () => {
         navigate("/view-watchlist");
     }
-
-    // Mock Data
-    const data = [
-        {
-          "name": "Group A",
-          "value": 300
-        },
-        {
-          "name": "Group B",
-          "value": 300
-        },
-        {
-          "name": "Group C",
-          "value": 300
-        }
-    ];
 
     let renderLabel = function(entry) {
         return entry.name;
@@ -170,15 +150,15 @@ function DashBoard() {
                                 <CardContent style={ styles.cardContent }>
                                     <Grid container direction="row" justifyContent="space-between" alignItems="center">
                                         <Grid xs={5}>
-                                            <Typography sx={{ fontSize: 20, fontWeight:"bold", mb: 2 }} color={ theme.palette.primary.main }>
+                                            <Typography style={ styles.gradientText } sx={{ fontSize: 20, fontWeight:"bold", mb: 2 }}>
                                                 Wealth
                                             </Typography>
                                             <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
                                                 YOUR NET WORTH
                                             </Typography>
                                             <Typography sx={{ fontSize: 20, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
-                                                {netWorth["total_net_worth"] <0 && `-S$${netWorth["total_net_worth"].toFixed(2).toLocaleString("en-US").slice(1)}`}
-                                                {netWorth["total_net_worth"] >=0 && `S$${netWorth["total_net_worth"].toFixed(2).toLocaleString("en-US")}`}
+                                                {netWorth["total_net_worth"] <0 && `-S$${netWorth["total_net_worth"].toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).slice(1)}`}
+                                                {netWorth["total_net_worth"] >=0 && `S$${netWorth["total_net_worth"].toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                                             </Typography>
                                             <Typography sx={{ fontSize: 10 }} color={ theme.palette.secondary.main }>
                                                 Total assets & liabilities
@@ -263,14 +243,14 @@ function DashBoard() {
                                 <CardContent style={ styles.cardContent }>
                                     <Grid container direction="row" justifyContent="space-between" alignItems="center">
                                         <Grid xs={6}>
-                                            <Typography sx={{ fontSize: 20, fontWeight:"bold", mb: 2 }} color={ theme.palette.primary.main }>
+                                            <Typography style={ styles.gradientText } sx={{ fontSize: 20, fontWeight:"bold", mb: 2 }}>
                                                 Financial Health
                                             </Typography>
                                             <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
                                                 IDEAL EMERGENCY FUND
                                             </Typography>
                                             <Typography sx={{ fontSize: 20, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
-                                                {`$${emergencySavings.toFixed(2).toLocaleString("en-US")}`}
+                                                {`$${emergencySavings.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                                             </Typography>
                                             <Typography sx={{ fontSize: 10 }} color={ theme.palette.secondary.main }>
                                                 Based on your cash flow
@@ -283,15 +263,15 @@ function DashBoard() {
                                                     CURRENT SAVINGS
                                                 </Typography>
                                                 <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color={ theme.palette.secondary.main }>
-                                                    {`$${savingsNeeded.toLocaleString("en-US")}`}
+                                                    {`$${totalSavings.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                                                 </Typography>
                                             </Paper>
                                             <Paper style={ styles.paper } elevation={1}>
                                                 <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#979797">
                                                     SAVINGS NEEDED
                                                 </Typography>
-                                                <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color={ styles.negative }>
-                                                    {`$${totalSavings.toFixed(2).toLocaleString("en-US")}`}
+                                                <Typography style={ styles.gradientText } sx={{ fontSize: 14, fontWeight: "bold" }}>
+                                                    {`$${savingsNeeded.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                                                 </Typography>
                                             </Paper>
                                         </Grid>
@@ -306,7 +286,7 @@ function DashBoard() {
                                 <Typography sx={{ fontSize: 16, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
                                     View Profit & Loss Analysis
                                 </Typography>
-                                <Typography sx={{ fontSize: 14 }} color={ styles.negative }>
+                                <Typography sx={{ fontSize: 14 }} color={ theme.palette.secondary.main }>
                                     Recommended entry/exit prices
                                 </Typography>
 

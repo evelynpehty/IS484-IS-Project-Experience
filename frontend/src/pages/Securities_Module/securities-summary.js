@@ -93,7 +93,7 @@ function SecuritiesSummary() {
                                     CURRENT HOLDINGS
                                 </Typography>
                                 <Typography sx={{ fontSize: 20, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
-                                    { `S$${ securitiesList.crr_holding_SGD.toFixed(2).toLocaleString("en-US") }` }
+                                    { `S$${ securitiesList.crr_holding_SGD.toFix.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }` }
                                 </Typography>
                                 <Grid xs={12}>
                                     <Typography variant="p" sx={{ fontSize: 12, mr: 1 }} color="#9197A4">
@@ -103,7 +103,7 @@ function SecuritiesSummary() {
                                         { securitiesList["1_day_change"] < 0 && <ArrowDownIcon style={ styles.arrowIcon } />}
                                         { securitiesList["1_day_change"] >= 0 && <ArrowUpIcon style={ styles.arrowIcon } />}
                                         
-                                        { `S$${ securitiesList["1_day_change"].toFixed(2).toLocaleString("en-US") }` }
+                                        { `S$${ securitiesList["1_day_change"].toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }` }
                                     </Typography>
                                 </Grid>       
                             </Grid>
@@ -112,7 +112,7 @@ function SecuritiesSummary() {
                                     TOTAL INVESTED
                                 </Typography>
                                 <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }}>
-                                    { `S$${ securitiesList["total_invest_SGD"].toFixed(2).toLocaleString("en-US") }` }
+                                    { `S$${ securitiesList["total_invest_SGD"].toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }` }
                                 </Typography>
                                 <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">
                                     OVERALL RETURNS
@@ -121,7 +121,7 @@ function SecuritiesSummary() {
                                     { securitiesList["overall_return_SGD"] < 0 && <ArrowDownIcon style={ styles.arrowIcon } />}
                                     { securitiesList["overall_return_SGD"] >= 0 && <ArrowUpIcon style={ styles.arrowIcon } />}
                                     
-                                    { `S$${ securitiesList["overall_return_SGD"].toFixed(2).toLocaleString("en-US") }` }
+                                    { `S$${ securitiesList["overall_return_SGD"].toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }` }
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -192,7 +192,7 @@ function SecuritiesSummary() {
                                                 { item["1_day_change_per_each"] < 0 && <ArrowDownIcon style={ styles.arrowIcon } />}
                                                 { item["1_day_change_per_each"] >= 0 && <ArrowUpIcon style={ styles.arrowIcon } />}
                                                 
-                                                { `S$${ item["1_day_change_per_each"].toFixed(2).toLocaleString("en-US") }` }
+                                                { `S$${ item["1_day_change_per_each"].toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` }
                                             </Typography>
                                         </Typography>
                                         
@@ -200,13 +200,13 @@ function SecuritiesSummary() {
                                     <Grid container direction="row" justifyContent="space-between" alignItems="center">
                                         <Typography variant="p" sx={{ fontSize: 14 }} color={ theme.palette.secondary.main }>
                                             
-                                            { `US$${ item["current_price_USD"].toFixed(2).toLocaleString("en-US") }` }
+                                            { `US$${ item["current_price_USD"].toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` }
                                             <Typography variant="p" sx={{ fontSize: 12, fontWeight:"regular", ml: 2 }} style={ item["change_rate"] < 0 ? styles.negative : styles.positive } >
                                                {item.change_rate.toFixed(2)}%
                                             </Typography>
                                         </Typography>
                                         <Typography sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="#4B4948">
-                                            { `SGD $${ item["current_price_SGD"].toFixed(2).toLocaleString("en-US") }` }
+                                            { `SGD $${ item["current_price_SGD"].toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` }
                                         </Typography>
                                     </Grid>
                                 </CardContent>

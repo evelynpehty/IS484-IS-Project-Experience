@@ -151,10 +151,10 @@ export default function LoanTransactionHistory() {
                             })
                         }
                     </Stack>
-                    { transactionDisplay.map((el,index)=> {
+                    { transactionDisplay.map((el,i)=> {
                             return (
                                 <>
-                                    <Accordion defaultExpanded>
+                                    <Accordion key={i} defaultExpanded>
                                         <AccordionSummary
                                             expandIcon={<ExpandMoreIcon />}
                                             aria-controls="panel2a-content"
@@ -169,10 +169,10 @@ export default function LoanTransactionHistory() {
                                             <Box>
                                                 <Grid container direction="row" justifyContent="space-between" alignItems="center">
                                                     <Typography sx={{ fontSize: 16, fontWeight:"bold" }} color="#4B4948">
-                                                        UBS - {index+1}
+                                                        UBS - {i+1}
                                                     </Typography>
                                                     <Typography style={ styles.negative } sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="#4B4948">
-                                                        { `- SGD $${ monthly_payment.toLocaleString("en-US") }` }
+                                                        { `- SGD $${ monthly_payment.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }` }
                                                     </Typography>
                                                 </Grid>
 
@@ -191,7 +191,7 @@ export default function LoanTransactionHistory() {
                                                             PRINCIPAL
                                                         </Typography>
                                                             <Typography sx={{ fontSize: 12, fontWeight:"bold" }}>
-                                                                { `SGD $${ el.item.principal.toLocaleString("en-US") }` }
+                                                                { `SGD $${ el.item.principal.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }` }
                                                         </Typography>
                                                     </Grid>
 
@@ -200,7 +200,7 @@ export default function LoanTransactionHistory() {
                                                             INTEREST
                                                         </Typography>
                                                         <Typography sx={{ fontSize: 12, fontWeight:"bold" }}>
-                                                            { `SGD $${ el.item.interest.toLocaleString("en-US") }` }
+                                                            { `SGD $${ el.item.interest.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }` }
                                                         </Typography>
                                                     </Grid>
 
@@ -209,7 +209,7 @@ export default function LoanTransactionHistory() {
                                                             OUTSTANDING
                                                         </Typography>
                                                         <Typography sx={{ fontSize: 12, fontWeight:"bold" }}>
-                                                            { `SGD $${ el.item.end_balance.toLocaleString("en-US") }` }
+                                                            { `SGD $${ el.item.end_balance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }` }
                                                         </Typography>
                                                     </Grid>     
                                                 </Grid>

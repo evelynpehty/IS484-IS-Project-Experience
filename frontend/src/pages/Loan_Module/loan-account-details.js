@@ -205,7 +205,7 @@ function LoanAccountDetails() {
                                 Outstanding Amount
                             </Typography>
                             <Typography sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="white">
-                                SGD ${ loan_item[0].LoanBalance.toLocaleString("en-US") }
+                                SGD ${ loan_item[0].LoanBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }
                             </Typography>
                         </CardContent>
                     </Card>
@@ -241,7 +241,7 @@ function LoanAccountDetails() {
                                             TOTAL LOAN AMOUNT
                                         </Typography>
                                         <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} >
-                                            SGD ${totalLoanAmount.toLocaleString("en-US")}
+                                            SGD ${totalLoanAmount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                         </Typography>
                                     </Grid>
                                     <Grid xs={6}>
@@ -270,7 +270,7 @@ function LoanAccountDetails() {
                                             TOTAL PAID
                                         </Typography>
                                         <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} >
-                                            SGD ${totalPaid.toLocaleString("en-US")}
+                                            SGD ${totalPaid.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                         </Typography>
                                     </Grid>
                                     <Grid xs={6}>
@@ -278,7 +278,7 @@ function LoanAccountDetails() {
                                             OUTSTANDING
                                         </Typography>
                                         <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }}>
-                                            SGD ${outstanding.toLocaleString("en-US")}
+                                            SGD ${outstanding.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                         </Typography>
                                     </Grid>
                                 </Grid>
@@ -289,7 +289,7 @@ function LoanAccountDetails() {
                                            MONTHLY REPAYMENT
                                         </Typography>
                                         <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} >
-                                            SGD ${monthlyRepayment.toLocaleString("en-US")}
+                                            SGD ${monthlyRepayment.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                         </Typography>
                                     </Grid>
                                     <Grid xs={6}>
@@ -322,7 +322,7 @@ function LoanAccountDetails() {
                                             UBS - {index+1}
                                         </Typography>
                                         <Typography style={ styles.negative } sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="#4B4948">
-                                            { `- SGD $${ monthly_payment.toLocaleString("en-US") }` }
+                                            { `- SGD $${ monthly_payment.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }` }
                                         </Typography>
                                     </Grid>
 
