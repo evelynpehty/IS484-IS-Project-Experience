@@ -129,14 +129,20 @@ function NetWorth() {
             justifyContent: "center",
             alignItems: "center",
             padding: "14px"
-        }
+        },
+        RedGradientText: {
+            background: "linear-gradient(to top right, #E60000, #E69F9F)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+        },
     }
 
     const COLORS = [
         { start: "#FF9364", end: "#F25F33" },
-        { start: "#109878", end: "#8AB8B2" },
-        { start: "#E60000", end: "#E69F9F" },
+        { start: "#109878", end: "#8AB8B2" }, 
+        { start: "#E60000", end: "#E69F9F" }, //loan
     ];
+
 
     const navigate = useNavigate();
     const { netWorth } = useSelector((state) => state.dashboard);
@@ -145,13 +151,27 @@ function NetWorth() {
     const [loans, setLoans] = useState(netWorth["loan_net_worth"]["data"]); 
     const [securities, setSecurities] = useState(netWorth["net_worth_security_holdings"]["data"]); 
     const [netAmount, setNetAmount] = useState(netWorth["total_net_worth"]); 
-    const [pieData, setPieData] = useState(netWorth["total_net_worth"]); 
+    const [pieData, setPieData] = useState([
+        {
+            "name": "Savings",
+            "value": savings,
+        },
+        {
+          "name": "Securities",
+          "value": securities,
+        },
+        {
+            "name": "Loans",
+            "value": loans,
+        }
+      ]); 
 
-    // console.log(savings)
-    // console.log(loans)
-    // console.log(securities)
+     console.log(savings)
+     console.log(securities)
 
-    useEffect(()=>{
+     console.log(loans)
+    
+    /*useEffect(()=>{
         // PIE CHART DATA
         const tempPieData = [
             {
@@ -168,9 +188,9 @@ function NetWorth() {
             }
           ];
         setPieData(tempPieData)
-    },[])
+    },[])*/
 
-    console.log(pieData)
+
 
     const [show, setShow] = useState(false);
     function handleTooltip() {
@@ -195,7 +215,7 @@ function NetWorth() {
 
                     {/* PIE CHART */}
                     <div style={ styles.wrapper }>
-                        <PieChart width={358} height={300}>
+                        <PieChart width={390} height={300}>
                             <defs>
                                 {pieData.map((entry, index) => (
                                     <linearGradient id={`myGradient${index}`}>
@@ -226,18 +246,20 @@ function NetWorth() {
                             </Pie>
                             <g onClick={ handleTooltip }>
                                 <text x="47%" y="45%" dy={8} textAnchor="middle" fill="#7D8895" fontWeight="bold" fontSize="16px">
-                                    Ideal Amount
+                                    Net Amount
                                 </text>
                                 <InfoIcon x="62%" y="43%"  />
                                 <text x="50%" y="55%" dy={8} textAnchor="middle" fill="#303841" fontWeight="bold" fontSize="16px">
-                                    S$
+                                   
+                                    {netAmount<0 &&  `-S$${netAmount.toFixed(2).slice(1).toLocaleString("en-US")}`}
+                                    {netAmount >= 0 &&  `S$${netAmount.toFixed(2).toLocaleString("en-US")}`}
                                 </text>
                             </g>
                         </PieChart>
                         { show && 
                             <Paper elevation={2} style={ styles.popoverContent }>
-                                <Typography style={ styles.RedGradientText } sx={{ fontSize: 10, fontWeight: "bold" }}>How is the Ideal Amount calculated?</Typography>
-                                <Typography sx={{ fontSize: 10 }} color={ theme.palette.secondary.main }>Based on your average monthly expenses, Monetari calculates a recommended amount 6 times your monthly expenses to be set aside in cash savings for emergencies </Typography>
+                                <Typography style={ styles.RedGradientText } sx={{ fontSize: 10, fontWeight: "bold" }}>How is the Net Worth calculated?</Typography>
+                                <Typography sx={{ fontSize: 10 }} color={ theme.palette.secondary.main }>Net worth is equivalent to the amount that remains if you were to sell all your assets and use the cash you gained to pay off all liabilities.</Typography>
                             </Paper>
                         }
                     </div>

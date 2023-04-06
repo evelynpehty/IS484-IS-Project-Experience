@@ -186,12 +186,13 @@ function CashFlow() {
         }
         const income_data = []
         const expense_data = []
-            monthRangeYear.forEach(month => {
-                var currentobj = {}
-                currentobj["x"] = month
-                currentobj["y"] = 0
-                expense_data.push(currentobj)
-                income_data.push( Object.assign({},currentobj))
+
+        monthRangeYear.forEach(month => {
+            var currentobj = {}
+            currentobj["x"] = month
+            currentobj["y"] = 0
+            expense_data.push(currentobj)
+            income_data.push( Object.assign({},currentobj))
         });
 
         expenses_transaction_item.forEach(element => {
@@ -245,23 +246,23 @@ function CashFlow() {
         }
 
         yearRange = yearRange.reverse()
-    
+      
         const income_data = []
         const expense_data = []
 
         yearRange.forEach(yy => {
-            var currentobj = {}
-            currentobj["x"] = yy
-            currentobj["y"] = 0
-            expense_data.push(currentobj)
-            income_data.push( Object.assign({},currentobj))
+            var c_obj = {}
+            c_obj["x"] = yy
+            c_obj["y"] = 0
+            expense_data.push(c_obj)
+            income_data.push( Object.assign({},c_obj))
         });
 
+        console.log(income_data)
+        console.log(expense_data)
     
-
         expenses_transaction_item.forEach(element => {
-            const yearNum = moment(element.transactionDate).year()
-            
+            const yearNum = moment(element.transactionDate).year().toString()
             expense_data.forEach(obj =>{
                 if (obj.x === yearNum){
                     obj.y += element.transactionAmount
@@ -271,7 +272,6 @@ function CashFlow() {
 
         income_transaction_data.forEach(element => {
             const yearNum = moment(element.transactionDate).year().toString()
-
             income_data.forEach(obj =>{
                 if (obj.x === yearNum){
                     obj.y += element.transactionAmount

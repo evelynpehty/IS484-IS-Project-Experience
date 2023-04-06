@@ -101,12 +101,6 @@ function DashBoard() {
         }
     }
 
-    const COLORS = [
-        { start: "#FF9364", end: "#F25F33" },
-        { start: "#FF9364", end: "#F25F33" },
-        { start: "#109878", end: "#8AB8B2" },
-    ];
-
     const { netWorth, emergencySaving } = useSelector((state) => state.dashboard);
 
     const [totalSavings, setTotalSavings] = useState(netWorth["deposit_net_worth"]["data"]); // DISPLAY THIS AS YOUR SAVINGS
@@ -135,22 +129,6 @@ function DashBoard() {
     const handleWatchlist = () => {
         navigate("/view-watchlist");
     }
-
-    // Mock Data
-    const data = [
-        {
-          "name": "Group A",
-          "value": 300
-        },
-        {
-          "name": "Group B",
-          "value": 300
-        },
-        {
-          "name": "Group C",
-          "value": 300
-        }
-    ];
 
     let renderLabel = function(entry) {
         return entry.name;
@@ -285,7 +263,7 @@ function DashBoard() {
                                                     CURRENT SAVINGS
                                                 </Typography>
                                                 <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color={ theme.palette.secondary.main }>
-                                                    {`$${savingsNeeded.toLocaleString("en-US")}`}
+                                                    {`$${totalSavings.toFixed(2).toLocaleString("en-US")}`}
                                                 </Typography>
                                             </Paper>
                                             <Paper style={ styles.paper } elevation={1}>
@@ -293,7 +271,7 @@ function DashBoard() {
                                                     SAVINGS NEEDED
                                                 </Typography>
                                                 <Typography style={ styles.gradientText } sx={{ fontSize: 14, fontWeight: "bold" }}>
-                                                    {`$${totalSavings.toFixed(2).toLocaleString("en-US")}`}
+                                                    {`$${savingsNeeded.toLocaleString("en-US")}`}
                                                 </Typography>
                                             </Paper>
                                         </Grid>
