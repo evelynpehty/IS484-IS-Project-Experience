@@ -138,11 +138,10 @@ function NetWorth() {
     }
 
     const COLORS = [
-        { start: "#FF9364", end: "#F25F33" },
-        { start: "#109878", end: "#8AB8B2" }, 
-        { start: "#E60000", end: "#E69F9F" }, //loan
+        { start: "#109878", end: "#8AB8B2" }, //securities
+        { start: "#FF7D1F", end: "#DBBB9E" }, //deposit
+        { start: "rgba(255,147,100,0.3)", end: "rgba(252,51,51,0.3)" }, //loan
     ];
-
 
     const navigate = useNavigate();
     const { netWorth } = useSelector((state) => state.dashboard);
@@ -153,12 +152,12 @@ function NetWorth() {
     const [netAmount, setNetAmount] = useState(netWorth["total_net_worth"]); 
     const [pieData, setPieData] = useState([
         {
-            "name": "Savings",
-            "value": savings,
+            "name": "Securities",
+            "value": securities,
         },
         {
-          "name": "Securities",
-          "value": securities,
+            "name": "Savings",
+            "value": savings,
         },
         {
             "name": "Loans",
@@ -237,8 +236,7 @@ function NetWorth() {
                                 nameKey="name" 
                                 innerRadius={80} 
                                 outerRadius={120} 
-                                labelLine = { false }
-                                label>
+                                >
     
                             {pieData.map((entry, index) => (
                                 <Cell key={`cell-${index}`} fill={`url(#myGradient${index})`} />
@@ -251,8 +249,8 @@ function NetWorth() {
                                 <InfoIcon x="62%" y="43%"  />
                                 <text x="50%" y="55%" dy={8} textAnchor="middle" fill="#303841" fontWeight="bold" fontSize="16px">
                                    
-                                    {netAmount<0 &&  `-S$${netAmount.toFixed(2).slice(1).toLocaleString("en-US")}`}
-                                    {netAmount >= 0 &&  `S$${netAmount.toFixed(2).toLocaleString("en-US")}`}
+                                    {netAmount<0 &&  `-S$${netAmount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).slice(1)}`}
+                                    {netAmount >= 0 &&  `S$${netAmount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                                 </text>
                             </g>
                         </PieChart>
@@ -282,7 +280,7 @@ function NetWorth() {
                                         <GreenOval />  Securities
                                     </Typography>
                                     <Typography sx={{ fontSize: 18, fontWeight:"bold",mb:1 }} style={styles.SecuritiesGradientText}>
-                                        {`S$${securities.toFixed(2).toLocaleString("en-US")}`}
+                                        {`S$${securities.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                                     </Typography>
                                     <Typography sx={{ fontSize: 10 }} color="#7D8895">
                                         Your total holding value across all securities
@@ -297,7 +295,7 @@ function NetWorth() {
                                         <OrangeOval /> Savings
                                     </Typography>
                                     <Typography sx={{ fontSize: 18, fontWeight:"bold", mb:1 }} style={styles.SavingsGradientText}>
-                                        {`S$${savings.toFixed(2).toLocaleString("en-US")}`}
+                                        {`S$${savings.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                                     </Typography>
                                     <Typography sx={{ fontSize: 10 }} color="#7D8895">
                                         Your total savings across all deposit accounts                               
@@ -319,7 +317,7 @@ function NetWorth() {
                                         <RedOval /> Loans
                                     </Typography>
                                     <Typography sx={{ fontSize: 18, fontWeight:"bold", mb:1 }} style={styles.LoansGradientText}>
-                                        {`-S$${loans.toFixed(2).toLocaleString("en-US")}`}
+                                        {`-S$${loans.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                                     </Typography>
                                     <Typography sx={{ fontSize: 10 }} color="#7D8895">
                                         Your total debt across all loan accounts

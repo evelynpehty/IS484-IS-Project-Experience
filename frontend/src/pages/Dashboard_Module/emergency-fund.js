@@ -126,7 +126,7 @@ function EmergencyFund() {
     }
 
     const COLORS = [
-        { start: "#FF9364", end: "#F25F33" },
+        { start: "rgba(255,147,100,0.3)", end: "rgba(252,51,51,0.3)" },
         { start: "#109878", end: "#8AB8B2" },
     ];
 
@@ -247,8 +247,8 @@ function EmergencyFund() {
         ];
         setPieData(tempPieData)
         setFinalData(final_data)
-        setTotalSavings(temp_savings.toFixed(2))
-        setSavingsNeeded(sNeeded.toFixed(2))
+        setTotalSavings(temp_savings)
+        setSavingsNeeded(sNeeded)
         
     }, []);
 
@@ -316,8 +316,7 @@ function EmergencyFund() {
                                 nameKey="name" 
                                 innerRadius={80} 
                                 outerRadius={120} 
-                                labelLine = { false }
-                                label>
+                                >
     
                             {pieData.map((entry, index) => (
                                 <Cell key={`cell-${index}`} fill={`url(#myGradient${index})`} />
@@ -329,7 +328,7 @@ function EmergencyFund() {
                                 </text>
                                 <InfoIcon x="62%" y="43%"  />
                                 <text x="50%" y="55%" dy={8} textAnchor="middle" fill="#303841" fontWeight="bold" fontSize="16px">
-                                    S${ emergencySavings.toLocaleString("en-US") }
+                                    S${ emergencySavings.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }
                                 </text>
                             </g>
                         </PieChart>
@@ -350,7 +349,7 @@ function EmergencyFund() {
                                         <GreenOval/> Your Savings
                                     </Typography>
                                     <Typography sx={{ fontSize: 20, fontWeight:"bold",mb:1 }} style={styles.GreenGradientText} color={ theme.palette.secondary.main }>
-                                        {`$${totalSavings.toLocaleString("en-US")}`}
+                                        {`$${totalSavings.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                                     </Typography>
                                     <Typography sx={{ fontSize: 10 }} color={ theme.palette.secondary.main }>
                                         Your total accessible savings in deposit accounts
@@ -365,7 +364,7 @@ function EmergencyFund() {
                                         <RedOval/> Savings Needed
                                     </Typography>
                                     <Typography sx={{ fontSize: 20, fontWeight:"bold", mb:1 }} style={styles.RedGradientText}>
-                                        {`$${savingsNeeded.toLocaleString("en-US")}`}
+                                        {`$${savingsNeeded.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                                     </Typography>
                                     <Typography sx={{ fontSize: 10 }} color={ theme.palette.secondary.main }>
                                         The amount needed to reach the ideal savings amount                              
@@ -414,7 +413,7 @@ function EmergencyFund() {
                                                 TOTAL INCOME
                                             </Typography>
                                             <Typography sx={{ fontSize: 18, fontWeight:"bold" }} color="#3BB537">
-                                                SGD ${totalIncome.toLocaleString("en-US")}
+                                                SGD ${totalIncome.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                             </Typography>
                                             <Typography sx={{ fontSize: 10 }} color="#9197A4">
                                                 For month of {selectedMonth}
@@ -425,13 +424,13 @@ function EmergencyFund() {
                                                 NET CASH FLOW
                                             </Typography>
                                             <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} style={ netCashFlow < 0 ? styles.negative : styles.positive }>
-                                                SGD ${netCashFlow.toLocaleString("en-US")}
+                                                SGD ${netCashFlow.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                             </Typography>
                                             <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">
                                                 TOTAL EXPENSES
                                             </Typography>
                                             <Typography sx={{ fontSize: 14, fontWeight:"bold" }} color="#E60000">
-                                                SGD ${totalExpense.toLocaleString("en-US")}
+                                                SGD ${totalExpense.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                             </Typography>
                                         </Grid>
                                     </Grid>
@@ -444,7 +443,7 @@ function EmergencyFund() {
                                                 TOTAL EXPENSE
                                             </Typography>
                                             <Typography sx={{ fontSize: 18, fontWeight:"bold" }} color="#E60000">
-                                                SGD ${totalExpense.toLocaleString("en-US")}
+                                                SGD ${totalExpense.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                             </Typography>
                                             <Typography sx={{ fontSize: 10 }} color="#9197A4">
                                                 For month of {selectedMonth}
@@ -455,13 +454,13 @@ function EmergencyFund() {
                                                 NET CASH FLOW
                                             </Typography>
                                             <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} style={ netCashFlow<0 ? styles.negative : styles.positive }>
-                                                SGD ${netCashFlow.toLocaleString("en-US")}
+                                                SGD ${netCashFlow.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                             </Typography>
                                             <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">
                                                 TOTAL INCOME
                                             </Typography>
                                             <Typography sx={{ fontSize: 14, fontWeight:"bold" }} color="#3BB537">
-                                                SGD ${totalIncome.toLocaleString("en-US")}
+                                                SGD ${totalIncome.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                             </Typography>
                                         </Grid>
                                     </Grid>

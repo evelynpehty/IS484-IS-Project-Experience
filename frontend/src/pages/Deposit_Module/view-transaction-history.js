@@ -415,7 +415,7 @@ export default function ColorTabs() {
                         { Object.keys(transactionDisplay[year]).map( (month, index) => {
                             return(
                                 <>
-                                    <Accordion defaultExpanded>
+                                    <Accordion key={index} defaultExpanded>
                                         <AccordionSummary
                                         expandIcon={<ExpandMoreIcon />}
                                         aria-controls={`panel-content`}
@@ -436,7 +436,7 @@ export default function ColorTabs() {
                                                                     {item.transactionID}
                                                                 </Typography>
                                                                 <Typography style={ (item.accountFrom === id) ? styles.negative : styles.positive } sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="#4B4948">
-                                                                    {(item.accountFrom === id) ? `- SGD $${ item.transactionAmount.toLocaleString("en-US") }` : `SGD $${ item.transactionAmount.toLocaleString("en-US") }` }
+                                                                    {(item.accountFrom === id) ? `- SGD $${ item.transactionAmount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }` : `SGD $${ item.transactionAmount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }` }
                                                                 </Typography>
                                                             </Grid>
                                                             <Grid container direction="row" justifyContent="space-between" alignItems="center">
@@ -467,7 +467,7 @@ export default function ColorTabs() {
             { value === "Monthly" && transactionDisplay.map((item,index)=> {
                     return (
                         <>
-                            <Accordion defaultExpanded>
+                            <Accordion key={index} defaultExpanded>
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
                                     aria-controls="panel2a-content"
@@ -485,7 +485,7 @@ export default function ColorTabs() {
                                                 {item.transactionID}
                                             </Typography>
                                             <Typography style={ (item.accountFrom === id) ? styles.negative : styles.positive } sx={{ fontSize: 16, fontWeight: "bold" }} textAlign="end" color="#4B4948">
-                                                {(item.accountFrom === id) ? `- SGD $${ item.transactionAmount.toLocaleString("en-US") }` : `SGD $${ item.transactionAmount.toLocaleString("en-US") }` }
+                                                {(item.accountFrom === id) ? `- SGD $${ item.transactionAmount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }` : `SGD $${ item.transactionAmount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }` }
                                             </Typography>
                                         </Grid>
                                         <Grid container direction="row" justifyContent="space-between" alignItems="center">

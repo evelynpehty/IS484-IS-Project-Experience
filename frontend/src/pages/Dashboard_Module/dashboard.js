@@ -114,7 +114,7 @@ function DashBoard() {
         
        
         const sNeeded = emergencySavings-totalSavings
-        setSavingsNeeded(sNeeded.toFixed(2))
+        setSavingsNeeded(sNeeded)
     },[])
 
 
@@ -157,8 +157,8 @@ function DashBoard() {
                                                 YOUR NET WORTH
                                             </Typography>
                                             <Typography sx={{ fontSize: 20, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
-                                                {netWorth["total_net_worth"] <0 && `-S$${netWorth["total_net_worth"].toFixed(2).toLocaleString("en-US").slice(1)}`}
-                                                {netWorth["total_net_worth"] >=0 && `S$${netWorth["total_net_worth"].toFixed(2).toLocaleString("en-US")}`}
+                                                {netWorth["total_net_worth"] <0 && `-S$${netWorth["total_net_worth"].toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).slice(1)}`}
+                                                {netWorth["total_net_worth"] >=0 && `S$${netWorth["total_net_worth"].toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                                             </Typography>
                                             <Typography sx={{ fontSize: 10 }} color={ theme.palette.secondary.main }>
                                                 Total assets & liabilities
@@ -250,7 +250,7 @@ function DashBoard() {
                                                 IDEAL EMERGENCY FUND
                                             </Typography>
                                             <Typography sx={{ fontSize: 20, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
-                                                {`$${emergencySavings.toFixed(2).toLocaleString("en-US")}`}
+                                                {`$${emergencySavings.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                                             </Typography>
                                             <Typography sx={{ fontSize: 10 }} color={ theme.palette.secondary.main }>
                                                 Based on your cash flow
@@ -263,7 +263,7 @@ function DashBoard() {
                                                     CURRENT SAVINGS
                                                 </Typography>
                                                 <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color={ theme.palette.secondary.main }>
-                                                    {`$${totalSavings.toFixed(2).toLocaleString("en-US")}`}
+                                                    {`$${totalSavings.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                                                 </Typography>
                                             </Paper>
                                             <Paper style={ styles.paper } elevation={1}>
@@ -271,7 +271,7 @@ function DashBoard() {
                                                     SAVINGS NEEDED
                                                 </Typography>
                                                 <Typography style={ styles.gradientText } sx={{ fontSize: 14, fontWeight: "bold" }}>
-                                                    {`$${savingsNeeded.toLocaleString("en-US")}`}
+                                                    {`$${savingsNeeded.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                                                 </Typography>
                                             </Paper>
                                         </Grid>

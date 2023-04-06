@@ -101,7 +101,7 @@ function DepositSummary() {
                                         TOTAL BALANCE
                                     </Typography>
                                     <Typography sx={{ fontSize: 20, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
-                                        SGD ${totalBalance.toLocaleString("en-US")}
+                                        SGD ${totalBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                     </Typography>
                                     <Typography sx={{ fontSize: 10 }} color={ theme.palette.secondary.main }>
                                         Across all deposit accounts
@@ -112,13 +112,13 @@ function DepositSummary() {
                                         INCOME THIS MONTH
                                     </Typography>
                                     <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} color={ styles.GreenGradientText }>
-                                        SGD ${cashflow_this_month.income.toLocaleString("en-US")}
+                                        SGD ${cashflow_this_month.income.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                     </Typography>
                                     <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
                                         EXPENSES THIS MONTH
                                     </Typography>
                                     <Typography sx={{ fontSize: 14, fontWeight:"bold" }} color={ styles.RedGradientText }>
-                                        SGD ${cashflow_this_month.expenses.toLocaleString("en-US")}
+                                        SGD ${cashflow_this_month.expenses.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                     </Typography>
                                 </Grid>
                             </Grid>

@@ -99,7 +99,7 @@ function ViewWatchList() {
         })
         if(result.length !== 0){
             if(result[0].currentPrice !== null){
-                return result[0].currentPrice.toFixed(2)
+                return result[0].currentPrice
             }
             else {
                 return 0
@@ -189,7 +189,7 @@ function ViewWatchList() {
 
                                                             <Grid xs={3} textAlign="end" sx={{ margin: "auto" }}>
                                                                 <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color={theme.palette.secondary.main}>
-                                                                   {`$${getCurrentPrice(value.ticker)}`}
+                                                                   {`$${getCurrentPrice(value.ticker).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                                                                 </Typography>
                                                             </Grid>
                                                             
@@ -238,7 +238,7 @@ function ViewWatchList() {
 
                                                             <Grid xs={3} textAlign="end" sx={{ margin: "auto" }}>
                                                                 <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color={theme.palette.secondary.main}>
-                                                                   {`$${getCurrentPrice(value.ticker)}`}
+                                                                   {`$${getCurrentPrice(value.ticker).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                                                                 </Typography>
                                                             </Grid>
                                                             

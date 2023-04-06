@@ -224,7 +224,7 @@ function AccountDetails() {
                                 Available Balance
                             </Typography>
                             <Typography sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="white">
-                                SGD ${ deposit_item[0].AvailBalance.toLocaleString("en-US") }
+                                SGD ${ deposit_item[0].AvailBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }
                             </Typography>
                         </CardContent>
                     </Card>
@@ -267,7 +267,7 @@ function AccountDetails() {
                                                 NET CASH FLOW
                                             </Typography>
                                             <Typography sx={{ fontSize: 18, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
-                                                SGD ${netCashFlow.toLocaleString("en-US")}
+                                                SGD ${netCashFlow.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                             </Typography>
                                             <Typography sx={{ fontSize: 10 }} color="#9B9B9B">
                                                 For month of {selectedMonth}
@@ -278,13 +278,13 @@ function AccountDetails() {
                                                 TOTAL INCOME
                                             </Typography>
                                             <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} style={ styles.GreenGradientText }>
-                                                SGD ${totalIncome.toLocaleString("en-US")}
+                                                SGD ${totalIncome.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                             </Typography>
                                             <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
                                                 TOTAL EXPENSES
                                             </Typography>
                                             <Typography sx={{ fontSize: 14, fontWeight:"bold" }} color={ styles.RedGradientText }>
-                                                SGD ${totalExpense.toLocaleString("en-US")}
+                                                SGD ${totalExpense.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                             </Typography>
                                         </Grid>
                                     </Grid>
@@ -297,7 +297,7 @@ function AccountDetails() {
                                                 TOTAL EXPENSE
                                             </Typography>
                                             <Typography sx={{ fontSize: 18, fontWeight:"bold" }} color={ styles.RedGradientText }>
-                                                SGD ${totalExpense.toLocaleString("en-US")}
+                                                SGD ${totalExpense.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                             </Typography>
                                             <Typography sx={{ fontSize: 10 }} color="#9197A4">
                                                 For month of {selectedMonth}
@@ -308,13 +308,13 @@ function AccountDetails() {
                                                 NET CASH FLOW
                                             </Typography>
                                             <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} style={ netCashFlow<0 ? styles.GreenGradientText : styles.RedGradientText }>
-                                                SGD ${netCashFlow.toLocaleString("en-US")}
+                                                SGD ${netCashFlow.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                             </Typography>
                                             <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">
                                                 TOTAL INCOME
                                             </Typography>
                                             <Typography sx={{ fontSize: 14, fontWeight:"bold" }} color="#3BB537">
-                                                SGD ${totalIncome.toLocaleString("en-US")}
+                                                SGD ${totalIncome.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                             </Typography>
                                         </Grid>
                                     </Grid>
@@ -337,7 +337,7 @@ function AccountDetails() {
                                             {value.transactionID}
                                         </Typography>
                                         <Typography style={ (value.accountFrom === id) ? styles.RedGradientText : styles.GreenGradientText } sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="#4B4948">
-                                            {(value.accountFrom === id) ? `- SGD $${ value.transactionAmount.toLocaleString("en-US") }` : `SGD $${ value.transactionAmount.toLocaleString("en-US") }` }
+                                            {(value.accountFrom === id) ? `- SGD $${ value.transactionAmount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }` : `SGD $${ value.transactionAmount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }` }
                                         </Typography>
                                     </Grid>
                                     <Grid container direction="row" justifyContent="space-between" alignItems="center">
