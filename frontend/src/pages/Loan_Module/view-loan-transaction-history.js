@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { useEffect, useState } from "react";
 import moment from 'moment';
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 // MUI Components
@@ -11,9 +11,11 @@ import { Container, Box, Typography, Accordion, AccordionDetails, AccordionSumma
 
 // Customised Components
 import SecondaryAppBar from "../../components/SecondaryAppBar";
+import WhiteReusableButton from "../../components/WhiteButton";
 
 // Assets (Images & Icons)
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { ReactComponent as BellIcon } from "../../assets/icons/bell-red.svg";
 
 
 export default function LoanTransactionHistory() { 
@@ -62,7 +64,8 @@ export default function LoanTransactionHistory() {
         stackChip: {
             overflow: "auto",
             paddingLeft: "16px",
-            paddingRight: "16px"
+            paddingRight: "16px",
+            marginBottom: "24px"
         },
         
         chipSelected: {

@@ -57,13 +57,17 @@ function SecuritiesSummary() {
             borderBottom: "1px dashed #BFBFBF"
         },
 
-        positive: {
-            color: "#3BB537"
+        GreenGradientText: {
+            background: "linear-gradient(to top right, #109878, #8AB8B2)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
         },
 
-        negative: {
-            color: "#E60000"
-        }
+        RedGradientText: {
+            background: "linear-gradient(to top right, #E60000, #E69F9F)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+        },
     }  
     
     const { securitiesList } = useSelector((state) => state.securities);
@@ -99,7 +103,7 @@ function SecuritiesSummary() {
                                     <Typography variant="p" sx={{ fontSize: 12, mr: 1 }} color="#9197A4">
                                         1D Change
                                     </Typography>
-                                    <Typography variant="p" sx={{ fontSize: 12 }} style={ securitiesList["1_day_change"] < 0 ? styles.negative : styles.positive } >
+                                    <Typography variant="p" sx={{ fontSize: 12 }} style={ securitiesList["1_day_change"] < 0 ? styles.RedGradientText : styles.GreenGradientText } >
                                         { securitiesList["1_day_change"] < 0 && <ArrowDownIcon style={ styles.arrowIcon } />}
                                         { securitiesList["1_day_change"] >= 0 && <ArrowUpIcon style={ styles.arrowIcon } />}
                                         
@@ -117,7 +121,7 @@ function SecuritiesSummary() {
                                 <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#4B4948">
                                     OVERALL RETURNS
                                 </Typography>
-                                <Typography sx={{ fontSize: 14, fontWeight:"bold" }} color="#109878" style={ securitiesList["overall_return_SGD"] < 0 ? styles.negative : styles.positive }>
+                                <Typography sx={{ fontSize: 14, fontWeight:"bold" }} color="#109878" style={ securitiesList["overall_return_SGD"] < 0 ? styles.RedGradientText : styles.GreenGradientText }>
                                     { securitiesList["overall_return_SGD"] < 0 && <ArrowDownIcon style={ styles.arrowIcon } />}
                                     { securitiesList["overall_return_SGD"] >= 0 && <ArrowUpIcon style={ styles.arrowIcon } />}
                                     
@@ -186,9 +190,9 @@ function SecuritiesSummary() {
                                             </Typography>
                                         </Typography>
                                         
-                                        <Typography variant="p" sx={{ fontSize: 12 }} textAlign="end" color="#9197A4">
+                                        <Typography variant="p" sx={{ fontSize: 12 }} textAlign="end" color={ theme.palette.secondary.main }>
                                             Qty {item.qty}
-                                            <Typography variant="p" sx={{ fontSize: 12, fontWeight:"regular", ml: 2 }} style={ item["1_day_change_per_each"] < 0 ? styles.negative : styles.positive }>
+                                            <Typography variant="p" sx={{ fontSize: 12, fontWeight:"regular", ml: 2 }} style={ item["1_day_change_per_each"] < 0 ? styles.RedGradientText : styles.GreenGradientText }>
                                                 { item["1_day_change_per_each"] < 0 && <ArrowDownIcon style={ styles.arrowIcon } />}
                                                 { item["1_day_change_per_each"] >= 0 && <ArrowUpIcon style={ styles.arrowIcon } />}
                                                 
@@ -201,7 +205,7 @@ function SecuritiesSummary() {
                                         <Typography variant="p" sx={{ fontSize: 14 }} color={ theme.palette.secondary.main }>
                                             
                                             { `US$${ item["current_price_USD"].toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` }
-                                            <Typography variant="p" sx={{ fontSize: 12, fontWeight:"regular", ml: 2 }} style={ item["change_rate"] < 0 ? styles.negative : styles.positive } >
+                                            <Typography variant="p" sx={{ fontSize: 12, fontWeight:"regular", ml: 2 }} style={ item["change_rate"] < 0 ? styles.RedGradientText : styles.GreenGradientText } >
                                                {item.change_rate.toFixed(2)}%
                                             </Typography>
                                         </Typography>

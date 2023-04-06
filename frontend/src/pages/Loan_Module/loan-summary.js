@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import moment from 'moment';
 
 // MUI Components
@@ -32,7 +32,13 @@ function LoanSummary() {
 
         label: {
             fontWeight: "bold",
-            color: "#4B4948",
+            color: theme.palette.secondary.main,
+            fontSize: "18px"
+        },
+
+        smallerLabel: {
+            fontWeight: "bold",
+            color: theme.palette.secondary.main,
             fontSize: "16px"
         },
 
@@ -67,18 +73,6 @@ function LoanSummary() {
             fontSize: "16px"
         }
     }
-
-    /*const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-        height: 20,
-        borderRadius: 5,
-        [`&.${linearProgressClasses.colorPrimary}`]: {
-          backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
-        },
-        [`& .${linearProgressClasses.bar}`]: {
-          borderRadius: 5,
-          backgroundColor: theme.palette.mode === 'light' ? 'linear-gradient(to top right, #E69F9F, #E60000)' : 'linear-gradient(to top right, #E69F9F, #E60000)',
-        },
-    }));*/
 
     // Change State of page
     const [show, setShow] = useState(false);

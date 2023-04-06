@@ -79,20 +79,14 @@ function LoanAccountDetails() {
 
         negative: {
             color: "#E60000"
-        }
-    }
+        },
 
-    const BorderLinearProgress = styled(LinearProgress) (({ theme }) => ({
-        height: 20,
-        borderRadius: 5,
-        [`&.${linearProgressClasses.colorPrimary}`]: {
-          backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
+        RedGradientText: {
+            background: "linear-gradient(to top right, #E60000, #E69F9F)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
         },
-        [`& .${linearProgressClasses.bar}`]: {
-          borderRadius: 5,
-          backgroundColor: theme.palette.mode === 'light' ? 'linear-gradient(to top right, #E69F9F, #E60000)' : 'linear-gradient(to top right, #E69F9F, #E60000)',
-        },
-    }));
+    }
 
     // Fetch Loan Account
     const navigate = useNavigate();
@@ -103,6 +97,8 @@ function LoanAccountDetails() {
     {
         return el.LoanAccountID === id
     })
+
+    console.log(loan_item)
 
     const monthly_payment = loan_item[0].Detail.monthly_payment
     const LoanAmount = loan_item[0].LoanAmount
@@ -145,13 +141,13 @@ function LoanAccountDetails() {
     // const display = []
 
     for(var i=monthDifference; i>0; i--){
-        var obj = {"month": "", "outstanding": ""}
+        var obj = {"month": "", "Outstanding": ""}
 
         obj["month"] = moment(r_date).format('MMM YYYY')
-        obj["outstanding"] = (Object.assign({}, schedule_for_payment[i]).end_balance).toFixed(2);
+        obj["Outstanding"] = (Object.assign({}, schedule_for_payment[i]).end_balance).toFixed(2);
         obj["Monthly_Repayment"] = monthly_payment.toFixed(2)
         obj["payment_due"] = moment(r_date).format('MMM 01, YYYY')
-        obj["total_paid"]= (LoanAmount - obj["outstanding"]).toFixed(2)
+        obj["total_paid"]= (LoanAmount - obj["Outstanding"]).toFixed(2)
 
         const completion = moment.duration((moment(LoanMaturity)).diff((moment(r_date))));
 
@@ -229,7 +225,7 @@ function LoanAccountDetails() {
                             <YAxis />
                             <CartesianGrid strokeDasharray="3 3" />
                             <Tooltip />
-                            <Area type="step" dataKey="outstanding" stroke="#E60000" fillOpacity={1} fill="url(#colorUv)" activeDot={{ r:8, onClick: handleChart }}/>
+                            <Area type="step" dataKey="Outstanding" stroke="#E60000" fillOpacity={1} fill="url(#colorUv)" activeDot={{ r:8, onClick: handleChart }}/>
                         </AreaChart>
                         </ResponsiveContainer>
                         {selectedMonth!=="" && 
@@ -240,7 +236,7 @@ function LoanAccountDetails() {
                                         <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#9197A4">
                                             TOTAL LOAN AMOUNT
                                         </Typography>
-                                        <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} >
+                                        <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} color={ theme.palette.secondary.main }>
                                             SGD ${totalLoanAmount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                         </Typography>
                                     </Grid>
@@ -248,7 +244,7 @@ function LoanAccountDetails() {
                                         <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#9197A4">
                                             TIME TO COMPLETION
                                         </Typography>
-                                        <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }}>
+                                        <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} color={ theme.palette.secondary.main }>
                                             {timeToCompletion}
                                         </Typography>
                                     </Grid>
@@ -256,20 +252,27 @@ function LoanAccountDetails() {
 
                                 <Grid container direction="row" justifyContent="space-between" alignItems="center" sx={{mt:1, mb: 2}}>
                                     <Grid xs={12}>
-                                        <BorderLinearProgress variant="determinate" value={progress} />
+                                        <LinearProgress variant="determinate" value={progress}  sx={{
+                                            height: 20,
+                                            borderRadius: 5,    
+                                            background: "#F2F2F2",
+                                            "& .MuiLinearProgress-bar": {
+                                            backgroundColor: "linear-gradient(to top right, #E60000, #E69F9F)"
+                                            }
+                                        }}/>
+                                        {/* <BorderLinearProgress variant="determinate" value={progress} /> */}
                                         <Typography sx={{ fontSize: 14, fontWeight:"bold", textAlign: "center" }} color="#E60000">
                                             {progress.toFixed(2)}%
                                         </Typography>
                                     </Grid>
                                 </Grid>
                                 
-
                                 <Grid container direction="row" justifyContent="space-between" alignItems="center">
                                     <Grid xs={6}>
                                         <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#9197A4">
                                             TOTAL PAID
                                         </Typography>
-                                        <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} >
+                                        <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} color={ theme.palette.secondary.main }>
                                             SGD ${totalPaid.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                         </Typography>
                                     </Grid>
@@ -277,7 +280,7 @@ function LoanAccountDetails() {
                                         <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#9197A4">
                                             OUTSTANDING
                                         </Typography>
-                                        <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }}>
+                                        <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} color={ theme.palette.secondary.main }>
                                             SGD ${outstanding.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                         </Typography>
                                     </Grid>
@@ -288,7 +291,7 @@ function LoanAccountDetails() {
                                         <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#9197A4">
                                            MONTHLY REPAYMENT
                                         </Typography>
-                                        <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} >
+                                        <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} color={ theme.palette.secondary.main }>
                                             SGD ${monthlyRepayment.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                         </Typography>
                                     </Grid>
@@ -296,7 +299,7 @@ function LoanAccountDetails() {
                                         <Typography sx={{ fontSize: 10, fontWeight:"bold" }} color="#9197A4">
                                             PAYMENT DUE
                                         </Typography>
-                                        <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }}>
+                                        <Typography sx={{ fontSize: 14, fontWeight:"bold", mb: 1 }} color={ theme.palette.secondary.main }>
                                             {paymentDue}
                                         </Typography>
                                     </Grid>
@@ -306,8 +309,7 @@ function LoanAccountDetails() {
                         </CardContent>} 
                     </Card>
 
-                    
-
+                    {/* Repayment History */}
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
                         <Typography style={ styles.label } variant="h6">Repayment History</Typography>
                         <WhiteReusableButton function={ handleViewAll } buttonText="VIEW ALL" />
@@ -321,7 +323,7 @@ function LoanAccountDetails() {
                                         <Typography sx={{ fontSize: 16, fontWeight:"bold" }} color="#4B4948">
                                             UBS - {index+1}
                                         </Typography>
-                                        <Typography style={ styles.negative } sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="#4B4948">
+                                        <Typography style={ styles.RedGradientText } sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end">
                                             { `- SGD $${ monthly_payment.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }` }
                                         </Typography>
                                     </Grid>

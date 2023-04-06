@@ -41,7 +41,8 @@ function PaymentReminders() {
 
         boldLabel: {
             fontSize: 14,
-            fontWeight: "bold"
+            fontWeight: "bold",
+            color: theme.palette.secondary.main 
         },
 
         modal: {
@@ -182,7 +183,7 @@ function PaymentReminders() {
                     { loan_item.map((value, index) => {
                         return (
                             <>
-                            <Typography sx={{ fontWeight: "bold", color: "#4B4948", fontSize: "16px", mb:2}} variant="h6"> { value.AccountName.toUpperCase() }</Typography>
+                            <Typography sx={{ fontWeight: "bold", color: theme.palette.secondary.main, fontSize: "16px", mb:2}} variant="h6"> { value.AccountName.toUpperCase() }</Typography>
                             
                             <Card style={ styles.card } elevation={ 4 }>
                                  
@@ -200,7 +201,7 @@ function PaymentReminders() {
                                             <Typography style={ styles.label } color={ theme.palette.primary.main }>
                                                 MONTHLY REPAYMENT
                                             </Typography>
-                                            <Typography style={ styles.boldLabel } color="#black">
+                                            <Typography style={ styles.boldLabel } color={ theme.palette.secondary.main }>
                                                 ${ value.Detail.monthly_payment.toLocaleString("en-US") }
                                             </Typography>
                                         </Grid>
@@ -210,7 +211,7 @@ function PaymentReminders() {
                                                     return (
                                                         <>
                                                             <Paper elevation={ 5 } sx={{ p: 1, borderRadius: 10, mt: 3 }}>
-                                                                <Grid key={index} container direction="row" justifyContent="space-between" alignItems="center" sx={{ fontWeight: "bold" }}>
+                                                                <Grid key={index} container direction="row" justifyContent="space-between" alignItems="center" sx={{ fontWeight: "bold" }} color={ theme.palette.secondary.main }>
                                                                     {reminder.ReminderType}
                                                                     <DeleteIcon onClick={()=>handleDelete(reminder)}/>
                                                                 </Grid>

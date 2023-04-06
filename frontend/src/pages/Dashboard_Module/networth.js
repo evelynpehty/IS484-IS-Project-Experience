@@ -23,18 +23,9 @@ import WhiteReusableButton from "../../components/WhiteButton";
 
 // Recharts Components
 import {
-    AreaChart,
-    ResponsiveContainer,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip,
-    Area,
     PieChart, 
     Pie,
     Cell,
-    Label,
-    LabelList
   } from "recharts";
 
 function NetWorth() {
@@ -165,32 +156,6 @@ function NetWorth() {
         }
       ]); 
 
-     console.log(savings)
-     console.log(securities)
-
-     console.log(loans)
-    
-    /*useEffect(()=>{
-        // PIE CHART DATA
-        const tempPieData = [
-            {
-              "name": "Securities",
-              "value": securities,
-            },
-            {
-              "name": "Savings",
-              "value": savings,
-            },
-            {
-                "name": "Loans",
-                "value": loans,
-            }
-          ];
-        setPieData(tempPieData)
-    },[])*/
-
-
-
     const [show, setShow] = useState(false);
     function handleTooltip() {
         setShow(prev => !prev);
@@ -214,7 +179,7 @@ function NetWorth() {
 
                     {/* PIE CHART */}
                     <div style={ styles.wrapper }>
-                        <PieChart width={390} height={300}>
+                        <PieChart width={358} height={300}>
                             <defs>
                                 {pieData.map((entry, index) => (
                                     <linearGradient id={`myGradient${index}`}>
@@ -269,7 +234,7 @@ function NetWorth() {
 
                     {/*Assets*/}
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
-                        <Typography sx={ {fontColor:"#4B4948", fontSize:"14px", fontWeight: "medium"} } variant="h6">Assets</Typography>
+                        <Typography sx={{fontSize:"14px", fontWeight: "bold"} } color={ theme.palette.secondary.main }>Assets</Typography>
                     </Grid>
 
                     <Grid container spacing={2} columns={12} alignItems="stretch">
