@@ -93,7 +93,7 @@ function SecuritiesSummary() {
                                     CURRENT HOLDINGS
                                 </Typography>
                                 <Typography sx={{ fontSize: 20, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
-                                    { `S$${ securitiesList.crr_holding_SGD.toFix.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }` }
+                                    { `S$${ securitiesList.crr_holding_SGD.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }` }
                                 </Typography>
                                 <Grid xs={12}>
                                     <Typography variant="p" sx={{ fontSize: 12, mr: 1 }} color="#9197A4">

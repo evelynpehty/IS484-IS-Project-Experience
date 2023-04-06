@@ -203,7 +203,9 @@ function ManageWatchList() {
                     {watchList.map((item, index) => {
                         return (
                             <>
-                                <Card style={ styles.card2 } elevation={ 4 }>
+                                {item.WatchlistGroupName !== "None" &&
+
+                                    <Card style={ styles.card2 } elevation={ 4 }>
                                     <CardContent style={ styles.cardContent }>
                                         <Grid container style={ styles.grid } justifyContent="center">
                                             <Grid xs={ 8 }>
@@ -224,7 +226,9 @@ function ManageWatchList() {
                                             <Button variant="text" sx={{ fontSize: 16, fontWeight:"bold", color:"#E60000" }}  onClick={()=>handleDeleteOpen(item.WatchlistID)}> Delete Group</Button>
                                         </Box>
                                     </CardContent>
-                                </Card>
+                                    </Card>
+
+                                }
                             </>
                             
                         )

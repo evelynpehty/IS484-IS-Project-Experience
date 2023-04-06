@@ -113,7 +113,7 @@ function LoanSummary() {
             const monthDifference =  Math.ceil(moment(new Date(r_date)).diff(new Date(element.LoanStartDate), 'months', true));
             const schedule_for_payment = element.Detail.schedule_for_payment
             const end_balance = (schedule_for_payment[monthDifference].end_balance)
-            element["end_balance"] = end_balance
+            element["end_balance"] = end_balance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
             const total_paid = (element.LoanAmount - end_balance)
             element["progress"]= (total_paid/ element.LoanAmount) * 100     
             
@@ -260,7 +260,7 @@ function LoanSummary() {
                                                 Outstanding Amount
                                             </Typography>
                                             <Typography sx={{ fontSize: 16, fontWeight: "thin" }} textAlign="end" color="white">
-                                                { `SGD $${ item.end_balance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` }
+                                                { `SGD $${ item.end_balance}` }
                                             </Typography>
                                         </CardContent>
                                     </Card>
