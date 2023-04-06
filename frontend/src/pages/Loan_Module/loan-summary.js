@@ -162,7 +162,7 @@ function LoanSummary() {
                         >
                             <Card style={styles.card2}>
                                 <CardContent sx={{ pt: "24px", textAlign: "center" }}>
-                                    <Calculator className="small-icon" />
+                                    <Calculator />
                                     <Typography sx={{ fontSize: 10, fontWeight: "bold" }} color="text.secondary" gutterBottom>
                                         Net Worth
                                     </Typography>
@@ -170,7 +170,7 @@ function LoanSummary() {
                             </Card>
                             <Card style={styles.card2}>
                                 <CardContent sx={{ pt: "24px", textAlign: "center" }}>
-                                    <Repayment className="small-icon" />
+                                    <Repayment />
                                     <Typography sx={{ fontSize: 10, fontWeight: "bold" }} color="text.secondary" gutterBottom>
                                         Repayments
                                     </Typography>

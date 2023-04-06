@@ -79,6 +79,8 @@ function DepositSummary() {
     const { depositList, cashflow_this_month, totalBalance } = useSelector((state) => state.deposit);
     const [isEmpty, setIsEmpty] = useState(false);
 
+    console.log(cashflow_this_month)
+
     if(depositList.length === 0){
         setIsEmpty(true)
     }

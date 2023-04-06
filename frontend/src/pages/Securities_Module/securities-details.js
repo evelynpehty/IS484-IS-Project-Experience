@@ -74,6 +74,7 @@ function SecuritiesDetails() {
         card2: {
             marginBottom: "24px",
             borderRadius: "15px",
+            paddingTop: "34px",
             padding: 10
         },
 
@@ -101,6 +102,18 @@ function SecuritiesDetails() {
             overflow: "auto",
             paddingLeft: "16px",
             paddingRight: "16px"
+        },
+
+        GreenGradientText: {
+            background: "linear-gradient(to top right, #109878, #8AB8B2)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+        },
+
+        RedGradientText: {
+            background: "linear-gradient(to top right, #E60000, #E69F9F)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
         },
     }
       
@@ -301,7 +314,7 @@ function SecuritiesDetails() {
                                     <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
                                         PROFIT / LOSS
                                     </Typography>
-                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#109878" }}>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold" }} style={ styles.GreenGradientText }>
                                         + S$175.18
                                     </Typography>
                                 </Grid>
@@ -320,12 +333,12 @@ function SecuritiesDetails() {
                                         1D CHANGE
                                     </Typography>
                                     { securities_item[0]["1_day_change_per_each"] >= 0 &&
-                                        <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#109878" }}>
+                                        <Typography sx={{ fontSize: 16, fontWeight:"bold" }} style={ styles.GreenGradientText }>
                                             S${securities_item[0]["1_day_change_per_each"].toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }
                                         </Typography>
                                     }
                                     { securities_item[0]["1_day_change_per_each"] < 0 &&
-                                        <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#E60000" }}>
+                                        <Typography sx={{ fontSize: 16, fontWeight:"bold"}} style={ styles.RedGradientText }>
                                             - S${securities_item[0]["1_day_change_per_each"].toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }
                                         </Typography>
                                     }
@@ -339,7 +352,7 @@ function SecuritiesDetails() {
 
 
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
-                        <Typography style={ styles.label } variant="h6">Overview</Typography>
+                        <Typography style={ styles.label }>Performance</Typography>
                         <WhiteReusableButton function={ handleViewStock } buttonText="VIEW DETAILS" />
                     </Grid>
                     <Card style={ styles.card2 } elevation={ 4 }>

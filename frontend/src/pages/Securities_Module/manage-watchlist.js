@@ -70,7 +70,23 @@ function ManageWatchList() {
         modalHeader: {
             fontSize: "18px",
             fontWeight: "bold",
-            color: theme.palette.primary.main
+            background: "linear-gradient(to top right, #E60000, #E69F9F)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+        },
+
+        button: {
+            fontSize: 14,
+            textTransform: "initial",
+            background: "linear-gradient(to top right, #E60000, #E69F9F)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+        },
+
+        RedGradientText: {
+            background: "linear-gradient(to top right, #E60000, #E69F9F)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
         }
     }
 
@@ -223,7 +239,7 @@ function ManageWatchList() {
                                             </Grid>
                                         </Grid>
                                         <Box display="flex" justifyContent="flex-end" alignItems="flex-end">
-                                            <Button variant="text" sx={{ fontSize: 16, fontWeight:"bold", color:"#E60000" }}  onClick={()=>handleDeleteOpen(item.WatchlistID)}> Delete Group</Button>
+                                            <Button variant="text" sx={{ fontSize: 16, fontWeight:"bold" }} onClick={()=>handleDeleteOpen(item.WatchlistID)} style={ styles.RedGradientText }> Delete Group</Button>
                                         </Box>
                                     </CardContent>
                                     </Card>
@@ -246,25 +262,25 @@ function ManageWatchList() {
                                 Rename Group
                             </Typography>
                             <Grid container direction="row" justifyContent="space-between" alignItems="center">
-                                <Grid>
-                                <FormControl variant="standard" sx={{ m: 1, width: "80%" }}>           
-                                    <TextField
-                                        required
-                                        id="NewGroupName"
-                                        name='NewGroupName'
-                                        label="New Group Name"
-                                        value={newGroupName}
-                                        onChange={onChangeNewGroupName}
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                        variant="standard"    
-                                    />
-                                </FormControl>
+                                <Grid xs={12}>
+                                    <FormControl variant="standard" sx={{ mt: 1, width: "100%" }}>           
+                                        <TextField
+                                            required
+                                            id="NewGroupName"
+                                            name='NewGroupName'
+                                            label="New Group Name"
+                                            value={newGroupName}
+                                            onChange={onChangeNewGroupName}
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            variant="standard"  
+                                        />
+                                    </FormControl>
                                 </Grid>
                             </Grid>
                         
-                            <Grid container direction="row" justifyContent="end" alignItems="center">
+                            <Grid container direction="row" justifyContent="end" alignItems="center" sx={{ mt: 2 }}>
                                 <NeutralButton function={ handleEditClose } text="CANCEL" />
                                 <NeutralButton text="OK" function={ handleEdit }/>
                             </Grid>
@@ -299,11 +315,14 @@ function ManageWatchList() {
 
                     {/* ADD Modal */}
                     <Grid xs={12} sx={{ mt: 3 }}>
-                        <Box onClick={ handleCreateOpen }>       
+                        <Button style={ styles.button } onClick={ handleCreateOpen } startIcon={<AddIcon />}>Create New Group</Button>
+                    </Grid>
+                    <Grid xs={12} sx={{ mt: 3 }}>
+                        {/* <Box onClick={ handleCreateOpen }>       
                             <Typography sx={{ fontSize: 14, fontWeight:"bold", color:"#E60000" }}>
                                  <AddIcon /> Create New Group
                             </Typography>
-                        </Box>
+                        </Box> */}
                         <Modal
                             open={createOpen}
                             onClose={handleCreateClose}

@@ -36,7 +36,10 @@ function PaymentReminders() {
 
         label: {
             fontSize: 12,
-            fontWeight: "bold"
+            fontWeight: "bold",
+            background: "linear-gradient(to top right, #E60000, #E69F9F)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
         },
 
         boldLabel: {
@@ -60,7 +63,9 @@ function PaymentReminders() {
         modalHeader: {
             fontSize: "18px",
             fontWeight: "bold",
-            color: theme.palette.primary.main
+            background: "linear-gradient(to top right, #E60000, #E69F9F)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
         }
     }
 

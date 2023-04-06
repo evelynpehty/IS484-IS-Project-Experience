@@ -175,7 +175,7 @@ function LoanAccountDetails() {
         const datapoint = payload.payload
         setSelectedMonth(datapoint["month"])
         setTotalPaid(datapoint["total_paid"])
-        setOutstanding(datapoint["outstanding"])
+        setOutstanding(datapoint["Outstanding"])
         setMonthlyRepayment(datapoint["Monthly_Repayment"])
         setPaymentDue(datapoint["payment_due"])
         setTimeToCompletion(datapoint["time_to_completion"])

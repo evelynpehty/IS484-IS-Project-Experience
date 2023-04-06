@@ -81,6 +81,26 @@ function ViewWatchList() {
             color: "white",
             background: "linear-gradient(to top right, #8AB8B2, #109877)"
         },
+
+        RedGradientText: {
+            background: "linear-gradient(to top right, #E60000, #E69F9F)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+        },
+
+        GreenGradientText: {
+            background: "linear-gradient(to top right, #109878, #8AB8B2)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+        },
+
+        button: {
+            fontSize: 14,
+            textTransform: "initial",
+            background: "linear-gradient(to top right, #E60000, #E69F9F)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+        }
     }
 
 
@@ -168,7 +188,7 @@ function ViewWatchList() {
                                                         }}
                                                         title= { 
                                                             <div> 
-                                                                <Typography sx={{ fontSize: 10, fontWeight: "bold", color: theme.palette.primary.main }}>P&L Analysis</Typography>
+                                                                <Typography sx={{ fontSize: 10, fontWeight: "bold" }} style = { styles.RedGradientText }>P&L Analysis</Typography>
                                                                 <Typography sx={{ fontSize: 10, color: theme.palette.secondary.main }}>Recommended entry/exit prices</Typography>
                                                             </div> 
                                                         }
@@ -183,17 +203,17 @@ function ViewWatchList() {
                                                     >
                                                         <Grid container direction="row" justifyContent="space-between">
                                                             {/* First 12 grids */}
-                                                            <Grid xs={3} sx={{m: "auto" }}>
+                                                            <Grid xs={4}>
                                                                 <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color={theme.palette.secondary.main}>{value.ticker}</Typography>
                                                             </Grid>
 
-                                                            <Grid xs={3} textAlign="end" sx={{ margin: "auto" }}>
+                                                            <Grid xs={3} textAlign="end">
                                                                 <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color={theme.palette.secondary.main}>
                                                                    {`$${getCurrentPrice(value.ticker).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                                                                 </Typography>
                                                             </Grid>
                                                             
-                                                            <Grid xs={6} textAlign="end" sx={{ mb: 1 }}>
+                                                            <Grid xs={5} textAlign="end" sx={{ mb: 1 }}>
                                                                 <Typography sx={{ fontSize: 12 }} color="#979797" onClick={ handleTooltip }>
                                                                     ENTRY
                                                                     {/* Styling code for grey chip is styles.greyChip */}
@@ -204,45 +224,43 @@ function ViewWatchList() {
                                                             </Grid>
 
                                                             {/* Second 12 grids */}
-                                                            <Grid xs={3} sx={{ margin: "auto" }}>
+                                                            <Grid xs={4} sx={{ mt: "3px" }}>
                                                                 <Typography sx={{ fontSize: 12 }} color={theme.palette.secondary.main}>{value.tickerName}</Typography>
                                                             </Grid>
 
-                                                            <Grid xs={3} textAlign="end" sx={{ margin: "auto" }}>
+                                                            <Grid xs={3} textAlign="end" sx={{ mt: "3px" }}>
                                                                 <Typography sx={{ fontSize: 12 }} color="#979797">
                                                                     1D
-                                                                    <Typography sx={{ fontSize: 12, ml: 1 }} variant="p" color={ ( getChange(value.ticker) < 0) ? styles.negative : styles.positive }>
+                                                                    <Typography sx={{ fontSize: 12, ml: 1 }} variant="p" color={ ( getChange(value.ticker) < 0) ? styles.RedGradientText : styles.GreenGradientText }>
                                                                         {`${getChange(value.ticker)}%`}
                                                                     </Typography>
                                                                     
                                                                 </Typography>
                                                             </Grid>
 
-                                                            <Grid xs={6} textAlign="end">
+                                                            <Grid xs={5} textAlign="end">
                                                                 <Typography sx={{ fontSize: 12 }} color="#979797">
                                                                     EXIT
                                                                     {/* Styling code for grey chip is styles.greyChip */}
                                                                     {value.exit >= getCurrentPrice(value.ticker) && <Chip sx={{ ml: 1 }} style={ styles.greyChip } size="small" label={`$${value.exit.toFixed(2)}`}></Chip>}
                                                                     {value.exit < getCurrentPrice(value.ticker) && <Chip sx={{ ml: 1 }} style={ styles.redChip } size="small" label={`$${value.exit.toFixed(2)}`}></Chip>}
-
-
                                                                 </Typography>
                                                             </Grid>
                                                         </Grid>
                                                     </LightTooltip>}
                                                     {(index !== 0 || i!==0) && <Grid container direction="row" justifyContent="space-between">
                                                             {/* First 12 grids */}
-                                                            <Grid xs={3} sx={{m: "auto" }}>
+                                                            <Grid xs={4}>
                                                                 <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color={theme.palette.secondary.main}>{value.ticker}</Typography>
                                                             </Grid>
 
-                                                            <Grid xs={3} textAlign="end" sx={{ margin: "auto" }}>
+                                                            <Grid xs={3} textAlign="end">
                                                                 <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color={theme.palette.secondary.main}>
                                                                    {`$${getCurrentPrice(value.ticker).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                                                                 </Typography>
                                                             </Grid>
                                                             
-                                                            <Grid xs={6} textAlign="end" sx={{ mb: 1 }}>
+                                                            <Grid xs={5} textAlign="end" sx={{ mb: 1 }}>
                                                                 <Typography sx={{ fontSize: 12 }} color="#979797" onClick={ handleTooltip }>
                                                                     ENTRY
                                                                     {/* Styling code for grey chip is styles.greyChip */}
@@ -253,11 +271,11 @@ function ViewWatchList() {
                                                             </Grid>
 
                                                             {/* Second 12 grids */}
-                                                            <Grid xs={3} sx={{ margin: "auto" }}>
+                                                            <Grid xs={4} sx={{ mt: "3px" }}>
                                                                 <Typography sx={{ fontSize: 12 }} color={theme.palette.secondary.main}>{value.tickerName}</Typography>
                                                             </Grid>
 
-                                                            <Grid xs={3} textAlign="end" sx={{ margin: "auto" }}>
+                                                            <Grid xs={3} textAlign="end" sx={{ mt: "3px" }}>
                                                                 <Typography sx={{ fontSize: 12 }} color="#979797">
                                                                     1D
                                                                     <Typography sx={{ fontSize: 12, ml: 1 }} variant="p" color={ ( getChange(value.ticker) < 0) ? styles.negative : styles.positive }>
@@ -267,14 +285,12 @@ function ViewWatchList() {
                                                                 </Typography>
                                                             </Grid>
 
-                                                            <Grid xs={6} textAlign="end">
+                                                            <Grid xs={5} textAlign="end">
                                                                 <Typography sx={{ fontSize: 12 }} color="#979797">
                                                                     EXIT
                                                                     {/* Styling code for grey chip is styles.greyChip */}
                                                                     {value.exit >= getCurrentPrice(value.ticker) && <Chip sx={{ ml: 1 }} style={ styles.greyChip } size="small" label={`$${value.exit.toFixed(2)}`}></Chip>}
                                                                     {value.exit < getCurrentPrice(value.ticker) && <Chip sx={{ ml: 1 }} style={ styles.redChip } size="small" label={`$${value.exit.toFixed(2)}`}></Chip>}
-
-
                                                                 </Typography>
                                                             </Grid>
                                                         </Grid>}
@@ -294,7 +310,7 @@ function ViewWatchList() {
                         )
                     })}
                     <Grid xs={12} sx={{ mt: 3 }}>
-                        <Button onClick={ handleAddSecurities } startIcon={<AddIcon />}>Add Securities</Button>
+                        <Button style={ styles.button } onClick={ handleAddSecurities } startIcon={<AddIcon />}>Add Securities</Button>
                     </Grid>
                     {/* Mapping ends here */}
                 </Box>

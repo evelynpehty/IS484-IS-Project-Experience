@@ -1,7 +1,7 @@
-<svg width="8" height="9" viewBox="0 0 8 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M4 8L0.5 5M4 8L7.5 5M4 8L4 1" stroke="url(#paint0_linear_1071_9248)" stroke-linecap="round" stroke-linejoin="round"/>
+<svg width="16" height="16" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M8 12.6667L4 8.66666M8 12.6667L12 8.66666M8 12.6667L8 3.33333" stroke="url(#paint0_linear_1603_10724)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 <defs>
-<linearGradient id="paint0_linear_1071_9248" x1="0.499999" y1="7.7375" x2="7.5" y2="1" gradientUnits="userSpaceOnUse">
+<linearGradient id="paint0_linear_1603_10724" x1="4" y1="12.3167" x2="13.17" y2="4.75145" gradientUnits="userSpaceOnUse">
 <stop stop-color="#E60000"/>
 <stop offset="1" stop-color="#E69F9F"/>
 </linearGradient>

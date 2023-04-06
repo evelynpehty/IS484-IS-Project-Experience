@@ -47,6 +47,7 @@ function StockDetails() {
             color: theme.palette.secondary.main,
             fontSize: "16px"
         },
+
         modal: {
             position: 'absolute',
             top: '50%',
@@ -62,8 +63,11 @@ function StockDetails() {
         modalHeader: {
             fontSize: "18px",
             fontWeight: "bold",
-            color: theme.palette.primary.main
+            background: "linear-gradient(to top right, #E60000, #E69F9F)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
         },
+
         chipSelected: {
             backgroundColor:theme.palette.secondary.light,
         }, 
@@ -71,23 +75,42 @@ function StockDetails() {
         chipUnSelected: {
             backgroundColor: theme.palette.neutral.main,
         },
+
         stackChip: {
             overflow: "auto",
             paddingLeft: "16px",
             paddingRight: "16px"
         },
+
+        card: {
+            marginBottom: "24px",
+            borderRadius: "10px",
+            padding: "24px"
+        },
+
         card2: {
             marginTop: "24px",
             marginBottom: "24px",
-            marginLeft: "16px",
-            marginRight: "16px",
-            borderRadius: "15px",
-            padding: 10
+            borderRadius: "10px",
+            paddingTop: 24,
+            paddingRight: 10
         },
 
         cardContent2: {
             paddingBottom: "16px",
             borderBottom: "1px dashed #BFBFBF"
+        },
+
+        GreenGradientText: {
+            background: "linear-gradient(to top right, #109878, #8AB8B2)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+        },
+
+        RedGradientText: {
+            background: "linear-gradient(to top right, #E60000, #E69F9F)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
         },
     }
 
@@ -348,8 +371,8 @@ function StockDetails() {
                             </AreaChart>
                         </ResponsiveContainer>
 
-                        <CardContent>                     
-                            <Grid container justifyContent="center" sx={{mt:2}}> 
+                        <CardContent sx={{ pb: "16px" }}>                     
+                            <Grid container justifyContent="center" sx={{ mt: 2 }}> 
                                 <Stack direction="row" spacing={1} style={ styles.stackChip }>
                                     {
                                         chipValue.map((item, index) => {
@@ -364,7 +387,7 @@ function StockDetails() {
                                     <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
                                         LAST PRICE
                                     </Typography>
-                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color: theme.palette.secondary.main }}>
                                         ${display.currentPrice}
                                     </Typography>
                                 </Grid>
@@ -372,14 +395,14 @@ function StockDetails() {
                                     <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
                                         CHANGE
                                     </Typography>   
-                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color: theme.palette.secondary.main }}>
                                         { display["1_day_change_in_price"] >= 0 &&
-                                        <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#109878" }}>
+                                        <Typography sx={{ fontSize: 16, fontWeight:"bold" }} style={ styles.GreenGradientText }>
                                             ${display["1_day_change_in_price"].toFixed(2)}
                                         </Typography>
                                         }
                                         { display["1_day_change_in_price"] < 0 &&
-                                        <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#E60000" }}>
+                                        <Typography sx={{ fontSize: 16, fontWeight:"bold"}} style={ styles.RedGradientText }>
                                         - ${display["1_day_change_in_price"].toFixed(2)}
                                         </Typography>
                                         } 
@@ -389,16 +412,16 @@ function StockDetails() {
                                     <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
                                         % CHANGE
                                     </Typography>
-                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
+                                    <Typography sx={{ fontSize: 16, fontWeight:"bold", color: theme.palette.secondary.main }}>
                                         
                                         { display["1_day_change_per_cent"] >= 0 &&
-                                        <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#109878" }}>
+                                        <Typography sx={{ fontSize: 16, fontWeight:"bold" }} style={ styles.GreenGradientText }>
                                             {display["1_day_change_per_cent"].toFixed(2)}%
                                         </Typography>
                                         }
                                         { display["1_day_change_per_cent"] < 0 &&
-                                            <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#E60000" }}>
-                                                - {display["1_day_change_per_cent"].toFixed(2)}%
+                                            <Typography sx={{ fontSize: 16, fontWeight:"bold" }} style={ styles.RedGradientText }>
+                                                {display["1_day_change_per_cent"].toFixed(2)}%
                                             </Typography>
                                         } 
                                     </Typography>
@@ -435,7 +458,7 @@ function StockDetails() {
                     <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
                         <Typography style={ styles.label } variant="h6">Summary</Typography>
                     </Grid>
-                    <Card style={ styles.card2 }>
+                    <Card style={ styles.card }>
                         <CardContent style={ styles.cardContent }>
                         <Grid container direction="row" justifyContent="space-between" alignItems="center" >
                                 <Grid xs={6}>
@@ -446,7 +469,7 @@ function StockDetails() {
                                         {`$${((summary.marketCap)/1000000000).toFixed(2)}B`}
                                     </Typography>
                                 </Grid>
-                                <Grid xs={6}>
+                                <Grid xs={6} textAlign="end">
                                     <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
                                         MARKET VOL
                                     </Typography>
@@ -465,7 +488,7 @@ function StockDetails() {
                                         {summary.dividendDate === null && "No Date"}
                                     </Typography>
                                 </Grid>
-                                <Grid xs={6}>
+                                <Grid xs={6} textAlign="end">
                                     <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
                                        AVG VOL
                                     </Typography>
@@ -483,7 +506,7 @@ function StockDetails() {
                                         {`${summary["priceEpsCurrentYear_in_2dp"]}`}
                                     </Typography>
                                 </Grid>
-                                <Grid xs={6}>
+                                <Grid xs={6} textAlign="end">
                                     <Typography sx={{ fontSize: 12, color:"#979797", fontWeight:"bold" }}>
                                         EPS
                                     </Typography>
@@ -511,7 +534,7 @@ function StockDetails() {
                             Add to Group
                         </Typography>
                         <Grid container direction="row" justifyContent="space-between" alignItems="center">
-                            <FormControl variant="standard" sx={{ m: 1, width: "100%" }}>
+                            <FormControl variant="standard" sx={{mt: 1, width: "100%" }}>
                                 <Select
                                 value={group}
                                 onChange={onChangeGroup}
@@ -550,13 +573,13 @@ function StockDetails() {
                         </Typography>
                         <Grid container direction="row" justifyContent="space-between" alignItems="center">
                             <Grid>
-                                <Typography sx={{ fontSize: 14, color:"#4B4948", mt:1}}>
+                                <Typography sx={{ fontSize: 14, mt:1}} color={ theme.palette.secondary.main }>
                                     Are you sure you want to remove this security from your watchlist?
                                 </Typography>
                             </Grid>
                         </Grid>
                     
-                        <Grid container direction="row" justifyContent="end" alignItems="center">
+                        <Grid container direction="row" justifyContent="end" alignItems="center" sx={{ mt: 3 }}>
                             <NeutralButton function={ handleRemoveClose } text="CANCEL" />
                             <NeutralButton text="OK" function={ handleRemoveWatchList }/>
                         </Grid>

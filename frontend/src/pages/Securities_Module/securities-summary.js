@@ -13,7 +13,9 @@ import MainAppBar from "../../components/MainAppBar";
 import WhiteReusableButton from "../../components/WhiteButton";
 
 // Assets (Images & Icons)
+import { ReactComponent as ArrowUpSmallIcon } from "../../assets/icons/arrow-up-green-small.svg"
 import { ReactComponent as ArrowUpIcon } from "../../assets/icons/arrow-up-green.svg";
+import { ReactComponent as ArrowDownSmallIcon } from "../../assets/icons/arrow-down-red-small.svg"
 import { ReactComponent as ArrowDownIcon } from "../../assets/icons/arrow-down-red.svg";
 import { ReactComponent as CalculatorIcon } from "../../assets/icons/calculator-line-red.svg";
 import { ReactComponent as LinkIcon } from "../../assets/icons/link-line-red.svg";
@@ -30,7 +32,13 @@ function SecuritiesSummary() {
 
         label: {
             fontWeight: "bold",
-            color: "#4B4948",
+            color: theme.palette.secondary.main,
+            fontSize: "18px"
+        },
+
+        smallerLabel: {
+            fontWeight: "bold",
+            color: theme.palette.secondary.main,
             fontSize: "16px"
         },
 
@@ -46,15 +54,8 @@ function SecuritiesSummary() {
         },
 
         card2: {
-            marginTop: "24px",
-            marginBottom: "24px",
-            borderRadius: "15px",
-            padding: 10
-        },
-
-        cardContent2: {
-            paddingBottom: "16px",
-            borderBottom: "1px dashed #BFBFBF"
+            backgroundColor: theme.palette.neutral.main,
+            borderRadius: 10
         },
 
         GreenGradientText: {
@@ -89,7 +90,7 @@ function SecuritiesSummary() {
                 </Grid>
 
                 {/* Consolidated Securities Card */}
-                <Card style={ styles.card2 } elevation={ 4 }>
+                <Card style={ styles.card2 } sx={{ mb: "24px" }} elevation={ 4 }>
                     <CardContent style={ styles.cardContent }>
                         <Grid container direction="row" justifyContent="space-between" alignItems="center">
                             <Grid xs={8}>
@@ -103,10 +104,11 @@ function SecuritiesSummary() {
                                     <Typography variant="p" sx={{ fontSize: 12, mr: 1 }} color="#9197A4">
                                         1D Change
                                     </Typography>
-                                    <Typography variant="p" sx={{ fontSize: 12 }} style={ securitiesList["1_day_change"] < 0 ? styles.RedGradientText : styles.GreenGradientText } >
-                                        { securitiesList["1_day_change"] < 0 && <ArrowDownIcon style={ styles.arrowIcon } />}
-                                        { securitiesList["1_day_change"] >= 0 && <ArrowUpIcon style={ styles.arrowIcon } />}
-                                        
+                                    <Typography variant="p" >
+                                        { securitiesList["1_day_change"] < 0 && <ArrowDownSmallIcon />}
+                                        { securitiesList["1_day_change"] >= 0 && <ArrowUpSmallIcon />}                                    
+                                    </Typography>
+                                    <Typography variant="p" sx={{ fontSize: 12 }} style={ securitiesList["1_day_change"] < 0 ? styles.RedGradientText : styles.GreenGradientText }>
                                         { `S$${ securitiesList["1_day_change"].toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }` }
                                     </Typography>
                                 </Grid>       
@@ -133,7 +135,44 @@ function SecuritiesSummary() {
                 </Card>
 
                 {/* Quick Actions */}
-                <Grid container style={styles.grid} direction="row" justifyContent="space-between" alignItems="center">
+                <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
+                    <Typography style={ styles.smallerLabel } >Quick Actions</Typography> 
+                    <Box
+                        sx={{
+                            p: 1,
+                            display: 'grid',
+                            gridTemplateColumns: { xs: '1fr 1fr 1fr' },
+                            gap: 2,
+                        }}
+                    >
+                        <Card style={styles.card2}>
+                            <CardContent sx={{ pt: "24px", textAlign: "center" }}>
+                                <CalculatorIcon />
+                                <Typography sx={{ fontSize: 10, fontWeight: "bold" }} color="text.secondary" gutterBottom>
+                                    Net Worth
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                        <Card style={styles.card2}>
+                            <CardContent sx={{ pt: "24px", textAlign: "center" }}>
+                                <PnLIcon />
+                                <Typography sx={{ fontSize: 10, fontWeight: "bold" }} color="text.secondary" gutterBottom>
+                                    P&L Analysis
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                        <Card style={styles.card2}>
+                            <CardContent sx={{ pt: "24px", textAlign: "center" }}>
+                                <LinkIcon />
+                                <Typography sx={{ fontSize: 10, fontWeight: "bold" }} color="text.secondary" gutterBottom>
+                                    Link Accounts
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                    </Box>
+                </Grid>
+
+                {/* <Grid container style={styles.grid} direction="row" justifyContent="space-between" alignItems="center">
                     <Typography style={styles.label} variant="h6">Quick Actions</Typography>
                 </Grid>
                 <Box
@@ -168,11 +207,11 @@ function SecuritiesSummary() {
                             </Typography>
                         </CardContent>
                     </Card>
-                </Box>
+                </Box> */}
 
                 {/* Securities Holdings */}
                 <Grid container style={styles.grid} direction="row" justifyContent="space-between" alignItems="center">
-                    <Typography style={styles.label} variant="h6">Holdings</Typography>
+                    <Typography style={styles.smallerLabel}>Holdings</Typography>
                 </Grid>
 
 
@@ -180,7 +219,7 @@ function SecuritiesSummary() {
                     return  (
                         <>
                         <Link to={`/securities-details/${item.ticker}`} key={item.ticker}> 
-                             <Card style={ styles.card2 }>
+                             <Card style={ styles.card2 } sx={{ mb: "24px" }}>
                                 <CardContent>
                                     <Grid container direction="row" justifyContent="space-between" alignItems="center">
                                         <Typography variant="p" sx={{ fontSize: 16, fontWeight:"bold" }} color={ theme.palette.secondary.main }>
@@ -192,12 +231,15 @@ function SecuritiesSummary() {
                                         
                                         <Typography variant="p" sx={{ fontSize: 12 }} textAlign="end" color={ theme.palette.secondary.main }>
                                             Qty {item.qty}
-                                            <Typography variant="p" sx={{ fontSize: 12, fontWeight:"regular", ml: 2 }} style={ item["1_day_change_per_each"] < 0 ? styles.RedGradientText : styles.GreenGradientText }>
-                                                { item["1_day_change_per_each"] < 0 && <ArrowDownIcon style={ styles.arrowIcon } />}
-                                                { item["1_day_change_per_each"] >= 0 && <ArrowUpIcon style={ styles.arrowIcon } />}
-                                                
+                                            <Typography variant="p" sx={{ ml: 3 }}>
+                                                { item["1_day_change_per_each"] < 0 && <ArrowDownIcon />}
+                                                { item["1_day_change_per_each"] >= 0 && <ArrowUpIcon />}
+                                            </Typography>
+
+                                            <Typography variant="p" sx={{ fontSize: 12, fontWeight:"regular" }} style={ item["1_day_change_per_each"] < 0 ? styles.RedGradientText : styles.GreenGradientText }>
                                                 { `S$${ item["1_day_change_per_each"].toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` }
                                             </Typography>
+                                            
                                         </Typography>
                                         
                                     </Grid>
