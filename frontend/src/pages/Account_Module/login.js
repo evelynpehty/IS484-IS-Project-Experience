@@ -77,7 +77,7 @@ function SignIn() {
             const p7 = dispatch(userNetWorth(UserID))
             const p8 = dispatch(emergencySaving(UserID))
            
-            Promise.all([p1,p2,p3,p4,p5,p6,p7,p8]).then(()=>{
+            Promise.all([p1,p2,p3,p4,5,p6,p7,p8]).then(()=>{
                 dispatch(DataLoaded())
                 if(route){
                     setLoading(false)

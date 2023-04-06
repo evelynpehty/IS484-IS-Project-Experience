@@ -140,7 +140,7 @@ function DashBoard() {
                 <Container maxWidth="lg">
                     <Box sx={{ pt: 10, pb: 10 }}>
                         <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
-                            <Typography style={ styles.label } variant="h6">Deposit Accounts</Typography>
+                            <Typography style={ styles.label } variant="h6">My Dashboard</Typography>
                             <WhiteReusableButton function={ handleLogOut } buttonText="LOGOUT" />           
                         </Grid>
 
