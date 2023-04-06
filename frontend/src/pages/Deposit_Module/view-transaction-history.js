@@ -59,7 +59,7 @@ export default function ColorTabs() {
         },
 
         positive: {
-            color: theme.palette.other.sucess
+            color: theme.palette.other.success
         },
 
         negative: {
@@ -86,7 +86,8 @@ export default function ColorTabs() {
         stackChip: {
             overflow: "auto",
             paddingLeft: "16px",
-            paddingRight: "16px"
+            paddingRight: "16px",
+            marginBottom: "24px"
         },
         
         chipSelected: {
@@ -216,17 +217,7 @@ export default function ColorTabs() {
     const [searchText, setSearchText] = React.useState("");
     const handleSearch = (e) => {
         const text = e.target.value;
-        setSearchText(text);
-        /*
-        if(text !== ""){
-            const filteredData = transactionDisplay.filter((item) => {
-                return Object.values(item.transactionDescription).join('').toLowerCase().includes(text.toLowerCase())
-            })
-            setTransDisplay(filteredData)
-        } else{
-            handleFilter(transFilter)
-        }*/
-        
+        setSearchText(text);        
     };
 
     function filter_transaction_item(filter){
@@ -358,75 +349,39 @@ export default function ColorTabs() {
                 <Grid container style={ styles.grid } direction="row" justifyContent="space-between" alignItems="center">
                     <Typography style={ styles.label } variant="h6">All Transactions</Typography>
                     <div>
-                    <IconButton 
-                        style={ styles.iconButton } 
-                        ref={anchorRef}
-                        id="composition-button"
-                        // aria-controls={open ? 'composition-menu' : undefined}
-                        // aria-expanded={open ? 'true' : undefined}
-                        aria-haspopup="true"
-                        onClick={handleMenu}
-                        color="inherit"
-                    >
-                        <FilterIcon />
-                    </IconButton>
-                    <Menu
-                        id="menu-appbar"
-                        anchorEl={anchorEl}
-                        anchorOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        open={Boolean(anchorEl)}
-                        onClose={handleClose}
-                    >
-                        <MenuItem onClick={ () => handleFilter("All") }>All</MenuItem>
-                        <MenuItem style={ styles.positive } onClick={ () => handleFilter("Income") }>Income</MenuItem>
-                        <MenuItem style={ styles.negative } onClick={ () => handleFilter("Expense") }>Expenses</MenuItem>
-                    </Menu>
+                        <IconButton 
+                            style={ styles.iconButton } 
+                            ref={anchorRef}
+                            id="composition-button"
+                            // aria-controls={open ? 'composition-menu' : undefined}
+                            // aria-expanded={open ? 'true' : undefined}
+                            aria-haspopup="true"
+                            onClick={handleMenu}
+                            color="inherit"
+                        >
+                            <FilterIcon />
+                        </IconButton>
+                        <Menu
+                            id="menu-appbar"
+                            anchorEl={anchorEl}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={Boolean(anchorEl)}
+                            onClose={handleClose}
+                        >
+                            <MenuItem onClick={ () => handleFilter("All") }>All</MenuItem>
+                            <MenuItem style={ styles.positive } onClick={ () => handleFilter("Income") }>Income</MenuItem>
+                            <MenuItem style={ styles.negative } onClick={ () => handleFilter("Expense") }>Expenses</MenuItem>
+                        </Menu>
                     </div>
                 </Grid>
-
-                {/* <Grid container style={ styles.grid } direction="row" justifyContent="end" alignItems="center">                    
-                    <Popper
-                    open={open}
-                    anchorEl={anchorRef.current}
-                    role={undefined}
-                    placement="bottom-start"
-                    transition
-                    disablePortal
-                    >
-                    {({ TransitionProps, placement }) => (
-                        <Grow
-                        {...TransitionProps}
-                        style={{
-                            transformOrigin:
-                            placement === 'bottom-start' ? 'left top' : 'left bottom',
-                        }}
-                        >
-                        <Paper>
-                            <ClickAwayListener onClickAway={handleClose}>
-                            <MenuList
-                                autoFocusItem={open}
-                                id="composition-menu"
-                                aria-labelledby="composition-button"
-                            >
-                                <MenuItem name="All" sx={( transFilter === "All") ? styles.chipSelected : styles.chipUnSelected } onClick={() => handleFilter("All")}>All</MenuItem>
-                                <MenuItem sx={{color: styles.positive }} style={( transFilter === "Income") ? styles.chipSelected : styles.chipUnSelected } onClick={() => handleFilter("Income")}>Income</MenuItem>
-                                <MenuItem sx={{color: styles.negative }} style={( transFilter === "Expense") ? styles.chipSelected : styles.chipUnSelected } onClick={() => handleFilter("Expense")}>Expense</MenuItem>
-                            </MenuList>
-                            </ClickAwayListener>
-                        </Paper>
-                        </Grow>
-                    )}
-                    </Popper>
-                </Grid> */}
-
 
                 <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
                     <Tabs
@@ -454,13 +409,13 @@ export default function ColorTabs() {
                 </Stack>
 
                 {/* By Year */}
-                {/* { value === "Yearly" && Object.keys(transactionDisplay).map(year => {
+                { value === "Yearly" && Object.keys(transactionDisplay).map(year => {
                 return (
                     <>
                         { Object.keys(transactionDisplay[year]).map( (month, index) => {
                             return(
                                 <>
-                                    <Accordion defaultExpanded>
+                                    <Accordion key={index} defaultExpanded>
                                         <AccordionSummary
                                         expandIcon={<ExpandMoreIcon />}
                                         aria-controls={`panel-content`}
@@ -481,7 +436,7 @@ export default function ColorTabs() {
                                                                     {item.transactionID}
                                                                 </Typography>
                                                                 <Typography style={ (item.accountFrom === id) ? styles.negative : styles.positive } sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="#4B4948">
-                                                                    {(item.accountFrom === id) ? `- SGD $${ item.transactionAmount.toLocaleString("en-US") }` : `SGD $${ item.transactionAmount.toLocaleString("en-US") }` }
+                                                                    {(item.accountFrom === id) ? `- SGD $${ item.transactionAmount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }` : `SGD $${ item.transactionAmount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }` }
                                                                 </Typography>
                                                             </Grid>
                                                             <Grid container direction="row" justifyContent="space-between" alignItems="center">
@@ -503,50 +458,50 @@ export default function ColorTabs() {
                         }
                         )}
                     </>
-                )
-            })
-            } */}
+                    )
+                })
+            }
 
 
-                {/* By Month */}
-                { value === "Monthly" && transactionDisplay.map((item,index)=> {
-                        return (
-                            <>
-                                <Accordion defaultExpanded>
-                                    <AccordionSummary
-                                        expandIcon={<ExpandMoreIcon />}
-                                        aria-controls="panel2a-content"
-                                        id="panel2a-header"
-                                        sx={{ backgroundColor: "#F8F8F8" }}
-                                        >
-                                            <Typography sx={{ fontWeight: "bold", color: "#4B4948" }}>
-                                                { moment(item.transactionDate).format('dddd, Do MMM YYYY') } 
+            {/* By Month */}
+            { value === "Monthly" && transactionDisplay.map((item,index)=> {
+                    return (
+                        <>
+                            <Accordion key={index} defaultExpanded>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel2a-content"
+                                    id="panel2a-header"
+                                    sx={{ backgroundColor: "#F8F8F8" }}
+                                    >
+                                        <Typography sx={{ fontWeight: "bold", color: "#4B4948" }}>
+                                            { moment(item.transactionDate).format('dddd, Do MMM YYYY') } 
+                                        </Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Box>
+                                        <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                            <Typography sx={{ fontSize: 16, fontWeight:"bold" }} color="#4B4948">
+                                                {item.transactionID}
                                             </Typography>
-                                    </AccordionSummary>
-                                    <AccordionDetails>
-                                        <Box>
-                                            <Grid container direction="row" justifyContent="space-between" alignItems="center">
-                                                <Typography sx={{ fontSize: 16, fontWeight:"bold" }} color="#4B4948">
-                                                    {item.transactionID}
-                                                </Typography>
-                                                <Typography style={ (item.accountFrom === id) ? styles.negative : styles.positive } sx={{ fontSize: 16, fontWeight:"bold" }} textAlign="end" color="#4B4948">
-                                                    {(item.accountFrom === id) ? `- SGD $${ item.transactionAmount.toLocaleString("en-US") }` : `SGD $${ item.transactionAmount.toLocaleString("en-US") }` }
-                                                </Typography>
-                                            </Grid>
-                                            <Grid container direction="row" justifyContent="space-between" alignItems="center">
-                                                <Typography sx={{ fontSize: 12 }} color="#9197A4">
-                                                    { item.transactionDescription }
-                                                </Typography>
-                                                <Typography sx={{ fontSize: 12 }} textAlign="end" color="#9197A4">
-                                                    { item.transactionDate.replace(" GMT", "") }
-                                                </Typography>
-                                            </Grid>
-                                        </Box>
-                                    </AccordionDetails>
-                                </Accordion>  
-                            </>
-                        )
-                    })}
+                                            <Typography style={ (item.accountFrom === id) ? styles.negative : styles.positive } sx={{ fontSize: 16, fontWeight: "bold" }} textAlign="end" color="#4B4948">
+                                                {(item.accountFrom === id) ? `- SGD $${ item.transactionAmount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }` : `SGD $${ item.transactionAmount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }` }
+                                            </Typography>
+                                        </Grid>
+                                        <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                                            <Typography sx={{ fontSize: 12 }} color="#9197A4">
+                                                { item.transactionDescription }
+                                            </Typography>
+                                            <Typography sx={{ fontSize: 12 }} textAlign="end" color="#9197A4">
+                                                { item.transactionDate.replace(" GMT", "") }
+                                            </Typography>
+                                        </Grid>
+                                    </Box>
+                                </AccordionDetails>
+                            </Accordion>  
+                        </>
+                    )
+                })}
             </Box>
         </Container>
     </React.Fragment>

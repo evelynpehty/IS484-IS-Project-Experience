@@ -17,8 +17,25 @@ const getUserNetWorth = (userID) => {
       });
 };
 
+const getEmergencySaving = (userID) => {
+  var bodyFormData = new FormData();
+  bodyFormData.append("userID", userID)
+
+  return axios
+  ({
+      method: "post",
+      url: API_URL + "emergency_saving_target_amount",
+      data: bodyFormData,
+  })
+    .then((response) => {
+      return response.data;
+    });
+};
+
+
 const dashboard_service = { 
-getUserNetWorth
+getUserNetWorth,
+getEmergencySaving
 }
 
 export default dashboard_service;

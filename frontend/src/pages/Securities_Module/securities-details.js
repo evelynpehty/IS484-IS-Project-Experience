@@ -253,7 +253,7 @@ function SecuritiesDetails() {
                                 { securities_item[0].stock_name }
                             </Typography>
                             <Typography sx={{ fontSize: 14, color:"#4B4948"}} >
-                                { `US$${ securities_item[0].current_price_USD.toFixed(2).toLocaleString("en-US") } ` }
+                                { `US$${ securities_item[0].current_price_USD.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) } ` }
                                 <Chip sx={(securities_item[0]["change_rate"] < 0) ? styles.chipRed : styles.chipGreen } size="small" label={ `${securities_item[0]["change_rate"].toFixed(2)} %` } />
                             </Typography>
 
@@ -261,7 +261,7 @@ function SecuritiesDetails() {
                                 Total Current Holdings
                             </Typography>
                             <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }} textAlign="end">
-                                SGD ${ (securities_item[0].qty * securities_item[0].current_price_SGD).toFixed(2).toLocaleString("en-US") }
+                                SGD ${ (securities_item[0].qty * securities_item[0].current_price_SGD).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </Typography>
                         </CardContent>
                     </Card>
@@ -284,7 +284,7 @@ function SecuritiesDetails() {
                                         CURRENT VALUE
                                     </Typography>
                                     <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#4B4948" }}>
-                                        SGD ${ (securities_item[0].qty * securities_item[0].current_price_SGD).toFixed(2).toLocaleString("en-US") }
+                                        SGD ${ (securities_item[0].qty * securities_item[0].current_price_SGD).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }
                                     </Typography>
                                 </Grid>
                             </Grid>        
@@ -321,12 +321,12 @@ function SecuritiesDetails() {
                                     </Typography>
                                     { securities_item[0]["1_day_change_per_each"] >= 0 &&
                                         <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#109878" }}>
-                                            S${securities_item[0]["1_day_change_per_each"].toFixed(2).toLocaleString("en-US") }
+                                            S${securities_item[0]["1_day_change_per_each"].toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }
                                         </Typography>
                                     }
                                     { securities_item[0]["1_day_change_per_each"] < 0 &&
                                         <Typography sx={{ fontSize: 16, fontWeight:"bold", color:"#E60000" }}>
-                                            - S${securities_item[0]["1_day_change_per_each"].toFixed(2).toLocaleString("en-US") }
+                                            - S${securities_item[0]["1_day_change_per_each"].toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }
                                         </Typography>
                                     }
                                     

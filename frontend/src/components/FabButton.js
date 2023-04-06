@@ -7,7 +7,7 @@ const WhiteReusableButton = (props) => {
 
     const styles = {
         fabButton: {
-            position: "absolute",
+            position: "fixed",
             bottom: 80,
             right: 16,
             backgroundColor: theme.palette.other.lightRed,

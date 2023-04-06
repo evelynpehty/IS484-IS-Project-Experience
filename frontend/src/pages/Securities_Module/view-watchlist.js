@@ -23,14 +23,14 @@ function ViewWatchList() {
 
     const LightTooltip = styled(({ className, ...props }) => (
         <Tooltip {...props} classes={{ popper: className }} />
-      ))(({ theme }) => ({
-        [`& .${tooltipClasses.tooltip}`]: {
-          backgroundColor: theme.palette.common.white,
-          color: 'rgba(0, 0, 0, 0.87)',
-          boxShadow: theme.shadows[4],
-          padding: "10px"
-        },
-      }));
+        ))(({ theme }) => ({
+            [`& .${tooltipClasses.tooltip}`]: {
+            backgroundColor: theme.palette.common.white,
+            color: 'rgba(0, 0, 0, 0.87)',
+            boxShadow: theme.shadows[4],
+            padding: "10px"
+            },
+        }));
 
     const styles = {
         grid: {
@@ -99,7 +99,7 @@ function ViewWatchList() {
         })
         if(result.length !== 0){
             if(result[0].currentPrice !== null){
-                return result[0].currentPrice.toFixed(2)
+                return result[0].currentPrice
             }
             else {
                 return 0
@@ -168,8 +168,8 @@ function ViewWatchList() {
                                                         }}
                                                         title= { 
                                                             <div> 
-                                                                <Typography sx={{ fontWeight: 10, fontWeight: "bold", color: theme.palette.primary.main }}>P&L Analysis</Typography>
-                                                                <Typography sx={{ fontWeight: 10, color: theme.palette.secondary.main }}>Recommended entry/exit prices</Typography>
+                                                                <Typography sx={{ fontSize: 10, fontWeight: "bold", color: theme.palette.primary.main }}>P&L Analysis</Typography>
+                                                                <Typography sx={{ fontSize: 10, color: theme.palette.secondary.main }}>Recommended entry/exit prices</Typography>
                                                             </div> 
                                                         }
                                                         arrow
@@ -189,7 +189,7 @@ function ViewWatchList() {
 
                                                             <Grid xs={3} textAlign="end" sx={{ margin: "auto" }}>
                                                                 <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color={theme.palette.secondary.main}>
-                                                                   {`$${getCurrentPrice(value.ticker)}`}
+                                                                   {`$${getCurrentPrice(value.ticker).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                                                                 </Typography>
                                                             </Grid>
                                                             
@@ -238,7 +238,7 @@ function ViewWatchList() {
 
                                                             <Grid xs={3} textAlign="end" sx={{ margin: "auto" }}>
                                                                 <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color={theme.palette.secondary.main}>
-                                                                   {`$${getCurrentPrice(value.ticker)}`}
+                                                                   {`$${getCurrentPrice(value.ticker).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                                                                 </Typography>
                                                             </Grid>
                                                             

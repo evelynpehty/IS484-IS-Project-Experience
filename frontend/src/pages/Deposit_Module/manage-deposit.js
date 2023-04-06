@@ -1,23 +1,17 @@
 // Packages
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from 'react-router-dom';
-import { Link } from "react-router-dom";
 
-import { deposit, updateDepositAccount } from "../../actions/deposit"
+import { updateDepositAccount } from "../../actions/deposit"
 
 // MUI Components
-import { Container, Box, Typography, Paper, useTheme, styled, Stack, Alert, AlertTitle } from "@mui/material";
+import { Container, Box, Typography, Paper, useTheme, styled, Stack, Alert, AlertTitle, Modal } from "@mui/material";
 
 // Customised Components
 import SecondaryAppBar from "../../components/SecondaryAppBar";
 import PrimaryButton from "../../components/PrimaryButton";
-import WhiteReusableButton from "../../components/WhiteButton";
-import OutlinedReusableButton from "../../components/OutlinedButton";
-import DepositCard from "../../components/DepositCard";
-import EditDepositCard from "../../components/EditDepositCard";
-import FabButton from "../../components/FabButton";
 import InputBox from "../../components/InputBox"
 import Loading from '../../components/loading.js'
 
@@ -31,12 +25,12 @@ function ManageDeposit() {
 
         label: {
             fontWeight: "bold",
-            color: "#4B4948",
+            color: theme.palette.secondary.main,
             fontSize: "18px"
         },
 
         inputLabel: {
-            color: "#4B4948",
+            color: theme.palette.secondary.main,
             fontSize: "12px",
             marginTop: "16px"
         },
@@ -49,12 +43,29 @@ function ManageDeposit() {
         },
 
         chipSelected: {
-            borderStyle: "solid",
-            borderColour: "gray"
+            border: "2px solid #4B4948"
         }, 
 
         chipUnSelected: {
             borderStyle: "none"
+        },
+
+        modal: {
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: "80%",
+            bgcolor: 'background.paper',
+            borderRadius: 3,
+            boxShadow: 24,
+            p: 3,
+        },
+
+        modalHeader: {
+            fontSize: "18px",
+            fontWeight: "bold",
+            color: theme.palette.primary.main
         }
     }
 
@@ -98,7 +109,6 @@ function ManageDeposit() {
     }
 
     const { user } = useSelector((state) => state.auth);
-    // const UserID = user.data.UserID
 
     const handleSave = () => {
         setLoading(true)
@@ -108,8 +118,6 @@ function ManageDeposit() {
             "newColor": chosenColor,
             "newName": accoutName
         }
-
-        console.log(input)
         
         dispatch(updateDepositAccount(input)).then((response)=>{
             console.log(response)
@@ -119,17 +127,11 @@ function ManageDeposit() {
             setLoading(false)
             setStatus("error")
         })
-
-        /*dispatch(updateDepositAccount(input)).then((response)=>{
-            console.log(response)
-        }).then(()=>{
-            dispatch(deposit(UserID)).then(()=>{
-                setStatus("success")
-            })
-        }).catch((error)=>{
-            setStatus("error")
-        })*/
     }
+
+    // Modal Component Functions
+    // const [open, setOpen] = React.useState(true);
+    // const handleClose = () => setOpen(false);
 
     return (
         <React.Fragment>
@@ -137,12 +139,27 @@ function ManageDeposit() {
             <SecondaryAppBar link={ "/deposit" } text="All Accounts" />
             <Container maxWidth="lg">
                 <Box sx={{ pt: 10, pb: 10 }}>
-                    {status==="success" && <Stack sx={{ width: '100%', mb:2 }} spacing={2}>
-                            <Alert severity="success" onClose={() => {setStatus("")}}>
-                                <AlertTitle>Success</AlertTitle>
-                                {"Deposit Account Updated!"}
-                            </Alert>
-                        </Stack>}
+                        {status==="success" && 
+                            // <Modal
+                            //     open={ open }
+                            //     onClose={ handleClose }
+                            //     aria-labelledby="modal-modal-title"
+                            //     aria-describedby="modal-modal-description"
+                            // >
+                            //     <Box sx={styles.modal}>
+                            //         <Typography style={ styles.modalHeader }>
+                            //             Add Recurring Reminder
+                            //         </Typography>
+                            //     </Box>
+                            // </Modal>
+
+                            <Stack sx={{ width: '100%', mb:2 }} spacing={2}>
+                                <Alert severity="success" onClose={() => {setStatus("")}}>
+                                    <AlertTitle>Success</AlertTitle>
+                                    {"Deposit Account Updated!"}
+                                </Alert>
+                            </Stack>
+                        }
 
                         {status==="error" && <Stack sx={{ width: '100%', mb:2 }} spacing={2}>
                             <Alert severity="error" onClose={() => {setStatus("")}}>
@@ -173,7 +190,7 @@ function ManageDeposit() {
                         }}
                     >
                         {
-                            colorChoiceArray.map((item,index)=> {
+                            colorChoiceArray.map((item, index)=> {
                                 return (
                                     <>
                                      <Item key={index} sx={{ background: `${item}` }} style={(item === chosenColor) ? styles.chipSelected : styles.chipUnSelected } onClick={() => handleColourChange(index)}></Item>
