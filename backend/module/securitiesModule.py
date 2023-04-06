@@ -10,7 +10,7 @@ from module.classes.watchlist import Watchlist
 from module.classes.watchlist_securities import Watchlist_Securities
 from module.classes.all_holdings import All_Holdings
 from module.classes.securities_holdings import Securities_Holdings
-from module.classes.Stock_Data_LR import StockData_LR
+from module.classes.stock_data_LR import StockData_LR
 #from module.classes.stock_predictor_LSTM import StockPredictorLSTM
 import datetime
 
