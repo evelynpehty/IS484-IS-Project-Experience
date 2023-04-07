@@ -68,12 +68,11 @@ function SignIn() {
         dispatch(login(username, password)).then((response) => {
             const UserID = response.data.UserID
         
-            const p1 = dispatch(loan(UserID))
+            /*const p1 = dispatch(loan(UserID))
             const p2 = dispatch(deposit(UserID))
             const p3 = dispatch(depositTransactionHistory(UserID))
-            
             const p7 = dispatch(userNetWorth(UserID))
-            const p8 = dispatch(emergencySaving(UserID))
+            const p8 = dispatch(emergencySaving(UserID))*/
 
             dispatch(loan(UserID)).then(()=>{
                 dispatch(deposit(UserID)).then(()=>{

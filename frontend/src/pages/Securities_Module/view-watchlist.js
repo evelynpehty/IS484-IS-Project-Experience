@@ -180,6 +180,7 @@ function ViewWatchList() {
                                 {item.watchlist_list !== null && item.watchlist_list.map((value, i)=>{
                                     return (
                                         <>
+                                        <Link to={`/view-stock-details/${value.ticker}`} key={index}> 
                                             <Card style={ styles.card }>
                                                 <CardContent style={ styles.cardContent }>
                                                     {(index === 0 && i ===0) && <LightTooltip 
@@ -296,6 +297,7 @@ function ViewWatchList() {
                                                         </Grid>}
                                                 </CardContent>
                                             </Card>
+                                        </Link>
                                         </>
                                     )
                                 })}
