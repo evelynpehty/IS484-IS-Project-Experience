@@ -71,22 +71,54 @@ function SignIn() {
             const p1 = dispatch(loan(UserID))
             const p2 = dispatch(deposit(UserID))
             const p3 = dispatch(depositTransactionHistory(UserID))
-            const p4 = dispatch(allSecurities())
-            const p5 = dispatch(securities(UserID))
-            const p6 = dispatch(watchlist(UserID))
+            
             const p7 = dispatch(userNetWorth(UserID))
             const p8 = dispatch(emergencySaving(UserID))
-           
-            Promise.all([p1,p2,p3,p4,5,p6,p7,p8]).then(()=>{
-                dispatch(DataLoaded())
-                if(route){
-                    setLoading(false)
-                    navigate(`/${route}`)
-                }else{
-                    setLoading(false)
-                    navigate("/dashboard")
-                }
+
+            dispatch(loan(UserID)).then(()=>{
+                dispatch(deposit(UserID)).then(()=>{
+                    dispatch(depositTransactionHistory(UserID)).then(()=>{
+                        dispatch(userNetWorth(UserID)).then(()=>{
+                            dispatch(emergencySaving(UserID)).then(()=>{
+                                dispatch(allSecurities()).then(()=>{
+                                    dispatch(securities(UserID)).then(()=>{
+                                        dispatch(watchlist(UserID)).then(()=>{
+                                            dispatch(DataLoaded())
+                                            if(route){
+                                                setLoading(false)
+                                                navigate(`/${route}`)
+                                            }else{
+                                                setLoading(false)
+                                                navigate("/dashboard")
+                                            }
+                                        })
+                                    })
+                           
+                                })
+                            })
+                        })
+                    })
+                })
             })
+           
+            /*Promise.all([p1,p2,p3,p7,p8]).then(()=>{
+                dispatch(allSecurities()).then(()=>{
+                    dispatch(securities(UserID)).then(()=>{
+                        dispatch(watchlist(UserID)).then(()=>{
+                            dispatch(DataLoaded())
+                            if(route){
+                                setLoading(false)
+                                navigate(`/${route}`)
+                            }else{
+                                setLoading(false)
+                                navigate("/dashboard")
+                            }
+                        })
+                    })
+           
+                })
+                
+            })*/
         });
     }
 
