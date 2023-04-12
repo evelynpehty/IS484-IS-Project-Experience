@@ -16,8 +16,6 @@ npm i react-router-dom
 
 npm install axios
 
-Material UI
-
 npm install @mui/material @emotion/react @emotion/styled (Core)
 
 npm install @mui/x-data-grid (Advanced Kit)
